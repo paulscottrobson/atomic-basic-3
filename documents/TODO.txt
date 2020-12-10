@@ -1,11 +1,11 @@
 TODO List
 =========
 
-For/While/Repeat
 Check scanner nesting
+DIM
 Full Variables
 Full Variable Check
-Dim 
+Procedures and Parameters (rewrite)
 
 Notes
 =====

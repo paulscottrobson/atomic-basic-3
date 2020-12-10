@@ -54,12 +54,12 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; [
 	.byte InstructionUndefined & $FF       ; ]
 	.byte Command_IF & $FF                 ; if
-	.byte InstructionUndefined & $FF       ; for
+	.byte Command_FOR & $FF                ; for
 	.byte InstructionUndefined & $FF       ; repeat
 	.byte NoOp6 & $FF                      ; proc
 	.byte InstructionUndefined & $FF       ; while
 	.byte Command_ENDIF & $FF              ; endif
-	.byte InstructionUndefined & $FF       ; next
+	.byte Command_NEXT & $FF               ; next
 	.byte InstructionUndefined & $FF       ; until
 	.byte InstructionUndefined & $FF       ; endproc
 	.byte InstructionUndefined & $FF       ; wend
@@ -141,12 +141,12 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; [
 	.byte InstructionUndefined >> 8        ; ]
 	.byte Command_IF >> 8                  ; if
-	.byte InstructionUndefined >> 8        ; for
+	.byte Command_FOR >> 8                 ; for
 	.byte InstructionUndefined >> 8        ; repeat
 	.byte NoOp6 >> 8                       ; proc
 	.byte InstructionUndefined >> 8        ; while
 	.byte Command_ENDIF >> 8               ; endif
-	.byte InstructionUndefined >> 8        ; next
+	.byte Command_NEXT >> 8                ; next
 	.byte InstructionUndefined >> 8        ; until
 	.byte InstructionUndefined >> 8        ; endproc
 	.byte InstructionUndefined >> 8        ; wend

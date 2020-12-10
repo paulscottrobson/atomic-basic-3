@@ -1,9 +1,6 @@
-100 x = 0
-110 x = x + 1
-120 if x <= 4 
-130 	print x ; " < 4"
-132 else
-135 	print x ; " >= 4"
-140 endif
-200 if x < 10 then 110
-
+100 for x = 1 to 10
+101 if x % 2 <> 0
+102 	print x," ODD"
+103 else:print x," EVEN":endif
+110 next x
+120 print "DONE"

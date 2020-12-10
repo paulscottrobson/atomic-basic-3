@@ -1,7 +1,12 @@
 TODO List
 =========
-Port functions
-Handle variables.
-Add RUN code.
+Port PRINT
+Handle variables (very basic).
+Reenable & port LET ; Command_LET call in RUN.
 Basic arithmetic check.
+Variables
 
+Notes
+=====
+Alloc() has been disabled (uses DIM code)
+Check all in functions module work.

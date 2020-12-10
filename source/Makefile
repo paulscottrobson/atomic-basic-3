@@ -22,7 +22,7 @@ BASIC = $(BASDIR)test.bas
 SCRIPTS = ..$(S)scripts$(S)
 GENERATOR = makepgm.py
 
-BUILD = boot.x16 boot.common extern.x16 interface.test common testing.simple
+BUILD = boot.x16 boot.common extern.x16 interface.none common testing.code
 all : asm.out$(S)basic.prg
 
 run : asm.out$(S)basic.prg

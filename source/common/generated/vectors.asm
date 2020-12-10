@@ -2,7 +2,7 @@
 ;	Automatically generated.
 ;
 TokenVectorLow:
-	.byte InstructionUndefined & $FF       ; <<end>>
+	.byte CommandNextLine & $FF            ; <<end>>
 	.byte BinaryAnd & $FF                  ; and
 	.byte BinaryOr & $FF                   ; or
 	.byte BinaryXor & $FF                  ; xor
@@ -37,14 +37,14 @@ TokenVectorLow:
 	.byte UnaryMax & $FF                   ; max
 	.byte UnarySys & $FF                   ; sys
 	.byte InstructionUndefined & $FF       ; code
-	.byte InstructionUndefined & $FF       ; timer
-	.byte InstructionUndefined & $FF       ; event
-	.byte InstructionUndefined & $FF       ; get
+	.byte Unary_Timer & $FF                ; timer
+	.byte Event_Function & $FF             ; event
+	.byte Unary_Get & $FF                  ; get
 	.byte InstructionUndefined & $FF       ; joy.x
 	.byte InstructionUndefined & $FF       ; joy.y
 	.byte InstructionUndefined & $FF       ; joy.btn
-	.byte InstructionUndefined & $FF       ; inkey
-	.byte InstructionUndefined & $FF       ; alloc
+	.byte Unary_Inkey & $FF                ; inkey
+	.byte Unary_Alloc & $FF                ; alloc
 	.byte UnaryChr & $FF                   ; chr
 	.byte NoOp1 & $FF                      ; ,
 	.byte NoOp2 & $FF                      ; ;
@@ -63,10 +63,10 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; until
 	.byte InstructionUndefined & $FF       ; endproc
 	.byte InstructionUndefined & $FF       ; wend
-	.byte InstructionUndefined & $FF       ; rem
+	.byte Command_Rem & $FF                ; rem
 	.byte InstructionUndefined & $FF       ; let
-	.byte InstructionUndefined & $FF       ; '
-	.byte InstructionUndefined & $FF       ; :
+	.byte Command_Rem2 & $FF               ; '
+	.byte Command_Colon & $FF              ; :
 	.byte NoOp7 & $FF                      ; then
 	.byte InstructionUndefined & $FF       ; else
 	.byte NoOp8 & $FF                      ; to
@@ -78,18 +78,18 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; goto
 	.byte InstructionUndefined & $FF       ; gosub
 	.byte InstructionUndefined & $FF       ; return
-	.byte InstructionUndefined & $FF       ; assert
-	.byte InstructionUndefined & $FF       ; stop
-	.byte InstructionUndefined & $FF       ; end
+	.byte Command_Assert & $FF             ; assert
+	.byte Command_Stop & $FF               ; stop
+	.byte Command_End & $FF                ; end
 	.byte InstructionUndefined & $FF       ; dim
-	.byte InstructionUndefined & $FF       ; clear
+	.byte CommandClear & $FF               ; clear
 	.byte InstructionUndefined & $FF       ; load
 	.byte InstructionUndefined & $FF       ; save
 	.byte InstructionUndefined & $FF       ; list
-	.byte InstructionUndefined & $FF       ; new
-	.byte InstructionUndefined & $FF       ; run
+	.byte Command_New & $FF                ; new
+	.byte Command_Run & $FF                ; run
 TokenVectorHigh:
-	.byte InstructionUndefined >> 8        ; <<end>>
+	.byte CommandNextLine >> 8             ; <<end>>
 	.byte BinaryAnd >> 8                   ; and
 	.byte BinaryOr >> 8                    ; or
 	.byte BinaryXor >> 8                   ; xor
@@ -124,14 +124,14 @@ TokenVectorHigh:
 	.byte UnaryMax >> 8                    ; max
 	.byte UnarySys >> 8                    ; sys
 	.byte InstructionUndefined >> 8        ; code
-	.byte InstructionUndefined >> 8        ; timer
-	.byte InstructionUndefined >> 8        ; event
-	.byte InstructionUndefined >> 8        ; get
+	.byte Unary_Timer >> 8                 ; timer
+	.byte Event_Function >> 8              ; event
+	.byte Unary_Get >> 8                   ; get
 	.byte InstructionUndefined >> 8        ; joy.x
 	.byte InstructionUndefined >> 8        ; joy.y
 	.byte InstructionUndefined >> 8        ; joy.btn
-	.byte InstructionUndefined >> 8        ; inkey
-	.byte InstructionUndefined >> 8        ; alloc
+	.byte Unary_Inkey >> 8                 ; inkey
+	.byte Unary_Alloc >> 8                 ; alloc
 	.byte UnaryChr >> 8                    ; chr
 	.byte NoOp1 >> 8                       ; ,
 	.byte NoOp2 >> 8                       ; ;
@@ -150,10 +150,10 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; until
 	.byte InstructionUndefined >> 8        ; endproc
 	.byte InstructionUndefined >> 8        ; wend
-	.byte InstructionUndefined >> 8        ; rem
+	.byte Command_Rem >> 8                 ; rem
 	.byte InstructionUndefined >> 8        ; let
-	.byte InstructionUndefined >> 8        ; '
-	.byte InstructionUndefined >> 8        ; :
+	.byte Command_Rem2 >> 8                ; '
+	.byte Command_Colon >> 8               ; :
 	.byte NoOp7 >> 8                       ; then
 	.byte InstructionUndefined >> 8        ; else
 	.byte NoOp8 >> 8                       ; to
@@ -165,13 +165,13 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; goto
 	.byte InstructionUndefined >> 8        ; gosub
 	.byte InstructionUndefined >> 8        ; return
-	.byte InstructionUndefined >> 8        ; assert
-	.byte InstructionUndefined >> 8        ; stop
-	.byte InstructionUndefined >> 8        ; end
+	.byte Command_Assert >> 8              ; assert
+	.byte Command_Stop >> 8                ; stop
+	.byte Command_End >> 8                 ; end
 	.byte InstructionUndefined >> 8        ; dim
-	.byte InstructionUndefined >> 8        ; clear
+	.byte CommandClear >> 8                ; clear
 	.byte InstructionUndefined >> 8        ; load
 	.byte InstructionUndefined >> 8        ; save
 	.byte InstructionUndefined >> 8        ; list
-	.byte InstructionUndefined >> 8        ; new
-	.byte InstructionUndefined >> 8        ; run
+	.byte Command_New >> 8                 ; new
+	.byte Command_Run >> 8                 ; run

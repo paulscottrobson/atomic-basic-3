@@ -42,11 +42,9 @@ UnaryParenthesis: 	;; [(]
 
 UnaryTrue: 		;; [True]
 		jsr 	Int32True
-		makeinteger
 		rts
 UnaryFalse:		;; [False]
 		jsr 	Int32False
-		makeinteger
 		rts
 
 ; *****************************************************************************

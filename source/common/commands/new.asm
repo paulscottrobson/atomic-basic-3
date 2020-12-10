@@ -1,20 +1,21 @@
 ; *****************************************************************************
 ; *****************************************************************************
 ;
-;		Name:		testing.asm
+;		Name:		new.asm
 ;		Author:		Paul Robson (paul@robsons.org.uk)
 ;		Date:		10 Dec 2020
-;		Purpose:	General testing code, not normally included.
+;		Purpose:	New Program
 ;
 ; *****************************************************************************
 ; *****************************************************************************
 
-TestProgram:		
-		set16 	codePtr,BasicProgram
-		ldy 	#0 
-		ldx 	#1
-		jsr 	EvaluateTOS
-		stop
-;		jsr 	DerefTop
-		stop
-w1:		jmp 	w1
+; *****************************************************************************
+;
+;								New Program
+;
+; *****************************************************************************
+
+Command_New:	;; [new]
+		lda 	#0 							; clear program
+		sta 	BasicProgram
+		jmp 	CommandClear				; clear variables etc.

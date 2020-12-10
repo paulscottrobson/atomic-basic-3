@@ -29,7 +29,7 @@ class BasicProgram(object):
 		if m is not None:
 			self.nextLine = int(m.group(1))
 			lineText = m.group(2).strip()
-		code = [self.nextLine & 0xFF,self.nextLine >> 8] + self.tokeniser.tokenise(lineText) + [0]
+		code = [self.nextLine & 0xFF,self.nextLine >> 8] + self.tokeniser.tokenise(lineText) + [0x80]
 		if False:	
 			print("{0:4} ${0:04x} {1}".format(self.nextLine,lineText.strip()))
 		self.code += [len(code)+1] + code	

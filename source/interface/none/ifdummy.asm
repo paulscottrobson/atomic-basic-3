@@ -10,6 +10,7 @@
 ; *****************************************************************************
 
 ColdStart:
+		jmp 	Command_RUN
 WarmStart:
 		jmp 	WarmStart
 		

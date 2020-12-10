@@ -13,6 +13,7 @@
 	.include "common/utility/stack.inc"
 	.include "common/commands/assert.asm"
 	.include "common/commands/clear.asm"
+	.include "common/commands/dim.asm"
 	.include "common/commands/for.asm"
 	.include "common/commands/gosub.asm"
 	.include "common/commands/goto.asm"

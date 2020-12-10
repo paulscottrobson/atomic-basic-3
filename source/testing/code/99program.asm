@@ -3,36 +3,34 @@ BasicProgram:
 	.byte $07
 	.byte $e8
 	.byte $03
-	.byte $17
+	.byte $04
 	.byte $89
 	.byte $70
 	.byte $80
-	.byte $08
+	.byte $05
 	.byte $f2
 	.byte $03
-	.byte $b7
-	.byte $17
-	.byte $85
-	.byte $7a
+	.byte $b5
 	.byte $80
-	.byte $06
+	.byte $0f
 	.byte $fc
 	.byte $03
+	.byte $b3
+	.byte $a4
+	.byte $95
+	.byte $04
+	.byte $ac
+	.byte $7e
+	.byte $71
+	.byte $ae
+	.byte $c1
 	.byte $c6
-	.byte $17
+	.byte $a3
 	.byte $80
-	.byte $09
+	.byte $06
 	.byte $06
 	.byte $04
-	.byte $17
-	.byte $89
-	.byte $17
-	.byte $8a
-	.byte $71
-	.byte $80
-	.byte $05
-	.byte $10
-	.byte $04
-	.byte $bc
+	.byte $ba
+	.byte $9e
 	.byte $80
 	.byte $00

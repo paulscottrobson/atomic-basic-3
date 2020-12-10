@@ -81,7 +81,7 @@ TokenVectorLow:
 	.byte Command_Assert & $FF             ; assert
 	.byte Command_Stop & $FF               ; stop
 	.byte Command_End & $FF                ; end
-	.byte InstructionUndefined & $FF       ; dim
+	.byte Command_Dim & $FF                ; dim
 	.byte CommandClear & $FF               ; clear
 	.byte InstructionUndefined & $FF       ; load
 	.byte InstructionUndefined & $FF       ; save
@@ -168,7 +168,7 @@ TokenVectorHigh:
 	.byte Command_Assert >> 8              ; assert
 	.byte Command_Stop >> 8                ; stop
 	.byte Command_End >> 8                 ; end
-	.byte InstructionUndefined >> 8        ; dim
+	.byte Command_Dim >> 8                 ; dim
 	.byte CommandClear >> 8                ; clear
 	.byte InstructionUndefined >> 8        ; load
 	.byte InstructionUndefined >> 8        ; save

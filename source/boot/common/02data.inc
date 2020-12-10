@@ -81,3 +81,5 @@ ChrBuffer: 									; buffer for CHR()
 PrintCRFlag:								; tracks printing new line at end of PRINT
 		.fill 	1
 				
+ArrayEnabled:	 							; when clear, cannot do array indexing.	
+		.fill 	1 				

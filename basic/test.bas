@@ -1,5 +1,4 @@
-x = 0
-while x < 10
-	print x
-	x = x + 1
-wend
+e = 0
+repeat
+	if event(e,30) then print timer
+until false

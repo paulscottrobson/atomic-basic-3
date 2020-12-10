@@ -57,5 +57,7 @@ _CCErase:
 		inx
 		cpx 	#HashTableSize*2
 		bne 	_CCErase
+		lda		#1 							; array works.
+		sta 	ArrayEnabled
 		pulx
 		rts		

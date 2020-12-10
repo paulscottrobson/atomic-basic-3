@@ -1,12 +1,10 @@
 TODO List
 =========
-
-Check scanner nesting
-DIM/Alloc() has been disabled (uses DIM code)
-Full Variables
+Full Variables (rewrite)
 Full Variable Check
-Procedures and Parameters (rewrite)
+Design procedure structure
+Procedures and Parameters (partial rewrite ?) 
 
 Notes
 =====
-Check all in functions module work.
+Import #1

@@ -22,11 +22,13 @@ EvaluateTerm:								; term value
 
 EvaluateBaseDeRef: 							; evaluate value with X = 0
 		jsr 	EvaluateBase
+		stop
 		jmp 	DeRefTop
 
 EvaluateTOSDeRef:							; evaluate value on TOS.
 		jsr 	EvaluateTOS
 		jmp 	DeRefTop
+		
 ; *****************************************************************************
 ;
 ;						Evaluate expression bottom of stack
@@ -69,7 +71,7 @@ _EBNotConstant:
 		;
 		;		Variable, Array.
 		;
-		report  NotImplemented
+		jsr 	VariableAccess
 		jmp 	EBHaveTerm
 		;
 		;		Have a string.

@@ -23,10 +23,10 @@ SCRIPTS = ..$(S)scripts$(S)
 TESTS = ..$(S)tests$(S)
 GENERATOR = makepgm.py
 
-BUILD = boot.x16 boot.common extern.x16 interface.none common testing.code
-all : asm.out$(S)basic.prg
+BUILD = boot.x16 boot.common extern.x16 interface.none common variables testing.code
+all : $(BASIC) asm.out$(S)basic.prg
 
-run : asm.out$(S)basic.prg
+run : $(BASIC) asm.out$(S)basic.prg
 	..$(S)bin$(S)x16emu -prg asm.out$(S)basic.prg -scale 2 -run -debug
 
 testing$(S)simple$(S)02testcode.asm : $(SCRIPTS)tokenworker.py
@@ -42,7 +42,7 @@ DEPS = 	$(wildcard **/*.asm) $(wildcard **/*.inc) \
 		testing$(S)code$(S)99program.asm
 		
 asm.out$(S)basic.prg : $(DEPS) 
-	python $(TESTS)mathstest.py >$(BASIC)
+	#python $(TESTS)mathstest.py >$(BASIC)
 	python $(SCRIPTS)errors.py
 	python $(SCRIPTS)tokentables.py
 	python $(SCRIPTS)builder.py $(BUILD)

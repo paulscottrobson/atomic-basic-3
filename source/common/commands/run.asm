@@ -51,7 +51,7 @@ _CSLExit:
 		;		Try to do LET.
 		;
 CommandTryLet:
-;		jsr 	Command_LET
+		jsr 	Command_LET
 		jmp 	CommandNextCommand
 		;
 Command_Colon:	;; [:]

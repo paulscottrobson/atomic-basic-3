@@ -64,20 +64,20 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; endproc
 	.byte InstructionUndefined & $FF       ; wend
 	.byte Command_Rem & $FF                ; rem
-	.byte InstructionUndefined & $FF       ; let
+	.byte Command_LET & $FF                ; let
 	.byte Command_Rem2 & $FF               ; '
 	.byte Command_Colon & $FF              ; :
 	.byte NoOp7 & $FF                      ; then
 	.byte InstructionUndefined & $FF       ; else
 	.byte NoOp8 & $FF                      ; to
 	.byte NoOp9 & $FF                      ; step
-	.byte InstructionUndefined & $FF       ; vdu
+	.byte Command_Vdu & $FF                ; vdu
 	.byte Command_Print & $FF              ; print
 	.byte InstructionUndefined & $FF       ; call
 	.byte InstructionUndefined & $FF       ; local
-	.byte InstructionUndefined & $FF       ; goto
-	.byte InstructionUndefined & $FF       ; gosub
-	.byte InstructionUndefined & $FF       ; return
+	.byte Command_Goto & $FF               ; goto
+	.byte Command_Gosub & $FF              ; gosub
+	.byte Command_Return & $FF             ; return
 	.byte Command_Assert & $FF             ; assert
 	.byte Command_Stop & $FF               ; stop
 	.byte Command_End & $FF                ; end
@@ -151,20 +151,20 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; endproc
 	.byte InstructionUndefined >> 8        ; wend
 	.byte Command_Rem >> 8                 ; rem
-	.byte InstructionUndefined >> 8        ; let
+	.byte Command_LET >> 8                 ; let
 	.byte Command_Rem2 >> 8                ; '
 	.byte Command_Colon >> 8               ; :
 	.byte NoOp7 >> 8                       ; then
 	.byte InstructionUndefined >> 8        ; else
 	.byte NoOp8 >> 8                       ; to
 	.byte NoOp9 >> 8                       ; step
-	.byte InstructionUndefined >> 8        ; vdu
+	.byte Command_Vdu >> 8                 ; vdu
 	.byte Command_Print >> 8               ; print
 	.byte InstructionUndefined >> 8        ; call
 	.byte InstructionUndefined >> 8        ; local
-	.byte InstructionUndefined >> 8        ; goto
-	.byte InstructionUndefined >> 8        ; gosub
-	.byte InstructionUndefined >> 8        ; return
+	.byte Command_Goto >> 8                ; goto
+	.byte Command_Gosub >> 8               ; gosub
+	.byte Command_Return >> 8              ; return
 	.byte Command_Assert >> 8              ; assert
 	.byte Command_Stop >> 8                ; stop
 	.byte Command_End >> 8                 ; end

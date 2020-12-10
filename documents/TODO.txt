@@ -2,12 +2,11 @@ TODO List
 =========
 
 Check scanner nesting
-DIM
+DIM/Alloc() has been disabled (uses DIM code)
 Full Variables
 Full Variable Check
 Procedures and Parameters (rewrite)
 
 Notes
 =====
-Alloc() has been disabled (uses DIM code)
 Check all in functions module work.

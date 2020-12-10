@@ -72,7 +72,7 @@ TokenVectorLow:
 	.byte NoOp8 & $FF                      ; to
 	.byte NoOp9 & $FF                      ; step
 	.byte InstructionUndefined & $FF       ; vdu
-	.byte InstructionUndefined & $FF       ; print
+	.byte Command_Print & $FF              ; print
 	.byte InstructionUndefined & $FF       ; call
 	.byte InstructionUndefined & $FF       ; local
 	.byte InstructionUndefined & $FF       ; goto
@@ -159,7 +159,7 @@ TokenVectorHigh:
 	.byte NoOp8 >> 8                       ; to
 	.byte NoOp9 >> 8                       ; step
 	.byte InstructionUndefined >> 8        ; vdu
-	.byte InstructionUndefined >> 8        ; print
+	.byte Command_Print >> 8               ; print
 	.byte InstructionUndefined >> 8        ; call
 	.byte InstructionUndefined >> 8        ; local
 	.byte InstructionUndefined >> 8        ; goto

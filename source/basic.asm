@@ -13,6 +13,7 @@
 	.include "common/commands/assert.asm"
 	.include "common/commands/clear.asm"
 	.include "common/commands/new.asm"
+	.include "common/commands/print.asm"
 	.include "common/commands/rem.asm"
 	.include "common/commands/run.asm"
 	.include "common/errors/checksyntax.asm"

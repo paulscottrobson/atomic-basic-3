@@ -77,3 +77,7 @@ IToSCount:									; characters output.s
 
 ChrBuffer: 									; buffer for CHR()
 		.fill 	2		
+
+PrintCRFlag:								; tracks printing new line at end of PRINT
+		.fill 	1
+				

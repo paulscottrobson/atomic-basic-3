@@ -20,6 +20,7 @@ BASDIR = ..$(S)basic$(S)
 
 BASIC = $(BASDIR)test.bas
 SCRIPTS = ..$(S)scripts$(S)
+TESTS = ..$(S)tests$(S)
 GENERATOR = makepgm.py
 
 BUILD = boot.x16 boot.common extern.x16 interface.none common testing.code
@@ -41,7 +42,7 @@ DEPS = 	$(wildcard **/*.asm) $(wildcard **/*.inc) \
 		testing$(S)code$(S)99program.asm
 		
 asm.out$(S)basic.prg : $(DEPS) 
-#	python $(SCRIPTS)genvartest.py >$(BASIC)
+	python $(TESTS)mathstest.py >$(BASIC)
 	python $(SCRIPTS)errors.py
 	python $(SCRIPTS)tokentables.py
 	python $(SCRIPTS)builder.py $(BUILD)

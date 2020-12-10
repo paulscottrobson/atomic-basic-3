@@ -74,3 +74,6 @@ ClockTicks: 								; clock ticks.
 
 IToSCount:									; characters output.s
 		.fill 	1		
+
+ChrBuffer: 									; buffer for CHR()
+		.fill 	2		

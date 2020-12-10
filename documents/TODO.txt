@@ -1,7 +1,5 @@
 TODO List
 =========
-Evaluate - complete unary operations
-Port unary functions
 Port functions
 Handle variables.
 Add RUN code.

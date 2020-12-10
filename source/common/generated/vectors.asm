@@ -22,20 +22,20 @@ TokenVectorLow:
 	.byte IndirectWord & $FF               ; !
 	.byte IndirectByte & $FF               ; ?
 	.byte IndirectString & $FF             ; $
-	.byte InstructionUndefined & $FF       ; ~
-	.byte InstructionUndefined & $FF       ; (
-	.byte InstructionUndefined & $FF       ; &
-	.byte InstructionUndefined & $FF       ; @
-	.byte InstructionUndefined & $FF       ; len
-	.byte InstructionUndefined & $FF       ; sgn
-	.byte InstructionUndefined & $FF       ; abs
-	.byte InstructionUndefined & $FF       ; random
-	.byte InstructionUndefined & $FF       ; page
-	.byte InstructionUndefined & $FF       ; true
-	.byte InstructionUndefined & $FF       ; false
-	.byte InstructionUndefined & $FF       ; min
-	.byte InstructionUndefined & $FF       ; max
-	.byte InstructionUndefined & $FF       ; sys
+	.byte UnaryNot & $FF                   ; ~
+	.byte UnaryParenthesis & $FF           ; (
+	.byte UnaryHexMarker & $FF             ; &
+	.byte UnaryRefToValue & $FF            ; @
+	.byte UnaryLen & $FF                   ; len
+	.byte UnarySgn1 & $FF                  ; sgn
+	.byte UnaryAbs & $FF                   ; abs
+	.byte UnaryRandom & $FF                ; random
+	.byte UnaryPage & $FF                  ; page
+	.byte UnaryTrue & $FF                  ; true
+	.byte UnaryFalse & $FF                 ; false
+	.byte UnaryMin & $FF                   ; min
+	.byte UnaryMax & $FF                   ; max
+	.byte UnarySys & $FF                   ; sys
 	.byte InstructionUndefined & $FF       ; code
 	.byte InstructionUndefined & $FF       ; timer
 	.byte InstructionUndefined & $FF       ; event
@@ -45,7 +45,7 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; joy.btn
 	.byte InstructionUndefined & $FF       ; inkey
 	.byte InstructionUndefined & $FF       ; alloc
-	.byte InstructionUndefined & $FF       ; chr
+	.byte UnaryChr & $FF                   ; chr
 	.byte NoOp1 & $FF                      ; ,
 	.byte NoOp2 & $FF                      ; ;
 	.byte NoOp3 & $FF                      ; )
@@ -109,20 +109,20 @@ TokenVectorHigh:
 	.byte IndirectWord >> 8                ; !
 	.byte IndirectByte >> 8                ; ?
 	.byte IndirectString >> 8              ; $
-	.byte InstructionUndefined >> 8        ; ~
-	.byte InstructionUndefined >> 8        ; (
-	.byte InstructionUndefined >> 8        ; &
-	.byte InstructionUndefined >> 8        ; @
-	.byte InstructionUndefined >> 8        ; len
-	.byte InstructionUndefined >> 8        ; sgn
-	.byte InstructionUndefined >> 8        ; abs
-	.byte InstructionUndefined >> 8        ; random
-	.byte InstructionUndefined >> 8        ; page
-	.byte InstructionUndefined >> 8        ; true
-	.byte InstructionUndefined >> 8        ; false
-	.byte InstructionUndefined >> 8        ; min
-	.byte InstructionUndefined >> 8        ; max
-	.byte InstructionUndefined >> 8        ; sys
+	.byte UnaryNot >> 8                    ; ~
+	.byte UnaryParenthesis >> 8            ; (
+	.byte UnaryHexMarker >> 8              ; &
+	.byte UnaryRefToValue >> 8             ; @
+	.byte UnaryLen >> 8                    ; len
+	.byte UnarySgn1 >> 8                   ; sgn
+	.byte UnaryAbs >> 8                    ; abs
+	.byte UnaryRandom >> 8                 ; random
+	.byte UnaryPage >> 8                   ; page
+	.byte UnaryTrue >> 8                   ; true
+	.byte UnaryFalse >> 8                  ; false
+	.byte UnaryMin >> 8                    ; min
+	.byte UnaryMax >> 8                    ; max
+	.byte UnarySys >> 8                    ; sys
 	.byte InstructionUndefined >> 8        ; code
 	.byte InstructionUndefined >> 8        ; timer
 	.byte InstructionUndefined >> 8        ; event
@@ -132,7 +132,7 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; joy.btn
 	.byte InstructionUndefined >> 8        ; inkey
 	.byte InstructionUndefined >> 8        ; alloc
-	.byte InstructionUndefined >> 8        ; chr
+	.byte UnaryChr >> 8                    ; chr
 	.byte NoOp1 >> 8                       ; ,
 	.byte NoOp2 >> 8                       ; ;
 	.byte NoOp3 >> 8                       ; )

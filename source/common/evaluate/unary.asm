@@ -1,9 +1,9 @@
 ; *****************************************************************************
 ; *****************************************************************************
 ;
-;		Name:		unarynum1.asm
+;		Name:		unary.asm
 ;		Author:		Paul Robson (paul@robsons.org.uk)
-;		Date:		5 Dec 2020
+;		Date:		10 Dec 2020
 ;		Purpose:	Numeric Unary Functions
 ;
 ; *****************************************************************************
@@ -30,7 +30,7 @@ UnaryPage: 	;; [page]
 ; *****************************************************************************
 
 UnaryParenthesis: 	;; [(]
-		jsr 	EvaluateAtStack				; evaluate expression
+		jsr 	EvaluateTOS					; evaluate expression
 		jsr 	CheckRightParen				; check for )
 		rts
 
@@ -56,7 +56,7 @@ UnaryFalse:		;; [False]
 ; *****************************************************************************
 
 UnaryAbs:		;; [abs]
-		jsr 	GetTermDeref				; work out value required and dispatch
+		jsr 	EvaluateTerm				; work out value required and dispatch
 		jsr		Int32Absolute
 		makeinteger
 		rts
@@ -68,7 +68,7 @@ UnaryAbs:		;; [abs]
 ; *****************************************************************************
 
 UnarySys:		;; [sys]
-		jsr 	GetTermDeref				; address to call
+		jsr 	EvaluateTerm				; address to call
 		lda 	esInt0,x 					; copy call address
 		sta 	temp0
 		lda 	esInt1,x
@@ -101,7 +101,7 @@ _USCall:jmp 	(temp0)
 ; *****************************************************************************
 
 UnarySgn1:		;; [sgn]
-		jsr 	GetTermDeref				; work out value required and dispatch
+		jsr 	EvaluateTerm				; work out value required and dispatch
 		jsr 	Int32Sign
 		makeinteger
 		rts
@@ -113,7 +113,7 @@ UnarySgn1:		;; [sgn]
 ; *****************************************************************************
 
 UnaryNot:		;; [~]
-		jsr 	GetTermDeref				; work out value required and dispatch
+		jsr 	EvaluateTerm				; work out value required and dispatch
 		jsr 	Int32Not
 		makeinteger
 		rts
@@ -132,10 +132,10 @@ UnaryMax:		;; [max]
 		clc 								; max is CC.
 		php 								; save what we're doing.
 		jsr 	CheckLeftParen 				; check for (, required here
-		jsr 	EvaluateAtStack				; evaluate expression
+		jsr 	EvaluateTOSDeRef			; evaluate expression
 		inx
 		jsr 	CheckComma
-		jsr 	EvaluateAtStack				; evaluate expression
+		jsr 	EvaluateTOSDeRef
 		jsr 	DerefBoth 					; dereference them.
 		dex
 		jsr 	CheckRightParen
@@ -163,7 +163,8 @@ UTypeError:
 ; *****************************************************************************
 
 UnaryRefToValue: 	;; [@]
-		jsr 	GetTerm 					; get a term.
+		lda 	#15
+		jsr 	EvaluateLevelAX 			; get a term.
 		lda 	esType,x
 		bpl 	UTypeError 					; not a reference
 		and 	#$7F 						; clear reference bit.
@@ -178,7 +179,7 @@ UnaryRefToValue: 	;; [@]
 ; *****************************************************************************
 
 UnaryHexMarker: 	;; [&]
-		jmp 	GetTerm
+		jmp 	EvaluateTerm
 		
 ; *****************************************************************************
 ;
@@ -198,7 +199,7 @@ UnaryRandom: 	;; [random]
 ; *****************************************************************************
 
 UnaryLen: 	;; [len]
-		jsr 	GetTermDeref				; work out value required and dispatch
+		jsr 	EvaluateTerm				; work out value required and dispatch
 		lda 	esInt0,x 					; copy addr to temp0
 		sta 	temp0
 		lda 	esInt1,x
@@ -224,7 +225,7 @@ _ULFound:
 ; *****************************************************************************
 
 UnaryChr: 	;; [chr]
-		jsr 	GetTermDeref				; work out value required and dereference
+		jsr 	EvaluateTerm				; work out value required and dereference
 		lda 	esInt0,x 					; get char code
 		sta 	ChrBuffer 					; put into buffer.
 		lda 	#0

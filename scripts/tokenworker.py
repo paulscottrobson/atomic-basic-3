@@ -36,17 +36,17 @@ class TokeniserWorker(object):
 		c = s[0].lower()
 		#
 		if (c >= 'a' and c <= 'z') or c == '.':							# token or variable.
-			m = re.match("^([A-Za-z\\.0-9]+)(.*)$",s)					# work it out
-			assert m is not None
+			m = re.match("^([A-Za-z]+)(.*)$",s)							# try text token first
 			kwd = m.group(1).lower()
 			if kwd in self.tokenToID:									# is a text token.
 				self.tokens.append(self.tokenToID[kwd]["id"])
 				return m.group(2).strip()
-			else:														# variable.
-				cList = [self.encodeVarChar(c) for c in m.group(1)]
-				cList[-1] -= 0x30 										# end marker.
-				self.tokens += cList
-				return m.group(2).strip()
+			m = re.match("^([A-Za-z\\.0-9]+)(.*)$",s)					# variable next
+			assert m is not None
+			cList = [self.encodeVarChar(c) for c in m.group(1)]
+			cList[-1] -= 0x30 										# end marker.
+			self.tokens += cList
+			return m.group(2).strip()
 		#
 		if c >= '0' and c <= '9':										# int constant.
 			m = re.match("^(\\d+)(.*)$",s)
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 		tw.test("> >= @")
 		tw.test('"0123" "" "12345"')
 	else:
-		src = '2*3+4*5+6*7*2'
+		src = 'sgn-5-1'
 		tokens = tw.tokenise(src)
 		tokens += [0x80]
 		h = open("../source/testing/simple/02testcode.asm","w")

@@ -15,6 +15,18 @@
 ;
 ; *****************************************************************************
 
+EvaluateTerm:								; term value
+		lda 	#15
+		jsr 	EvaluateLevelAX
+		jmp 	DeRefTop
+
+EvaluateBaseDeRef: 							; evaluate value with X = 0
+		jsr 	EvaluateBase
+		jmp 	DeRefTop
+
+EvaluateTOSDeRef:							; evaluate value on TOS.
+		jsr 	EvaluateTOS
+		jmp 	DeRefTop
 ; *****************************************************************************
 ;
 ;						Evaluate expression bottom of stack
@@ -123,55 +135,55 @@ _EBExit:
 		;		(codePtr),y points to keyword, level is pushed on stack.
 		;
 EBNotVariable:
-;		lda 	(codePtr),y 
-;		cmp 	#$1F 						; 0001 1111 indicates unary function
-;		beq 	_EBExecUnaryFunction
-;		and 	#$F0 						; check it's a keyword.
-;		cmp 	#$10
-;		bne 	_EBError 					; if not, syntax error.
-;		iny									; get and skip.
-;		lda 	(codePtr),y
-;		iny
-;		cmp 	#KWDL_MINUS
-;		beq 	_EBNegate
-;		cmp 	#KWDL_PLING
-;		beq 	_EBUnaryReference
-;		cmp 	#KWDL_QUESTION
-;		beq 	_EBUnaryReference
-;		cmp 	#KWDL_DOLLAR
-;		beq 	_EBUnaryReference
+		sty 	tempShort 					; get the type
+		lda 	(codePtr),y 				; get function keyword.
+		tay
+		lda 	KeywordTypes-$80,y
+		ldy 	tempShort
+		and 	#$40 						; check unary function
+		bne 	_EBExecUnaryFunction
+
+		lda 	(codePtr),y 				; get function keyword.
+		iny
+		cmp 	#KWD_MINUS
+		beq 	_EBNegate
+		cmp 	#KWD_PLING
+		beq 	_EBUnaryReference
+		cmp 	#KWD_QUESTION
+		beq 	_EBUnaryReference
+		cmp 	#KWD_DOLLAR
+		beq 	_EBUnaryReference
 _EBError:	
-;		report 	Syntax
-;		; 									; negate
+		report 	Syntax
+		; 									; negate
 _EBNegate:
-;		jsr 	GetTermDeref
-;		jsr 	Int32Negate
-;		jmp 	EBHaveTerm
+		jsr 	EvaluateTerm
+		jsr 	Int32Negate
+		jmp 	EBHaveTerm
 		; 									; $ ! or ?
 _EBUnaryReference:
-;		pha 								; save keyword
-;		jsr 	GetTermDeref 				; get the address to case.
-;		pla
-;		eor 	#KWDL_PLING 				; is it pling, then will now be zero.
-;		beq 	_EBSetType
-;		eor 	#KWDL_DOLLAR^KWDL_PLING 	; if was dollar will now be zero
-;		beq 	_EBSetString
-;		lda 	#$41 						; will end up as $C0
-;_EBSetString:
-;		eor 	#$01 						; will end up as $81
+		pha 								; save keyword
+		jsr 	EvaluateTerm 				; get the address to case.
+		pla
+		eor 	#KWD_PLING 					; is it pling, then will now be zero.
+		beq 	_EBSetType
+		eor 	#KWD_DOLLAR^KWD_PLING 		; if was dollar will now be zero
+		beq 	_EBSetString
+		lda 	#$41 						; will end up as $C0
+_EBSetString:
+		eor 	#$01 						; will end up as $81
 _EBSetType:
-;		ora 	#$80 						; make it a reference.
-;		sta 	esType,x
-;		jmp 	EBHaveTerm
+		ora 	#$80 						; make it a reference.
+		sta 	esType,x
+		jmp 	EBHaveTerm
 		;
 		;		General unary function.
 		;		
 _EBExecUnaryFunction:
-;		iny  								; get ID and skip
-;		lda 	(codePtr),y
-;		iny		
-;		jsr 	ExecuteCommand 				; and do it.
-;		jmp 	EBHaveTerm
+		lda 	(codePtr),y 				; get the function token.
+		iny
+		jsr 	ExecuteCommand 				; and do it.
+		jmp 	EBHaveTerm
 
 ; *****************************************************************************
 ;

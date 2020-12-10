@@ -15,6 +15,7 @@
 	.include "common/evaluate/binary1.asm"
 	.include "common/evaluate/binary2.asm"
 	.include "common/evaluate/evaluate.asm"
+	.include "common/evaluate/unary.asm"
 	.include "common/generated/errors.asm"
 	.include "common/generated/keytypes.asm"
 	.include "common/generated/vectors.asm"

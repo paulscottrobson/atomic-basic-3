@@ -53,12 +53,12 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; --
 	.byte InstructionUndefined & $FF       ; [
 	.byte InstructionUndefined & $FF       ; ]
-	.byte InstructionUndefined & $FF       ; if
+	.byte Command_IF & $FF                 ; if
 	.byte InstructionUndefined & $FF       ; for
 	.byte InstructionUndefined & $FF       ; repeat
 	.byte NoOp6 & $FF                      ; proc
 	.byte InstructionUndefined & $FF       ; while
-	.byte InstructionUndefined & $FF       ; endif
+	.byte Command_ENDIF & $FF              ; endif
 	.byte InstructionUndefined & $FF       ; next
 	.byte InstructionUndefined & $FF       ; until
 	.byte InstructionUndefined & $FF       ; endproc
@@ -68,7 +68,7 @@ TokenVectorLow:
 	.byte Command_Rem2 & $FF               ; '
 	.byte Command_Colon & $FF              ; :
 	.byte NoOp7 & $FF                      ; then
-	.byte InstructionUndefined & $FF       ; else
+	.byte Command_ELSE & $FF               ; else
 	.byte NoOp8 & $FF                      ; to
 	.byte NoOp9 & $FF                      ; step
 	.byte Command_Vdu & $FF                ; vdu
@@ -140,12 +140,12 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; --
 	.byte InstructionUndefined >> 8        ; [
 	.byte InstructionUndefined >> 8        ; ]
-	.byte InstructionUndefined >> 8        ; if
+	.byte Command_IF >> 8                  ; if
 	.byte InstructionUndefined >> 8        ; for
 	.byte InstructionUndefined >> 8        ; repeat
 	.byte NoOp6 >> 8                       ; proc
 	.byte InstructionUndefined >> 8        ; while
-	.byte InstructionUndefined >> 8        ; endif
+	.byte Command_ENDIF >> 8               ; endif
 	.byte InstructionUndefined >> 8        ; next
 	.byte InstructionUndefined >> 8        ; until
 	.byte InstructionUndefined >> 8        ; endproc
@@ -155,7 +155,7 @@ TokenVectorHigh:
 	.byte Command_Rem2 >> 8                ; '
 	.byte Command_Colon >> 8               ; :
 	.byte NoOp7 >> 8                       ; then
-	.byte InstructionUndefined >> 8        ; else
+	.byte Command_ELSE >> 8                ; else
 	.byte NoOp8 >> 8                       ; to
 	.byte NoOp9 >> 8                       ; step
 	.byte Command_Vdu >> 8                 ; vdu

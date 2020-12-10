@@ -62,7 +62,7 @@ _CLByteCopy:
 		;		Int assign (e.g. !x = 42 or x = 42)
 		;
 _CLIntCopy:
-		dex
+		inx
 		jsr 	CopyTOSToTemp0
 		rts
 

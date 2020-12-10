@@ -1,11 +1,8 @@
 TODO List
 =========
-Gosub/Goto/Return/Vdu
-
-If (basic)
-Scan Forward/If (full)
 
 For/While/Repeat
+Check scanner nesting
 Full Variables
 Full Variable Check
 Dim 

@@ -22,7 +22,6 @@ EvaluateTerm:								; term value
 
 EvaluateBaseDeRef: 							; evaluate value with X = 0
 		jsr 	EvaluateBase
-		stop
 		jmp 	DeRefTop
 
 EvaluateTOSDeRef:							; evaluate value on TOS.

@@ -3,25 +3,25 @@
 ;
 TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; <<end>>
-	.byte InstructionUndefined & $FF       ; and
-	.byte InstructionUndefined & $FF       ; or
-	.byte InstructionUndefined & $FF       ; xor
-	.byte InstructionUndefined & $FF       ; >
-	.byte InstructionUndefined & $FF       ; <
-	.byte InstructionUndefined & $FF       ; >=
-	.byte InstructionUndefined & $FF       ; <=
-	.byte InstructionUndefined & $FF       ; <>
-	.byte InstructionUndefined & $FF       ; =
-	.byte InstructionUndefined & $FF       ; +
-	.byte InstructionUndefined & $FF       ; -
-	.byte InstructionUndefined & $FF       ; *
-	.byte InstructionUndefined & $FF       ; /
-	.byte InstructionUndefined & $FF       ; %
-	.byte InstructionUndefined & $FF       ; >>
-	.byte InstructionUndefined & $FF       ; <<
-	.byte InstructionUndefined & $FF       ; !
-	.byte InstructionUndefined & $FF       ; ?
-	.byte InstructionUndefined & $FF       ; $
+	.byte BinaryAnd & $FF                  ; and
+	.byte BinaryOr & $FF                   ; or
+	.byte BinaryXor & $FF                  ; xor
+	.byte Binary_Greater & $FF             ; >
+	.byte Binary_Less & $FF                ; <
+	.byte Binary_GreaterEqual & $FF        ; >=
+	.byte Binary_LessEqual & $FF           ; <=
+	.byte Binary_NotEqual & $FF            ; <>
+	.byte Binary_Equal & $FF               ; =
+	.byte BinaryAdd & $FF                  ; +
+	.byte BinarySub & $FF                  ; -
+	.byte BinaryMult & $FF                 ; *
+	.byte BinaryDivide & $FF               ; /
+	.byte BinaryModulus & $FF              ; %
+	.byte BinaryShiftRight & $FF           ; >>
+	.byte BinaryShiftLeft & $FF            ; <<
+	.byte IndirectWord & $FF               ; !
+	.byte IndirectByte & $FF               ; ?
+	.byte IndirectString & $FF             ; $
 	.byte InstructionUndefined & $FF       ; ~
 	.byte InstructionUndefined & $FF       ; (
 	.byte InstructionUndefined & $FF       ; &
@@ -90,25 +90,25 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; run
 TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; <<end>>
-	.byte InstructionUndefined >> 8        ; and
-	.byte InstructionUndefined >> 8        ; or
-	.byte InstructionUndefined >> 8        ; xor
-	.byte InstructionUndefined >> 8        ; >
-	.byte InstructionUndefined >> 8        ; <
-	.byte InstructionUndefined >> 8        ; >=
-	.byte InstructionUndefined >> 8        ; <=
-	.byte InstructionUndefined >> 8        ; <>
-	.byte InstructionUndefined >> 8        ; =
-	.byte InstructionUndefined >> 8        ; +
-	.byte InstructionUndefined >> 8        ; -
-	.byte InstructionUndefined >> 8        ; *
-	.byte InstructionUndefined >> 8        ; /
-	.byte InstructionUndefined >> 8        ; %
-	.byte InstructionUndefined >> 8        ; >>
-	.byte InstructionUndefined >> 8        ; <<
-	.byte InstructionUndefined >> 8        ; !
-	.byte InstructionUndefined >> 8        ; ?
-	.byte InstructionUndefined >> 8        ; $
+	.byte BinaryAnd >> 8                   ; and
+	.byte BinaryOr >> 8                    ; or
+	.byte BinaryXor >> 8                   ; xor
+	.byte Binary_Greater >> 8              ; >
+	.byte Binary_Less >> 8                 ; <
+	.byte Binary_GreaterEqual >> 8         ; >=
+	.byte Binary_LessEqual >> 8            ; <=
+	.byte Binary_NotEqual >> 8             ; <>
+	.byte Binary_Equal >> 8                ; =
+	.byte BinaryAdd >> 8                   ; +
+	.byte BinarySub >> 8                   ; -
+	.byte BinaryMult >> 8                  ; *
+	.byte BinaryDivide >> 8                ; /
+	.byte BinaryModulus >> 8               ; %
+	.byte BinaryShiftRight >> 8            ; >>
+	.byte BinaryShiftLeft >> 8             ; <<
+	.byte IndirectWord >> 8                ; !
+	.byte IndirectByte >> 8                ; ?
+	.byte IndirectString >> 8              ; $
 	.byte InstructionUndefined >> 8        ; ~
 	.byte InstructionUndefined >> 8        ; (
 	.byte InstructionUndefined >> 8        ; &

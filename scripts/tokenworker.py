@@ -119,9 +119,9 @@ if __name__ == "__main__":
 		tw.test("> >= @")
 		tw.test('"0123" "" "12345"')
 	else:
-		src = '42'
+		src = '2*3+4*5+6*7*2'
 		tokens = tw.tokenise(src)
-		tokens += [0,0]
+		tokens += [0x80]
 		h = open("../source/testing/simple/02testcode.asm","w")
 		h.write(";\n;\tAutomatically generated.\n;\n")
 		h.write("\t.align 256\nBasicProgram:\n\t.byte {0}\n".format(",".join(["${0:02x}".format(c) for c in tokens])))

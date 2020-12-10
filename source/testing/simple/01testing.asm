@@ -11,9 +11,10 @@
 
 TestProgram:		
 		set16 	codePtr,BasicProgram
-;		ldy 	#0 
-;		jsr 	EvaluateBase
-;		stop
+		ldy 	#0 
+		ldx 	#1
+		jsr 	EvaluateTOS
+		stop
 ;		jsr 	DerefTop
 		stop
 w1:		jmp 	w1

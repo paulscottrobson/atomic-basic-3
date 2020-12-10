@@ -1,3 +1,9 @@
 TODO List
 =========
-Evaluate
+Evaluate - complete unary operations
+Port unary functions
+Port functions
+Handle variables.
+Add RUN code.
+Basic arithmetic check.
+

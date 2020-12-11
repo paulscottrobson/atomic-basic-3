@@ -1,13 +1,35 @@
 	.align 256
 BasicProgram:
-	.byte $05
+	.byte $0b
 	.byte $e8
 	.byte $03
-	.byte $cd
+	.byte $c7
+	.byte $3f
+	.byte $41
+	.byte $32
+	.byte $1b
+	.byte $95
+	.byte $ae
 	.byte $80
 	.byte $0b
 	.byte $f2
 	.byte $03
+	.byte $c7
+	.byte $3f
+	.byte $41
+	.byte $32
+	.byte $1c
+	.byte $95
+	.byte $ae
+	.byte $80
+	.byte $05
+	.byte $fc
+	.byte $03
+	.byte $cd
+	.byte $80
+	.byte $0b
+	.byte $06
+	.byte $04
 	.byte $b6
 	.byte $3f
 	.byte $41
@@ -17,8 +39,8 @@ BasicProgram:
 	.byte $ae
 	.byte $80
 	.byte $0c
-	.byte $fc
-	.byte $03
+	.byte $10
+	.byte $04
 	.byte $c6
 	.byte $60
 	.byte $07
@@ -29,16 +51,16 @@ BasicProgram:
 	.byte $00
 	.byte $80
 	.byte $05
-	.byte $06
+	.byte $1a
 	.byte $04
 	.byte $bb
 	.byte $80
 	.byte $04
-	.byte $10
+	.byte $24
 	.byte $04
 	.byte $80
 	.byte $0b
-	.byte $1a
+	.byte $2e
 	.byte $04
 	.byte $b6
 	.byte $3f
@@ -49,7 +71,7 @@ BasicProgram:
 	.byte $ae
 	.byte $80
 	.byte $0c
-	.byte $24
+	.byte $38
 	.byte $04
 	.byte $c6
 	.byte $60
@@ -61,7 +83,7 @@ BasicProgram:
 	.byte $00
 	.byte $80
 	.byte $05
-	.byte $2e
+	.byte $42
 	.byte $04
 	.byte $bb
 	.byte $80

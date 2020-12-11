@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.55.2200 listing file
 ; 64tass -q --m65xx -L asm.out/basic.lst -l asm.out/basic.lbl -o asm.out/basic.prg basic.asm
-; Fri Dec 11 19:41:17 2020
+; Fri Dec 11 20:53:18 2020
 
 ;Offset	;Hex		;Monitor	;Source
 
@@ -926,7 +926,7 @@
 
 .140f					Command_Run:
 .140f	20 95 10	jsr $1095			jsr 	CommandClear 				; clear variables, memory pointers, hash table.
-.1412	20 04 1f	jsr $1f04			jsr 	BuildProcedureList 			; build procedure cache.
+.1412	20 05 1f	jsr $1f05			jsr 	BuildProcedureList 			; build procedure cache.
 .1415	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
 .1417	85 00		sta $00				sta 	codePtr
 .1419	a9 22		lda #$22			lda 	#(BasicProgram) >> 8
@@ -2062,7 +2062,7 @@
 >1b56	c8					.byte Command_ENDIF & $FF              ; endif
 >1b57	8f					.byte Command_NEXT & $FF               ; next
 >1b58	f5					.byte Command_Until & $FF              ; until
->1b59	9e					.byte Command_EndProc & $FF            ; endproc
+>1b59	a2					.byte Command_EndProc & $FF            ; endproc
 >1b5a	7f					.byte Command_Wend & $FF               ; wend
 >1b5b	cc					.byte Command_Rem & $FF                ; rem
 >1b5c	c9					.byte Command_LET & $FF                ; let
@@ -2074,8 +2074,8 @@
 >1b62	b8					.byte NoOp9 & $FF                      ; step
 >1b63	51					.byte Command_Vdu & $FF                ; vdu
 >1b64	32					.byte Command_Print & $FF              ; print
->1b65	01					.byte Command_Call & $FF               ; call
->1b66	b2					.byte Command_Local & $FF              ; local
+>1b65	9e					.byte Command_Call & $FF               ; call
+>1b66	b6					.byte Command_Local & $FF              ; local
 >1b67	52					.byte Command_Goto & $FF               ; goto
 >1b68	33					.byte Command_Gosub & $FF              ; gosub
 >1b69	41					.byte Command_Return & $FF             ; return
@@ -2161,7 +2161,7 @@
 >1bb8	14					.byte NoOp9 >> 8                       ; step
 >1bb9	14					.byte Command_Vdu >> 8                 ; vdu
 >1bba	13					.byte Command_Print >> 8               ; print
->1bbb	1f					.byte Command_Call >> 8                ; call
+>1bbb	1e					.byte Command_Call >> 8                ; call
 >1bbc	1e					.byte Command_Local >> 8               ; local
 >1bbd	12					.byte Command_Goto >> 8                ; goto
 >1bbe	12					.byte Command_Gosub >> 8               ; gosub
@@ -2678,119 +2678,119 @@
 ;******  Return to file: basic.asm
 
 
+;******  Processing file: common/procedures/call.asm
+
+.1e9e					Command_Call:
+>1e9e	db						.byte 	$DB
+.1e9f	4c 7a 1a	jmp $1a7a			jmp 	EHandlerNotImplemented
+
+;******  Return to file: basic.asm
+
+
 ;******  Processing file: common/procedures/endproc.asm
 
-.1e9e					Command_EndProc:
-.1e9e	20 aa 20	jsr $20aa			jsr 	StackPopLocals 				; restore local variables.
-.1ea1	a9 54		lda #$54			lda 	#SMProcedure				; check TOS is PROC
-.1ea3	20 68 20	jsr $2068			jsr 	StackCheck
-.1ea6	d0 07		bne $1eaf			bne 	_EPError
-.1ea8	20 87 20	jsr $2087			jsr 	StackLoadPosition 			; restore position and drop
-.1eab	20 73 20	jsr $2073			jsr 	StackClose
-.1eae	60		rts				rts
-.1eaf					_EPError:
-.1eaf	4c 34 1a	jmp $1a34			jmp 	EHandlerNoProc
+.1ea2					Command_EndProc:
+.1ea2	20 aa 20	jsr $20aa			jsr 	StackPopLocals 				; restore local variables.
+.1ea5	a9 54		lda #$54			lda 	#SMProcedure				; check TOS is PROC
+.1ea7	20 68 20	jsr $2068			jsr 	StackCheck
+.1eaa	d0 07		bne $1eb3			bne 	_EPError
+.1eac	20 87 20	jsr $2087			jsr 	StackLoadPosition 			; restore position and drop
+.1eaf	20 73 20	jsr $2073			jsr 	StackClose
+.1eb2	60		rts				rts
+.1eb3					_EPError:
+.1eb3	4c 34 1a	jmp $1a34			jmp 	EHandlerNoProc
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/procedures/local.asm
 
-.1eb2					Command_Local:
-.1eb2	20 cb 1e	jsr $1ecb			jsr 	GetLocalTerm 				; get a local variable.
-.1eb5	98		tya				tya
-.1eb6	48		pha				pha
-.1eb7	a0 00		ldy #$00			ldy 	#0 							; erase the variable.
+.1eb6					Command_Local:
+.1eb6	20 cf 1e	jsr $1ecf			jsr 	GetLocalTerm 				; get a local variable.
 .1eb9	98		tya				tya
-.1eba					_CLClear:
-.1eba	91 04		sta ($04),y			sta 	(temp0),y
-.1ebc	c8		iny				iny
-.1ebd	c0 04		cpy #$04			cpy 	#4
-.1ebf	d0 f9		bne $1eba			bne 	_CLClear
-.1ec1	68		pla				pla
-.1ec2	a8		tay				tay
-.1ec3	b1 00		lda ($00),y			lda 	(codePtr),y					; check comma
-.1ec5	c8		iny				iny
-.1ec6	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
-.1ec8	f0 e8		beq $1eb2			beq 	Command_Local
-.1eca	60		rts				rts
-.1ecb					GetLocalTerm:
-.1ecb	8a		txa				txa
-.1ecc	48		pha				pha
-.1ecd	a2 00		ldx #$00			ldx 	#0 							; start on stack
-.1ecf	a9 07		lda #$07			lda 	#7  						; get a term
-.1ed1	20 a6 16	jsr $16a6			jsr 	EvaluateLevelAX 			; this is the variable/parameter to localise.
-.1ed4	b5 20		lda $20,x			lda 	esType,x 					; which should be a reference of some sort
-.1ed6	10 26		bpl $1efe			bpl 	_GLTSyntax 					; if not, syntax error.
-.1ed8	98		tya				tya
-.1ed9	48		pha				pha
-.1eda	a9 67		lda #$67			lda 	#SMLocal 					; create stack frame.
-.1edc	20 43 20	jsr $2043			jsr 	StackOpen
-.1edf	a0 05		ldy #$05			ldy 	#5
-.1ee1	b5 28		lda $28,x			lda 	esInt0,x 					; copy address to temp0 and to stack+5,stack+6
-.1ee3	85 04		sta $04				sta 	temp0
-.1ee5	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.1ee7	b5 30		lda $30,x			lda 	esInt1,x
-.1ee9	85 05		sta $05				sta 	temp0+1
-.1eeb	c8		iny				iny
-.1eec	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.1eee	a0 00		ldy #$00			ldy 	#0 							; now copy data into stack1-4
-.1ef0					_GLTCopy:
-.1ef0	b1 04		lda ($04),y			lda 	(temp0),y
-.1ef2	c8		iny				iny
-.1ef3	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.1ef5	c0 04		cpy #$04			cpy 	#4
-.1ef7	d0 f7		bne $1ef0			bne 	_GLTCopy
-.1ef9	68		pla				pla
-.1efa	a8		tay				tay
-.1efb	68		pla				pla
-.1efc	aa		tax				tax
-.1efd	60		rts				rts
-.1efe					_GLTSyntax:
-.1efe	4c a7 1a	jmp $1aa7			jmp 	EHandlerSyntax
-
-;******  Return to file: basic.asm
-
-
-;******  Processing file: common/procedures/proc.asm
-
-.1f01					Command_Call:
-.1f01	4c 7a 1a	jmp $1a7a			jmp 	EHandlerNotImplemented
+.1eba	48		pha				pha
+.1ebb	a0 00		ldy #$00			ldy 	#0 							; erase the variable.
+.1ebd	98		tya				tya
+.1ebe					_CLClear:
+.1ebe	91 04		sta ($04),y			sta 	(temp0),y
+.1ec0	c8		iny				iny
+.1ec1	c0 04		cpy #$04			cpy 	#4
+.1ec3	d0 f9		bne $1ebe			bne 	_CLClear
+.1ec5	68		pla				pla
+.1ec6	a8		tay				tay
+.1ec7	b1 00		lda ($00),y			lda 	(codePtr),y					; check comma
+.1ec9	c8		iny				iny
+.1eca	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
+.1ecc	f0 e8		beq $1eb6			beq 	Command_Local
+.1ece	60		rts				rts
+.1ecf					GetLocalTerm:
+.1ecf	8a		txa				txa
+.1ed0	48		pha				pha
+.1ed1	a2 00		ldx #$00			ldx 	#0 							; start on stack
+.1ed3	a9 07		lda #$07			lda 	#7  						; get a term
+.1ed5	20 a6 16	jsr $16a6			jsr 	EvaluateLevelAX 			; this is the variable/parameter to localise.
+.1ed8	b5 20		lda $20,x			lda 	esType,x 					; which should be a reference of some sort
+.1eda	10 26		bpl $1f02			bpl 	_GLTSyntax 					; if not, syntax error.
+.1edc	98		tya				tya
+.1edd	48		pha				pha
+.1ede	a9 67		lda #$67			lda 	#SMLocal 					; create stack frame.
+.1ee0	20 43 20	jsr $2043			jsr 	StackOpen
+.1ee3	a0 05		ldy #$05			ldy 	#5
+.1ee5	b5 28		lda $28,x			lda 	esInt0,x 					; copy address to temp0 and to stack+5,stack+6
+.1ee7	85 04		sta $04				sta 	temp0
+.1ee9	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.1eeb	b5 30		lda $30,x			lda 	esInt1,x
+.1eed	85 05		sta $05				sta 	temp0+1
+.1eef	c8		iny				iny
+.1ef0	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.1ef2	a0 00		ldy #$00			ldy 	#0 							; now copy data into stack1-4
+.1ef4					_GLTCopy:
+.1ef4	b1 04		lda ($04),y			lda 	(temp0),y
+.1ef6	c8		iny				iny
+.1ef7	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.1ef9	c0 04		cpy #$04			cpy 	#4
+.1efb	d0 f7		bne $1ef4			bne 	_GLTCopy
+.1efd	68		pla				pla
+.1efe	a8		tay				tay
+.1eff	68		pla				pla
+.1f00	aa		tax				tax
+.1f01	60		rts				rts
+.1f02					_GLTSyntax:
+.1f02	4c a7 1a	jmp $1aa7			jmp 	EHandlerSyntax
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/procedures/scanproc.asm
 
-.1f04					BuildProcedureList:
-.1f04	a9 00		lda #$00			lda 	#0 							; first link is zero
-.1f06	8d a9 08	sta $08a9			sta 	ProcList
-.1f09	8d aa 08	sta $08aa			sta 	ProcList+1
-.1f0c	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
-.1f0e	85 00		sta $00				sta 	codePtr
-.1f10	a9 22		lda #$22			lda 	#(BasicProgram) >> 8
-.1f12	85 01		sta $01				sta 	1+(codePtr)
-.1f14					_BPLLoop:
-.1f14	a0 00		ldy #$00			ldy 	#0 							; check at the end ?
-.1f16	b1 00		lda ($00),y			lda 	(codePtr),y
-.1f18	f0 1e		beq $1f38			beq	 	_BPLExit
-.1f1a	a0 03		ldy #$03			ldy 	#3 							; look at first token.
-.1f1c	b1 00		lda ($00),y			lda 	(codePtr),y
-.1f1e	c9 b6		cmp #$b6			cmp 	#KWD_PROC					; if it is PROC
-.1f20	d0 06		bne $1f28			bne 	_BPLNext
-.1f22	20 3a 1f	jsr $1f3a			jsr 	ScanParameters 				; find the parameters
-.1f25	20 7c 1f	jsr $1f7c			jsr 	CacheProcedure 				; cache it.
-.1f28					_BPLNext:
-.1f28	a0 00		ldy #$00			ldy 	#0 							; next line.
-.1f2a	b1 00		lda ($00),y			lda 	(codePtr),y
-.1f2c	18		clc				clc
-.1f2d	65 00		adc $00				adc 	codePtr
-.1f2f	85 00		sta $00				sta 	codePtr
-.1f31	90 e1		bcc $1f14			bcc 	_BPLLoop
-.1f33	e6 01		inc $01				inc 	codePtr+1
-.1f35	4c 14 1f	jmp $1f14			jmp 	_BPLLoop
-.1f38					_BPLExit:
->1f38	db						.byte 	$DB
+.1f05					BuildProcedureList:
+.1f05	a9 00		lda #$00			lda 	#0 							; first link is zero
+.1f07	8d a9 08	sta $08a9			sta 	ProcList
+.1f0a	8d aa 08	sta $08aa			sta 	ProcList+1
+.1f0d	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
+.1f0f	85 00		sta $00				sta 	codePtr
+.1f11	a9 22		lda #$22			lda 	#(BasicProgram) >> 8
+.1f13	85 01		sta $01				sta 	1+(codePtr)
+.1f15					_BPLLoop:
+.1f15	a0 00		ldy #$00			ldy 	#0 							; check at the end ?
+.1f17	b1 00		lda ($00),y			lda 	(codePtr),y
+.1f19	f0 1e		beq $1f39			beq	 	_BPLExit
+.1f1b	a0 03		ldy #$03			ldy 	#3 							; look at first token.
+.1f1d	b1 00		lda ($00),y			lda 	(codePtr),y
+.1f1f	c9 b6		cmp #$b6			cmp 	#KWD_PROC					; if it is PROC
+.1f21	d0 06		bne $1f29			bne 	_BPLNext
+.1f23	20 3a 1f	jsr $1f3a			jsr 	ScanParameters 				; find the parameters
+.1f26	20 7c 1f	jsr $1f7c			jsr 	CacheProcedure 				; cache it.
+.1f29					_BPLNext:
+.1f29	a0 00		ldy #$00			ldy 	#0 							; next line.
+.1f2b	b1 00		lda ($00),y			lda 	(codePtr),y
+.1f2d	18		clc				clc
+.1f2e	65 00		adc $00				adc 	codePtr
+.1f30	85 00		sta $00				sta 	codePtr
+.1f32	90 e1		bcc $1f15			bcc 	_BPLLoop
+.1f34	e6 01		inc $01				inc 	codePtr+1
+.1f36	4c 15 1f	jmp $1f15			jmp 	_BPLLoop
+.1f39					_BPLExit:
 .1f39	60		rts				rts
 .1f3a					ScanParameters:
 .1f3a	98		tya				tya
@@ -2840,7 +2840,7 @@
 .1f85	20 e6 1f	jsr $1fe6			jsr 	CacheWrite
 .1f88	ad aa 08	lda $08aa			lda 	ProcList+1
 .1f8b	20 e6 1f	jsr $1fe6			jsr 	CacheWrite
-.1f8e	68		pla				pla 								; write this one out as the current head.
+.1f8e	68		pla				pla 								; write this one out as the current head of the linked procedure list.
 .1f8f	8d aa 08	sta $08aa			sta 	ProcList+1
 .1f92	68		pla				pla
 .1f93	8d a9 08	sta $08a9			sta 	ProcList
@@ -2852,7 +2852,7 @@
 .1f9c	18		clc				clc
 .1f9d	71 00		adc ($00),y			adc 	(codePtr),y
 .1f9f	aa		tax				tax
-.1fa0	b1 00		lda ($00),y			lda 	(codePtr),y 					; end of name (e.g. $00-$2F)
+.1fa0	b1 00		lda ($00),y			lda 	(codePtr),y 				; end of name (e.g. $00-$2F)
 .1fa2	c9 30		cmp #$30			cmp 	#$30
 .1fa4	b0 f4		bcs $1f9a			bcs 	_CPCalculateHash
 .1fa6	98		tya				tya
@@ -3223,72 +3223,94 @@
 
 >21b6						.align 256
 .2200					BasicProgram:
->2200	05					.byte $05
+>2200	0b					.byte $0b
 >2201	e8					.byte $e8
 >2202	03					.byte $03
->2203	cd					.byte $cd
->2204	80					.byte $80
->2205	0b					.byte $0b
->2206	f2					.byte $f2
->2207	03					.byte $03
->2208	b6					.byte $b6
->2209	3f					.byte $3f
->220a	41					.byte $41
->220b	32					.byte $32
->220c	1b					.byte $1b
->220d	95					.byte $95
->220e	ae					.byte $ae
->220f	80					.byte $80
->2210	0c					.byte $0c
->2211	fc					.byte $fc
->2212	03					.byte $03
->2213	c6					.byte $c6
->2214	60					.byte $60
->2215	07					.byte $07
->2216	50					.byte $50
->2217	52					.byte $52
->2218	43					.byte $43
->2219	31					.byte $31
->221a	00					.byte $00
->221b	80					.byte $80
->221c	05					.byte $05
->221d	06					.byte $06
->221e	04					.byte $04
->221f	bb					.byte $bb
->2220	80					.byte $80
->2221	04					.byte $04
->2222	10					.byte $10
->2223	04					.byte $04
->2224	80					.byte $80
->2225	0b					.byte $0b
->2226	1a					.byte $1a
->2227	04					.byte $04
->2228	b6					.byte $b6
->2229	3f					.byte $3f
->222a	41					.byte $41
->222b	32					.byte $32
->222c	1c					.byte $1c
->222d	95					.byte $95
->222e	ae					.byte $ae
->222f	80					.byte $80
->2230	0c					.byte $0c
->2231	24					.byte $24
->2232	04					.byte $04
->2233	c6					.byte $c6
->2234	60					.byte $60
->2235	07					.byte $07
->2236	50					.byte $50
->2237	52					.byte $52
->2238	43					.byte $43
->2239	32					.byte $32
->223a	00					.byte $00
->223b	80					.byte $80
->223c	05					.byte $05
->223d	2e					.byte $2e
->223e	04					.byte $04
->223f	bb					.byte $bb
->2240	80					.byte $80
->2241	00					.byte $00
+>2203	c7					.byte $c7
+>2204	3f					.byte $3f
+>2205	41					.byte $41
+>2206	32					.byte $32
+>2207	1b					.byte $1b
+>2208	95					.byte $95
+>2209	ae					.byte $ae
+>220a	80					.byte $80
+>220b	0b					.byte $0b
+>220c	f2					.byte $f2
+>220d	03					.byte $03
+>220e	c7					.byte $c7
+>220f	3f					.byte $3f
+>2210	41					.byte $41
+>2211	32					.byte $32
+>2212	1c					.byte $1c
+>2213	95					.byte $95
+>2214	ae					.byte $ae
+>2215	80					.byte $80
+>2216	05					.byte $05
+>2217	fc					.byte $fc
+>2218	03					.byte $03
+>2219	cd					.byte $cd
+>221a	80					.byte $80
+>221b	0b					.byte $0b
+>221c	06					.byte $06
+>221d	04					.byte $04
+>221e	b6					.byte $b6
+>221f	3f					.byte $3f
+>2220	41					.byte $41
+>2221	32					.byte $32
+>2222	1b					.byte $1b
+>2223	95					.byte $95
+>2224	ae					.byte $ae
+>2225	80					.byte $80
+>2226	0c					.byte $0c
+>2227	10					.byte $10
+>2228	04					.byte $04
+>2229	c6					.byte $c6
+>222a	60					.byte $60
+>222b	07					.byte $07
+>222c	50					.byte $50
+>222d	52					.byte $52
+>222e	43					.byte $43
+>222f	31					.byte $31
+>2230	00					.byte $00
+>2231	80					.byte $80
+>2232	05					.byte $05
+>2233	1a					.byte $1a
+>2234	04					.byte $04
+>2235	bb					.byte $bb
+>2236	80					.byte $80
+>2237	04					.byte $04
+>2238	24					.byte $24
+>2239	04					.byte $04
+>223a	80					.byte $80
+>223b	0b					.byte $0b
+>223c	2e					.byte $2e
+>223d	04					.byte $04
+>223e	b6					.byte $b6
+>223f	3f					.byte $3f
+>2240	41					.byte $41
+>2241	32					.byte $32
+>2242	1c					.byte $1c
+>2243	95					.byte $95
+>2244	ae					.byte $ae
+>2245	80					.byte $80
+>2246	0c					.byte $0c
+>2247	38					.byte $38
+>2248	04					.byte $04
+>2249	c6					.byte $c6
+>224a	60					.byte $60
+>224b	07					.byte $07
+>224c	50					.byte $50
+>224d	52					.byte $52
+>224e	43					.byte $43
+>224f	32					.byte $32
+>2250	00					.byte $00
+>2251	80					.byte $80
+>2252	05					.byte $05
+>2253	42					.byte $42
+>2254	04					.byte $04
+>2255	bb					.byte $bb
+>2256	80					.byte $80
+>2257	00					.byte $00
 
 ;******  Return to file: basic.asm
 

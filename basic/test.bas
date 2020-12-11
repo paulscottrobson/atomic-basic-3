@@ -1,3 +1,5 @@
+call prc1()
+call prc2()
 stop
 proc prc1()
 	print "PRC1"

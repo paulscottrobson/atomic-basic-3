@@ -3,7 +3,7 @@
 ;
 ;		Name:		scanproc.asm
 ;		Author:		Paul Robson (paul@robsons.org.uk)
-;		Date:		7 Dec 2020
+;		Date:		11 Dec 2020
 ;		Purpose:	Scan for procedures.
 ;
 ; *****************************************************************************
@@ -16,10 +16,9 @@
 ; *****************************************************************************
 
 BuildProcedureList:
-		lda 	LowMemory 					; starts at low memory
-		sta 	ProcTable
-		lda 	LowMemory+1
-		sta 	ProcTable+1
+		lda 	#0 							; first link is zero
+		sta 	ProcList
+		sta 	ProcList+1
 		;
 		set16 	codePtr,BasicProgram 		; codePtr points to the actual code.
 		;
@@ -31,6 +30,7 @@ _BPLLoop:
 		lda 	(codePtr),y
 		cmp 	#KWD_PROC					; if it is PROC
 		bne 	_BPLNext
+		jsr 	ScanParameters 				; find the parameters
 		jsr 	CacheProcedure 				; cache it.
 		;
 _BPLNext:		
@@ -44,9 +44,62 @@ _BPLNext:
 		jmp 	_BPLLoop
 
 _BPLExit:		
-		lda 	#0 							; write the trailing zero.
-		jsr 	CacheWrite
+		stop
 		rts
+
+; *****************************************************************************
+;
+;			Scan for parameters, which are stored in the buffer.
+;		  (done seperately because it is likely to create variables)
+;
+; *****************************************************************************
+
+ScanParameters:
+		pshy 								; save Y
+		lda 	#1
+		sta 	Buffer 						; 'next free' in the buffer, start recording at Buffer+1
+		;
+		;		Look for opening left bracket.
+		;
+_SPFindOpen:
+		lda 	(codePtr),y					; get next
+		iny 
+		cmp 	#KWD_LPAREN 				; ( token ?
+		bne 	_SPFindOpen 				
+		;
+		;		Now extract the parameters.
+		;
+_SPGrabParams:
+		lda 	(codePtr),y 				; found ) ?
+		cmp 	#KWD_RPAREN 	
+		beq 	_SPExit
+		;
+		ldx 	#0 							; start on stack
+		lda 	#7  						; get a term
+		jsr 	EvaluateLevelAX 			; this is the variable/parameter to localise.
+		;
+		lda 	esType,x 					; which should be a reference of some sort
+		bpl 	SPSyntax 					; if not, syntax error.
+		;
+		ldx 	Buffer 						; write into Buffer in Hi-Lo order.
+		lda		esInt1
+		sta 	Buffer,x
+		lda		esInt0
+		sta 	Buffer+1,x
+		inx
+		inx
+		stx 	Buffer
+		lda 	(codePtr),y 				; found , ?
+		iny
+		cmp 	#KWD_COMMA 					; if so, get next.
+		beq 	_SPGrabParams 				
+		cmp 	#KWD_RPAREN 				; if not )
+		bne 	SPSyntax					; syntax error.
+_SPExit:
+		puly
+		rts
+SPSyntax:
+		report 	Syntax
 
 ; *****************************************************************************
 ;
@@ -54,16 +107,22 @@ _BPLExit:
 ;
 ; *****************************************************************************
 
+
 CacheProcedure:
-		lda 	LowMemory 					; push current position on the stack.
+		lda 	LowMemory 					; push low memory (current addr) on the stack
 		pha
 		lda 	LowMemory+1
 		pha
 		;
-		;		Start off with a dummy offset
-		;
-		lda 	#0
+		lda 	ProcList 					; write out the previous entry
 		jsr 	CacheWrite
+		lda 	ProcList+1
+		jsr 	CacheWrite
+		;
+		pla 								; write this one out as the current head of the linked procedure list.
+		sta 	ProcList+1
+		pla
+		sta 	ProcList
 		;
 		;		Calculate the hash of the line, which is a simple sum.
 		;
@@ -75,7 +134,7 @@ _CPCalculateHash:
 		clc
 		adc 	(codePtr),y
 		tax		
-		lda 	(codePtr),y 					; end of name (e.g. $00-$2F)
+		lda 	(codePtr),y 				; end of name (e.g. $00-$2F)
 		cmp 	#$30
 		bcs 	_CPCalculateHash
 		;
@@ -93,58 +152,31 @@ _CPCalculateHash:
 		puly  								; restore and point to next token.
 		iny
 		jsr 	CheckLeftParen 				; should be a (
-		pshy 								; save it again.
 _CPScanEnd:
 		lda 	(codePtr),y 				; look for ) or EOL or :
 		iny		
-		cmp 	#KWD_RPAREN
-		beq 	_CPScanFoundR
 		cmp 	#KWD_COLON
-		beq		_CPSyntax
+		beq		SPSyntax
 		cmp 	#$80
-		bne 	_CPScanEnd 					; no, go round.
-_CPSyntax:
-		report 	Syntax
+		beq 	SPSyntax
+		cmp 	#KWD_RPAREN
+		bne 	_CPScanEnd
 		;
 _CPScanFoundR:		
 		tya 								; put as element 4, offset to the code
 		jsr 	CacheWrite
-		puly 								; restore Y position at parameter start.
-		;
-		;		Look for parameters loop.
-		;
-		lda 	(codePtr),y 				; found ) ending the list
-		cmp 	#KWD_RPAREN
-		beq 	_CPRExit
-		;	
-_CPRParameterLoop:	
-		ldx 	#0 							; get localised term (in local.asm)
-		jsr 	GetLocalTerm 			
-		lda 	esInt1,x 					; write the address out HIGH first.
+		ldx 	#0 							; copy the buffer out.
+_CPCopyBuffer:
+		cpx 	Buffer
+		beq 	_CPDoneCopy
+		lda 	Buffer+1,x
 		jsr 	CacheWrite
-		lda 	esInt0,x
-		jsr 	CacheWrite
+		inx
+		jmp 	_CPCopyBuffer
 		;
-		lda 	(codePtr),y 				; comma go back.
-		iny
-		cmp 	#KWD_COMMA
-		beq 	_CPRParameterLoop
-		cmp 	#KWD_RPAREN 				; SN error if not )
-		bne 	_CPSyntax
-		;
-_CPRExit:
+_CPDoneCopy:
 		lda 	#0 							; write trailing zero to parameter address list.
 		jsr 	CacheWrite
-		pla 								; pull start off to codePtr.
-		sta 	temp1+1
-		pla
-		sta 	temp1
-		;
-		ldy 	#0 							; calculate current - start
-		sec
-		lda 	LowMemory
-		sbc 	temp1
-		sta 	(temp1),y 					; write it out and exit
 		rts
 
 ; *****************************************************************************

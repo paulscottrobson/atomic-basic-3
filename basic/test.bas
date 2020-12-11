@@ -1,4 +1,8 @@
 stop
 proc prc1()
-b = 2
-proc prc2(d,hello,xw)
+	print "PRC1"
+endproc
+
+proc prc2()
+	print "PRC2"
+endproc

@@ -84,5 +84,5 @@ PrintCRFlag:								; tracks printing new line at end of PRINT
 ArrayEnabled:	 							; when clear, cannot do array indexing.	
 		.fill 	1 				
 
-ProcTable:									; procedure list			
+ProcList:									; procedure list			
 		.fill 	2		

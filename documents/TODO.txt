@@ -2,7 +2,7 @@ TODO List
 =========
 Full Variables (rewrite)
 Full Variable Check
-Design procedure structure
+Array code.
 Procedures and Parameters (partial rewrite ?) 
 
 Notes

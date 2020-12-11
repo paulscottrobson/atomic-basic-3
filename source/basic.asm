@@ -49,5 +49,7 @@
 	.include "common/math/int32unary.asm"
 	.include "common/utility/scanner.asm"
 	.include "common/utility/stack.asm"
+	.include "variables/common/varcreate.asm"
 	.include "variables/common/variables.asm"
+	.include "variables/common/varsearch.asm"
 	.include "testing/code/99program.asm"

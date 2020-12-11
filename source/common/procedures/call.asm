@@ -16,30 +16,49 @@
 ; *****************************************************************************
 
 Command_Call:	;; [call]
-		stop
 		;
-		sec 								; put into temp1 the address of the identifier (so we can use ,Y)
-		tya 
-		adc 	codePtr
+		;		Create a pointer y-4 back so we can compare identifiers starting
+		;		from Y = 4
+		;
+		tya 								; Y offset - 4
+		sec
+		sbc 	#4
+		adc 	codePtr 					; add to CodePtr -> temp1
 		sta 	temp1
 		lda 	codePtr+1
-		adc		#0
+		adc 	#0
 		sta 	temp1+1
 		;
-		ldx 	#0 							; calculate the hash, in X
-_CalcHash:
-		txa
+		;		Calculate the hash of the identifier.
+		;
+		ldx 	#0
+_CCCalcHash:
+		txa 								; which is simple additive
 		clc
-		adc 	(codePtr),y		
+		adc 	(codePtr),y
 		tax
-		lda 	(codePtr),y
+		lda 	(codePtr),y 				; until added end marker.
 		iny
 		cmp 	#$30
-		bcs 	_CalcHash 
+		bcs 	_CCCalCHash		
+		jsr 	CheckLeftParen 				; check for opening parameter bracket.
 		;
-		jsr 	CheckLeftParen 				; check for opening bracket.
-		pshy 								; save parameters star on stack.
+		;		Scan through the procedure table looking for a match.
 		;
-		;		Now find the procedure to call in temp0
+		stop
+		lda 	ProcTable 					; copy ProcTable to temp0
+		sta 	temp0
+		lda 	ProcTable+1
+		sta 	temp0+1
 		;
-		set16 	temp0,
+		;		Evaluate all the procedures on successive stack levels.
+		;
+
+		;
+		;		Push the return address on the stack.
+		;
+
+		;
+		;		Go through the parameters localising each one and copying the new value in.		
+		;
+		rts

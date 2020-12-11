@@ -1,6 +1,5 @@
 TODO List
 =========
-Full Variables (rewrite)
 Full Variable Check
 Array code.
 Procedures and Parameters (partial rewrite ?) 

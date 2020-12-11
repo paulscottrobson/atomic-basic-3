@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.55.2200 listing file
 ; 64tass -q --m65xx -L asm.out/basic.lst -l asm.out/basic.lbl -o asm.out/basic.prg basic.asm
-; Fri Dec 11 08:18:46 2020
+; Fri Dec 11 08:30:13 2020
 
 ;Offset	;Hex		;Monitor	;Source
 
@@ -1381,7 +1381,7 @@
 .16be					_EBNotConstant:
 .16be	c9 60		cmp #$60			cmp 	#$60 						; 60 is a string.
 .16c0	f0 06		beq $16c8			beq 	_EBHaveString
-.16c2	20 be 1f	jsr $1fbe			jsr 	VariableAccess
+.16c2	20 bd 1f	jsr $1fbd			jsr 	VariableAccess
 .16c5	4c e1 16	jmp $16e1			jmp 	EBHaveTerm
 .16c8					_EBHaveString:
 .16c8	98		tya				tya 								; put codePtr + 2 in the address, it's a string.
@@ -2841,7 +2841,7 @@
 .1f82	69 00		adc #$00			adc 	#0
 .1f84	85 11		sta $11				sta 	LowMemory+1
 .1f86	c5 0f		cmp $0f				cmp 	StackPtr+1 					; caught up with high memory ?
-.1f88	b0 31		bcs $1fbb			bcs 	_CVMemoryError
+.1f88	b0 30		bcs $1fba			bcs 	_CVMemoryError
 .1f8a	a0 00		ldy #$00			ldy 	#0 							; copy the current link from hash table into the 'next' links
 .1f8c	b1 06		lda ($06),y			lda 	(temp1),y 					; from the hash table, inserting it into the front.
 .1f8e	91 04		sta ($04),y			sta 	(temp0),y 					; (offset 0 & 1)
@@ -2870,231 +2870,166 @@
 .1fb4	c8		iny				iny
 .1fb5	a5 05		lda $05				lda 	temp0+1
 .1fb7	91 06		sta ($06),y			sta 	(temp1),y
->1fb9	db						.byte 	$DB
-.1fba	60		rts				rts
-.1fbb					_CVMemoryError:
-.1fbb	4c 02 1a	jmp $1a02			jmp 	EHandlerMemory
+.1fb9	60		rts				rts
+.1fba					_CVMemoryError:
+.1fba	4c 02 1a	jmp $1a02			jmp 	EHandlerMemory
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: variables/common/variables.asm
 
-.1fbe					VariableAccess:
-.1fbe	b1 00		lda ($00),y			lda 	(codePtr),y 				; check 20xx where x is 1..1A representing A-Z.
-.1fc0	c9 1a		cmp #$1a			cmp 	#$1A 						; is this A-Z ?
-.1fc2	b0 0b		bcs $1fcf			bcs 	_VANotBasic
-.1fc4	0a		asl a				asl 	a 							; x 4
-.1fc5	0a		asl a				asl 	a
-.1fc6	95 28		sta $28,x			sta 	esInt0,x 					; set up address
-.1fc8	a9 08		lda #$08			lda 	#RootVariables >> 8
-.1fca	95 30		sta $30,x			sta 	esInt1,x
-.1fcc	4c 0d 20	jmp $200d			jmp 	VACheckModifier
-.1fcf					_VANotBasic:
-.1fcf	0a		asl a				asl 	a 							; calculate hash as 2 x first byte + second byte
-.1fd0	c8		iny				iny
-.1fd1	18		clc				clc
-.1fd2	71 00		adc ($00),y			adc 	(codePtr),y
-.1fd4	88		dey				dey
-.1fd5	85 08		sta $08				sta 	temp2 						; 8 bit hash in temp2.
-.1fd7	29 0f		and #$0f			and 	#HashTableSize-1 			; force into hash range
-.1fd9	0a		asl a				asl 	a 							; double, word addresses in table and CLC
-.1fda	69 68		adc #$68			adc 	#HashTable & $FF 			; make temp1 point to the hash table first link.
-.1fdc	85 06		sta $06				sta 	temp1
-.1fde	a9 08		lda #$08			lda 	#HashTable >> 8
-.1fe0	85 07		sta $07				sta 	temp1+1
-.1fe2	84 09		sty $09				sty 	temp2+1 					; Y is the offset of the first character.
-.1fe4	98		tya				tya
-.1fe5	18		clc				clc
-.1fe6	65 00		adc $00				adc 	codePtr 					; temp3 is the address of that variable name.
-.1fe8	85 0a		sta $0a				sta 	temp3
-.1fea	a5 01		lda $01				lda		codePtr+1
-.1fec	69 00		adc #$00			adc 	#0
-.1fee	85 0b		sta $0b				sta 	temp3+1
-.1ff0	8a		txa				txa
-.1ff1	48		pha				pha
-.1ff2	98		tya				tya
-.1ff3	48		pha				pha
-.1ff4	20 24 20	jsr $2024			jsr 	VariableSearch 				; does it exist already ?
-.1ff7	b0 03		bcs $1ffc			bcs 	_VAExists
-.1ff9	20 75 1f	jsr $1f75			jsr 	VariableCreate 				; no, create it.
-.1ffc					_VAExists:
-.1ffc	68		pla				pla
-.1ffd	a8		tay				tay
-.1ffe	68		pla				pla
-.1fff	aa		tax				tax
-.2000	18		clc				clc
-.2001	a5 04		lda $04				lda 	temp0 						; add 5 to temp0, which is the offset in the record
-.2003	69 05		adc #$05			adc 	#5 							; of the actual variable data and copy into the stack
-.2005	95 28		sta $28,x			sta 	esInt0,x
-.2007	a5 05		lda $05				lda 	temp0+1
-.2009	69 00		adc #$00			adc 	#0
-.200b	95 30		sta $30,x			sta 	esInt1,x
-.200d					VACheckModifier:
-.200d	b1 00		lda ($00),y			lda 	(codePtr),y
-.200f	c8		iny				iny
-.2010	c9 30		cmp #$30			cmp 	#$30
-.2012	b0 f9		bcs $200d			bcs 	VACheckModifier
-.2014	ad a8 08	lda $08a8			lda 	arrayEnabled 				; arrays in operation
-.2017	f0 00		beq $2019			beq 	_VAExit
-.2019					_VAExit:
-.2019	a9 00		lda #$00			lda 	#0 							; clear the upper two bytes of variable/element address.
-.201b	95 38		sta $38,x			sta 	esInt2,x
-.201d	95 40		sta $40,x			sta 	esInt3,x
-.201f	a9 80		lda #$80			lda 	#$80 						; it's a reference to an integer.
-.2021	95 20		sta $20,x			sta 	esType,x
-.2023	60		rts				rts
+.1fbd					VariableAccess:
+.1fbd	b1 00		lda ($00),y			lda 	(codePtr),y 				; check 20xx where x is 1..1A representing A-Z.
+.1fbf	c9 1a		cmp #$1a			cmp 	#$1A 						; is this A-Z ?
+.1fc1	b0 0b		bcs $1fce			bcs 	_VANotBasic
+.1fc3	0a		asl a				asl 	a 							; x 4
+.1fc4	0a		asl a				asl 	a
+.1fc5	95 28		sta $28,x			sta 	esInt0,x 					; set up address
+.1fc7	a9 08		lda #$08			lda 	#RootVariables >> 8
+.1fc9	95 30		sta $30,x			sta 	esInt1,x
+.1fcb	4c 0c 20	jmp $200c			jmp 	VACheckModifier
+.1fce					_VANotBasic:
+.1fce	0a		asl a				asl 	a 							; calculate hash as 2 x first byte + second byte
+.1fcf	c8		iny				iny
+.1fd0	18		clc				clc
+.1fd1	71 00		adc ($00),y			adc 	(codePtr),y
+.1fd3	88		dey				dey
+.1fd4	85 08		sta $08				sta 	temp2 						; 8 bit hash in temp2.
+.1fd6	29 0f		and #$0f			and 	#HashTableSize-1 			; force into hash range
+.1fd8	0a		asl a				asl 	a 							; double, word addresses in table and CLC
+.1fd9	69 68		adc #$68			adc 	#HashTable & $FF 			; make temp1 point to the hash table first link.
+.1fdb	85 06		sta $06				sta 	temp1
+.1fdd	a9 08		lda #$08			lda 	#HashTable >> 8
+.1fdf	85 07		sta $07				sta 	temp1+1
+.1fe1	84 09		sty $09				sty 	temp2+1 					; Y is the offset of the first character.
+.1fe3	98		tya				tya
+.1fe4	18		clc				clc
+.1fe5	65 00		adc $00				adc 	codePtr 					; temp3 is the address of that variable name.
+.1fe7	85 0a		sta $0a				sta 	temp3
+.1fe9	a5 01		lda $01				lda		codePtr+1
+.1feb	69 00		adc #$00			adc 	#0
+.1fed	85 0b		sta $0b				sta 	temp3+1
+.1fef	8a		txa				txa
+.1ff0	48		pha				pha
+.1ff1	98		tya				tya
+.1ff2	48		pha				pha
+.1ff3	20 23 20	jsr $2023			jsr 	VariableSearch 				; does it exist already ?
+.1ff6	b0 03		bcs $1ffb			bcs 	_VAExists
+.1ff8	20 75 1f	jsr $1f75			jsr 	VariableCreate 				; no, create it.
+.1ffb					_VAExists:
+.1ffb	68		pla				pla
+.1ffc	a8		tay				tay
+.1ffd	68		pla				pla
+.1ffe	aa		tax				tax
+.1fff	18		clc				clc
+.2000	a5 04		lda $04				lda 	temp0 						; add 5 to temp0, which is the offset in the record
+.2002	69 05		adc #$05			adc 	#5 							; of the actual variable data and copy into the stack
+.2004	95 28		sta $28,x			sta 	esInt0,x
+.2006	a5 05		lda $05				lda 	temp0+1
+.2008	69 00		adc #$00			adc 	#0
+.200a	95 30		sta $30,x			sta 	esInt1,x
+.200c					VACheckModifier:
+.200c	b1 00		lda ($00),y			lda 	(codePtr),y
+.200e	c8		iny				iny
+.200f	c9 30		cmp #$30			cmp 	#$30
+.2011	b0 f9		bcs $200c			bcs 	VACheckModifier
+.2013	ad a8 08	lda $08a8			lda 	arrayEnabled 				; arrays in operation
+.2016	f0 00		beq $2018			beq 	_VAExit
+.2018					_VAExit:
+.2018	a9 00		lda #$00			lda 	#0 							; clear the upper two bytes of variable/element address.
+.201a	95 38		sta $38,x			sta 	esInt2,x
+.201c	95 40		sta $40,x			sta 	esInt3,x
+.201e	a9 80		lda #$80			lda 	#$80 						; it's a reference to an integer.
+.2020	95 20		sta $20,x			sta 	esType,x
+.2022	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: variables/common/varsearch.asm
 
-.2024					VariableSearch:
-.2024	a5 06		lda $06				lda 	temp1 						; put the first hash link address into temp0
-.2026	85 04		sta $04				sta 	temp0
-.2028	a5 07		lda $07				lda 	temp1+1
-.202a	85 05		sta $05				sta 	temp0+1
-.202c					_VSLoop:
-.202c	a0 01		ldy #$01			ldy 	#1 							; look at MSB of link to follow
-.202e	b1 04		lda ($04),y			lda 	(temp0),y
-.2030	f0 29		beq $205b			beq 	_VSFail						; if zero, end of linked list, so exit with CC
-.2032	aa		tax				tax 								; follow the link.
-.2033	88		dey				dey
-.2034	b1 04		lda ($04),y			lda 	(temp0),y
-.2036	85 04		sta $04				sta 	temp0
-.2038	86 05		stx $05				stx 	temp0+1
-.203a	a0 02		ldy #$02			ldy 	#2 							; check the hashes match
-.203c	b1 04		lda ($04),y			lda 	(temp0),y
-.203e	c5 08		cmp $08				cmp 	temp2 						; no, they don't, go around.
-.2040	d0 ea		bne $202c			bne 	_VSLoop
-.2042	c8		iny				iny 								; copy the varname address into temp4
-.2043	b1 04		lda ($04),y			lda 	(temp0),y
-.2045	85 0c		sta $0c				sta 	temp4
-.2047	c8		iny				iny
-.2048	b1 04		lda ($04),y			lda 	(temp0),y
-.204a	85 0d		sta $0d				sta 	temp4+1
-.204c	a0 00		ldy #$00			ldy 	#0 							; now compare them.
-.204e					_VSCompareName:
-.204e	b1 0c		lda ($0c),y			lda 	(temp4),y
-.2050	d1 0a		cmp ($0a),y			cmp 	(temp3),y
-.2052	d0 d8		bne $202c			bne 	_VSLoop 					; different, go around
-.2054	c8		iny				iny
-.2055	c9 30		cmp #$30			cmp 	#$30 						; reached end marker
-.2057	b0 f5		bcs $204e			bcs 	_VSCompareName
-.2059	38		sec				sec 								; and we match.
-.205a	60		rts				rts
-.205b	18		clc		_VSFail:clc
-.205c	60		rts				rts
+.2023					VariableSearch:
+.2023	a5 06		lda $06				lda 	temp1 						; put the first hash link address into temp0
+.2025	85 04		sta $04				sta 	temp0
+.2027	a5 07		lda $07				lda 	temp1+1
+.2029	85 05		sta $05				sta 	temp0+1
+.202b					_VSLoop:
+.202b	a0 01		ldy #$01			ldy 	#1 							; look at MSB of link to follow
+.202d	b1 04		lda ($04),y			lda 	(temp0),y
+.202f	f0 29		beq $205a			beq 	_VSFail						; if zero, end of linked list, so exit with CC
+.2031	aa		tax				tax 								; follow the link.
+.2032	88		dey				dey
+.2033	b1 04		lda ($04),y			lda 	(temp0),y
+.2035	85 04		sta $04				sta 	temp0
+.2037	86 05		stx $05				stx 	temp0+1
+.2039	a0 02		ldy #$02			ldy 	#2 							; check the hashes match
+.203b	b1 04		lda ($04),y			lda 	(temp0),y
+.203d	c5 08		cmp $08				cmp 	temp2 						; no, they don't, go around.
+.203f	d0 ea		bne $202b			bne 	_VSLoop
+.2041	c8		iny				iny 								; copy the varname address into temp4
+.2042	b1 04		lda ($04),y			lda 	(temp0),y
+.2044	85 0c		sta $0c				sta 	temp4
+.2046	c8		iny				iny
+.2047	b1 04		lda ($04),y			lda 	(temp0),y
+.2049	85 0d		sta $0d				sta 	temp4+1
+.204b	a0 00		ldy #$00			ldy 	#0 							; now compare them.
+.204d					_VSCompareName:
+.204d	b1 0c		lda ($0c),y			lda 	(temp4),y
+.204f	d1 0a		cmp ($0a),y			cmp 	(temp3),y
+.2051	d0 d8		bne $202b			bne 	_VSLoop 					; different, go around
+.2053	c8		iny				iny
+.2054	c9 30		cmp #$30			cmp 	#$30 						; reached end marker
+.2056	b0 f5		bcs $204d			bcs 	_VSCompareName
+.2058	38		sec				sec 								; and we match.
+.2059	60		rts				rts
+.205a	18		clc		_VSFail:clc
+.205b	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: testing/code/99program.asm
 
->205d						.align 256
+>205c						.align 256
 .2100					BasicProgram:
->2100	22					.byte $22
+>2100	08					.byte $08
 >2101	e8					.byte $e8
 >2102	03					.byte $03
 >2103	43					.byte $43
->2104	34					.byte $34
->2105	42					.byte $42
->2106	13					.byte $13
->2107	89					.byte $89
->2108	74					.byte $74
->2109	c0					.byte $c0
->210a	43					.byte $43
->210b	34					.byte $34
->210c	42					.byte $42
->210d	43					.byte $43
->210e	1b					.byte $1b
->210f	89					.byte $89
->2110	75					.byte $75
->2111	c0					.byte $c0
->2112	33					.byte $33
->2113	34					.byte $34
->2114	3c					.byte $3c
->2115	0e					.byte $0e
->2116	89					.byte $89
->2117	76					.byte $76
->2118	c0					.byte $c0
->2119	43					.byte $43
->211a	34					.byte $34
->211b	42					.byte $42
->211c	43					.byte $43
->211d	54					.byte $54
->211e	1c					.byte $1c
->211f	89					.byte $89
->2120	77					.byte $77
->2121	80					.byte $80
->2122	05					.byte $05
->2123	f2					.byte $f2
->2124	03					.byte $03
->2125	b5					.byte $b5
->2126	80					.byte $80
->2127	1b					.byte $1b
->2128	fc					.byte $fc
->2129	03					.byte $03
->212a	c6					.byte $c6
->212b	43					.byte $43
->212c	34					.byte $34
->212d	42					.byte $42
->212e	13					.byte $13
->212f	ac					.byte $ac
->2130	43					.byte $43
->2131	34					.byte $34
->2132	42					.byte $42
->2133	43					.byte $43
->2134	1b					.byte $1b
->2135	ac					.byte $ac
->2136	33					.byte $33
->2137	34					.byte $34
->2138	3c					.byte $3c
->2139	0e					.byte $0e
->213a	ac					.byte $ac
->213b	43					.byte $43
->213c	34					.byte $34
->213d	42					.byte $42
->213e	43					.byte $43
->213f	54					.byte $54
->2140	1c					.byte $1c
->2141	80					.byte $80
->2142	13					.byte $13
->2143	06					.byte $06
->2144	04					.byte $04
->2145	43					.byte $43
->2146	34					.byte $34
->2147	42					.byte $42
->2148	43					.byte $43
->2149	54					.byte $54
->214a	1c					.byte $1c
->214b	89					.byte $89
->214c	43					.byte $43
->214d	34					.byte $34
->214e	42					.byte $42
->214f	43					.byte $43
->2150	54					.byte $54
->2151	1c					.byte $1c
->2152	8a					.byte $8a
->2153	71					.byte $71
->2154	80					.byte $80
->2155	06					.byte $06
->2156	10					.byte $10
->2157	04					.byte $04
->2158	ba					.byte $ba
->2159	9e					.byte $9e
->215a	80					.byte $80
->215b	05					.byte $05
->215c	1a					.byte $1a
->215d	04					.byte $04
->215e	cd					.byte $cd
->215f	80					.byte $80
->2160	04					.byte $04
->2161	24					.byte $24
->2162	04					.byte $04
->2163	80					.byte $80
->2164	00					.byte $00
+>2104	1b					.byte $1b
+>2105	89					.byte $89
+>2106	a3					.byte $a3
+>2107	80					.byte $80
+>2108	13					.byte $13
+>2109	f2					.byte $f2
+>210a	03					.byte $03
+>210b	c6					.byte $c6
+>210c	60					.byte $60
+>210d	0e					.byte $0e
+>210e	48					.byte $48
+>210f	45					.byte $45
+>2110	4c					.byte $4c
+>2111	4c					.byte $4c
+>2112	4f					.byte $4f
+>2113	20					.byte $20
+>2114	57					.byte $57
+>2115	4f					.byte $4f
+>2116	52					.byte $52
+>2117	4c					.byte $4c
+>2118	44					.byte $44
+>2119	00					.byte $00
+>211a	80					.byte $80
+>211b	09					.byte $09
+>211c	fc					.byte $fc
+>211d	03					.byte $03
+>211e	c6					.byte $c6
+>211f	a3					.byte $a3
+>2120	8b					.byte $8b
+>2121	43					.byte $43
+>2122	1b					.byte $1b
+>2123	80					.byte $80
+>2124	00					.byte $00
 
 ;******  Return to file: basic.asm
 

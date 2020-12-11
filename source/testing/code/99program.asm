@@ -1,103 +1,39 @@
 	.align 256
 BasicProgram:
-	.byte $22
+	.byte $08
 	.byte $e8
 	.byte $03
 	.byte $43
-	.byte $34
-	.byte $42
-	.byte $13
-	.byte $89
-	.byte $74
-	.byte $c0
-	.byte $43
-	.byte $34
-	.byte $42
-	.byte $43
 	.byte $1b
 	.byte $89
-	.byte $75
-	.byte $c0
-	.byte $33
-	.byte $34
-	.byte $3c
-	.byte $0e
-	.byte $89
-	.byte $76
-	.byte $c0
-	.byte $43
-	.byte $34
-	.byte $42
-	.byte $43
-	.byte $54
-	.byte $1c
-	.byte $89
-	.byte $77
+	.byte $a3
 	.byte $80
-	.byte $05
+	.byte $13
 	.byte $f2
 	.byte $03
-	.byte $b5
+	.byte $c6
+	.byte $60
+	.byte $0e
+	.byte $48
+	.byte $45
+	.byte $4c
+	.byte $4c
+	.byte $4f
+	.byte $20
+	.byte $57
+	.byte $4f
+	.byte $52
+	.byte $4c
+	.byte $44
+	.byte $00
 	.byte $80
-	.byte $1b
+	.byte $09
 	.byte $fc
 	.byte $03
 	.byte $c6
-	.byte $43
-	.byte $34
-	.byte $42
-	.byte $13
-	.byte $ac
-	.byte $43
-	.byte $34
-	.byte $42
+	.byte $a3
+	.byte $8b
 	.byte $43
 	.byte $1b
-	.byte $ac
-	.byte $33
-	.byte $34
-	.byte $3c
-	.byte $0e
-	.byte $ac
-	.byte $43
-	.byte $34
-	.byte $42
-	.byte $43
-	.byte $54
-	.byte $1c
-	.byte $80
-	.byte $13
-	.byte $06
-	.byte $04
-	.byte $43
-	.byte $34
-	.byte $42
-	.byte $43
-	.byte $54
-	.byte $1c
-	.byte $89
-	.byte $43
-	.byte $34
-	.byte $42
-	.byte $43
-	.byte $54
-	.byte $1c
-	.byte $8a
-	.byte $71
-	.byte $80
-	.byte $06
-	.byte $10
-	.byte $04
-	.byte $ba
-	.byte $9e
-	.byte $80
-	.byte $05
-	.byte $1a
-	.byte $04
-	.byte $cd
-	.byte $80
-	.byte $04
-	.byte $24
-	.byte $04
 	.byte $80
 	.byte $00

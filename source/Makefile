@@ -33,7 +33,9 @@ testing$(S)simple$(S)02testcode.asm : $(SCRIPTS)tokenworker.py
 	python $(SCRIPTS)tokenworker.py
 
 testing$(S)code$(S)99program.asm : $(SCRIPTS)$(GENERATOR)
-		python $(SCRIPTS)$(GENERATOR) $(BASIC)
+	#$(CCOPY) $(SCRIPTS)tokens.py $(TESTS) $(CCOPYQ)
+	#python $(TESTS)genvartest.py >$(BASIC)
+	python $(SCRIPTS)$(GENERATOR) $(BASIC)
 
 DEPS = 	$(wildcard **/*.asm) $(wildcard **/*.inc) \
 		$(wildcard *.asm) $(wildcard *.inc) \
@@ -42,7 +44,6 @@ DEPS = 	$(wildcard **/*.asm) $(wildcard **/*.inc) \
 		testing$(S)code$(S)99program.asm
 		
 asm.out$(S)basic.prg : $(DEPS) 
-	#python $(TESTS)mathstest.py >$(BASIC)
 	python $(SCRIPTS)errors.py
 	python $(SCRIPTS)tokentables.py
 	python $(SCRIPTS)builder.py $(BUILD)

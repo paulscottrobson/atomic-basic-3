@@ -57,14 +57,14 @@ esStrHigh = esInt1
 		* = DataStart
 		.align 	256  						; these two must be on one page.
 		
-RootVariables: 											
-		.fill 	26*4 						; variables A-Z which are fixed.
+RootVariables: 								; variables A-Z which are fixed.			
+		.fill 	26*4 						
 
-HashTable:
-		.fill 	HashTableSize*2 			; variable hash table.
+HashTable:									; variable hash table.
+		.fill 	HashTableSize*2 			
 	
-Seed32:	
-		.fill 	4 							; random number
+Seed32:										; random number
+		.fill 	4 							
 
 Buffer:	 									; string conversion buffer.
 		.fill 	20 		
@@ -83,3 +83,6 @@ PrintCRFlag:								; tracks printing new line at end of PRINT
 				
 ArrayEnabled:	 							; when clear, cannot do array indexing.	
 		.fill 	1 				
+
+ProcTable:									; procedure list			
+		.fill 	2		

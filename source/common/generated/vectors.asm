@@ -61,7 +61,7 @@ TokenVectorLow:
 	.byte Command_ENDIF & $FF              ; endif
 	.byte Command_NEXT & $FF               ; next
 	.byte Command_Until & $FF              ; until
-	.byte InstructionUndefined & $FF       ; endproc
+	.byte Command_EndProc & $FF            ; endproc
 	.byte Command_Wend & $FF               ; wend
 	.byte Command_Rem & $FF                ; rem
 	.byte Command_LET & $FF                ; let
@@ -73,8 +73,8 @@ TokenVectorLow:
 	.byte NoOp9 & $FF                      ; step
 	.byte Command_Vdu & $FF                ; vdu
 	.byte Command_Print & $FF              ; print
-	.byte InstructionUndefined & $FF       ; call
-	.byte InstructionUndefined & $FF       ; local
+	.byte Command_Call & $FF               ; call
+	.byte Command_Local & $FF              ; local
 	.byte Command_Goto & $FF               ; goto
 	.byte Command_Gosub & $FF              ; gosub
 	.byte Command_Return & $FF             ; return
@@ -148,7 +148,7 @@ TokenVectorHigh:
 	.byte Command_ENDIF >> 8               ; endif
 	.byte Command_NEXT >> 8                ; next
 	.byte Command_Until >> 8               ; until
-	.byte InstructionUndefined >> 8        ; endproc
+	.byte Command_EndProc >> 8             ; endproc
 	.byte Command_Wend >> 8                ; wend
 	.byte Command_Rem >> 8                 ; rem
 	.byte Command_LET >> 8                 ; let
@@ -160,8 +160,8 @@ TokenVectorHigh:
 	.byte NoOp9 >> 8                       ; step
 	.byte Command_Vdu >> 8                 ; vdu
 	.byte Command_Print >> 8               ; print
-	.byte InstructionUndefined >> 8        ; call
-	.byte InstructionUndefined >> 8        ; local
+	.byte Command_Call >> 8                ; call
+	.byte Command_Local >> 8               ; local
 	.byte Command_Goto >> 8                ; goto
 	.byte Command_Gosub >> 8               ; gosub
 	.byte Command_Return >> 8              ; return

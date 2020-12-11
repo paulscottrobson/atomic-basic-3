@@ -17,6 +17,7 @@
 
 Command_Run:	;; [run]
 		jsr 	CommandClear 				; clear variables, memory pointers, hash table.
+		jsr 	BuildProcedureList 			; build procedure cache.
 		set16 	codePtr,BasicProgram 		; reset code pointer.
 		ldy 	#0 							; check if off end of program.
 		lda 	(codePtr),y

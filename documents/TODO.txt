@@ -1,9 +1,7 @@
 TODO List
 =========
-Evaluate parameters
-Localise and store parameters.
 Array code.
+7F sign/shift syntax.
 
 Notes
 =====
-Import #1

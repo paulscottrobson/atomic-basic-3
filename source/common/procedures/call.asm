@@ -52,13 +52,22 @@ _CCEvaluateParameters:
 		lda 	(codePtr),y 				; hit )
 		cmp 	#KWD_RPAREN
 		beq 	_CCHaveParams
+_CCNextParam:		
 		inx 								; first parameter goes in offset #1.
-		report 	NotImplemented 				; evaluate parameters on stack
-
+		jsr 	EvaluateLevelAX 			; evaluate and derefernce.
+		jsr 	DeRefTop
+		lda 	(codePtr),y 				; check if followed by a comma
+		iny
+		cmp 	#KWD_COMMA 					; if so go back
+		beq 	_CCNextParam
+		cmp 	#KWD_RPAREN 				; if not ) error
+		bne 	_CCSyntax
+		dey 								; point (codePtr),y to the )
 _CCHaveParams:		
 		;
 		;		Scan through the procedure table looking for a match.
 		;
+		stx 	ParamCount 					; save number of parameters evaluated.
 		pla 								; put the hash into temp2
 		sta 	temp2
 		pshy 								; save the RParen position on the stack
@@ -97,6 +106,14 @@ _CCNext:
 		bcc 	_CCCheckLoop		
 		inc 	temp0+1
 		jmp 	_CCCheckLoop
+
+_CCSyntax:
+		report 	Syntax
+_CCNoProc:
+		report 	BadProc		
+_CCParamErr:
+		report 	Parameters 			
+
 		;
 		;		Push the return address on the stack.
 		;
@@ -117,18 +134,41 @@ _CCFound:
 		;
 		;		Go through the parameters localising each one and copying the new value in.		
 		;
+		ldx 	#0
 _CCSaveParams:		
 		lda 	(codePtr),y 				; found the right bracket
 		cmp 	#KWD_RPAREN
 		beq 	_CCExit
+		;
+_CCParamLoop:		
+		inx 								; point to the parameter we will save
+		jsr 	GetLocalTerm 				; get and localise a parameter. Address to copy to is in temp0.
 
-		report 	NotImplemented
+		pshy 								; copy the data in.
+		ldy 	#0
+		lda 	esInt0,x
+		sta 	(temp0),y
+		iny
+		lda 	esInt1,x
+		sta 	(temp0),y
+		iny
+		lda 	esInt2,x
+		sta 	(temp0),y
+		iny
+		lda 	esInt3,x
+		sta 	(temp0),y
+		puly
 
-
+		lda 	(codePtr),y 				; get and skip next
+		iny
+		cmp 	#KWD_COMMA 					; if , go round again.
+		beq 	_CCParamLoop
+		cmp 	#KWD_RPAREN 				; should be )
+		bne 	_CCSyntax		
+		dey 								; Y now points to )
 _CCExit:
+		cpx 	ParamCount 					; parameters match
+		bne 	_CCParamErr
 		iny 								; skip the right bracket
 		rts
-
-_CCNoProc:
-		report 	BadProc		
 

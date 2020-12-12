@@ -23,7 +23,7 @@ SCRIPTS = ..$(S)scripts$(S)
 TESTS = ..$(S)tests$(S)
 GENERATOR = makepgm.py
 
-BUILD = boot.x16 boot.common extern.x16 interface.none common variables testing.code
+BUILD = boot.x16 boot.common extern.x16 interface.none common variables system.x16 testing.code
 all : $(BASIC) asm.out$(S)basic.prg
 
 run : $(BASIC) asm.out$(S)basic.prg

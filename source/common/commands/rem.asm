@@ -19,13 +19,12 @@ Command_Rem:	;; [rem]
 Command_Rem2:	;; [']
 		lda 	(codePtr),y 				; should be followed by string
 		cmp 	#$60
-		bne 	_CRMSyntax
+		bne 	_CRMExit
 		tya
 		iny
 		clc
 		adc 	(codePtr),y
 		tay
+_CRMExit:		
 		rts
 
-_CRMSyntax:
-		report 	Syntax		

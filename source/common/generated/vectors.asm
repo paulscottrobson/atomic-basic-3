@@ -53,6 +53,7 @@ TokenVectorLow:
 	.byte InstructionUndefined & $FF       ; --
 	.byte InstructionUndefined & $FF       ; [
 	.byte InstructionUndefined & $FF       ; ]
+	.byte InstructionUndefined & $FF       ; ->
 	.byte Command_IF & $FF                 ; if
 	.byte Command_FOR & $FF                ; for
 	.byte Command_Repeat & $FF             ; repeat
@@ -140,6 +141,7 @@ TokenVectorHigh:
 	.byte InstructionUndefined >> 8        ; --
 	.byte InstructionUndefined >> 8        ; [
 	.byte InstructionUndefined >> 8        ; ]
+	.byte InstructionUndefined >> 8        ; ->
 	.byte Command_IF >> 8                  ; if
 	.byte Command_FOR >> 8                 ; for
 	.byte Command_Repeat >> 8              ; repeat

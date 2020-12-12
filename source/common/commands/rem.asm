@@ -17,33 +17,15 @@
 
 Command_Rem:	;; [rem]
 Command_Rem2:	;; [']
-		lda 	(codePtr),y
-		cmp 	#$80 						; end of line.
-		beq 	_RemExit
-		;
-		cmp 	#KWD_COLON
-		beq 	_RemExit
-		jsr 	AdvancePointer
-		jmp 	Command_Rem		
-_RemExit:				
-		rts
-
-; *****************************************************************************
-;
-;							Advance to next token.
-;
-; *****************************************************************************
-
-AdvancePointer:
-		lda 	(codePtr),y 				; look at token
-		cmp 	#$01 						; quoted string
-		beq 	_APString
-		iny 								; advance and return.
-		rts
-_APString:
-		tya 								; and length to position
+		lda 	(codePtr),y 				; should be followed by string
+		cmp 	#$60
+		bne 	_CRMSyntax
+		tya
 		iny
 		clc
 		adc 	(codePtr),y
 		tay
 		rts
+
+_CRMSyntax:
+		report 	Syntax		

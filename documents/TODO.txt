@@ -1,6 +1,8 @@
 TODO List
 =========
-7F sign/shift syntax.
+7C-7F sign/shift syntax.
+Need to fix anything advancing : Structure here.
+Run assignment checks again.
 
 Notes
 =====

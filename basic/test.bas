@@ -1,11 +1,12 @@
-mem = alloc(25)
-print &mem,mem
-mem!0 = 42
-mem!4 = -2
-mem!8 = &12345678
-print &mem!8,mem!4,mem!0
-print &mem(2),mem(1),mem(0)
-mem(2) = &AA55AA55
-print &mem!8,mem!4,mem!0
-print &mem(2),mem(1),mem(0)
-
+print 0
+print 4
+print 8
+print 10
+print 11
+print 12
+print 128
+print 262
+print 599
+print 3333
+print 333333
+print 123456789

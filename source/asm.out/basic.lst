@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.55.2200 listing file
 ; 64tass -q --m65xx -L asm.out/basic.lst -l asm.out/basic.lbl -o asm.out/basic.prg basic.asm
-; Fri Dec 11 21:20:38 2020
+; Sat Dec 12 12:34:59 2020
 
 ;Offset	;Hex		;Monitor	;Source
 
@@ -427,7 +427,7 @@
 
 .113f					Command_FOR:
 .113f	a9 4b		lda #$4b			lda 	#SMFor 						; allocate the space.
-.1141	20 f6 1f	jsr $1ff6			jsr 	StackOpen
+.1141	20 60 20	jsr $2060			jsr 	StackOpen
 .1144	20 c9 12	jsr $12c9			jsr 	Command_LET 				; do the same as LET.
 .1147	20 a2 14	jsr $14a2			jsr 	CheckTO 					; check TO something.
 .114a	a2 01		ldx #$01			ldx 	#1 							; keep the variable address in stack 0
@@ -470,11 +470,11 @@
 .1189	68		pla				pla
 .118a	a8		tay				tay
 .118b					_CFDone:
-.118b	20 4a 20	jsr $204a			jsr 	StackSavePosition 			; save position.
+.118b	20 b4 20	jsr $20b4			jsr 	StackSavePosition 			; save position.
 .118e	60		rts				rts
 .118f					Command_NEXT:
 .118f	a9 4b		lda #$4b			lda 	#SMFor 						; check NEXT
-.1191	20 1b 20	jsr $201b			jsr 	StackCheck
+.1191	20 85 20	jsr $2085			jsr 	StackCheck
 .1194	b1 00		lda ($00),y			lda 	(codePtr),y 				; is it NEXT <index>
 .1196	30 1e		bmi $11b6			bmi 	_CNNoIndex
 .1198	c9 60		cmp #$60			cmp 	#$60
@@ -553,12 +553,12 @@
 .1213					_CNLoopExit:
 .1213	68		pla				pla
 .1214	a8		tay				tay
-.1215	20 26 20	jsr $2026			jsr		StackClose 					; delete from stack and continue
+.1215	20 90 20	jsr $2090			jsr		StackClose 					; delete from stack and continue
 .1218	60		rts				rts
 .1219					_CNLoopRound:
 .1219	68		pla				pla
 .121a	a8		tay				tay
-.121b	20 3a 20	jsr $203a			jsr 	StackLoadPosition			; go back to the loop top
+.121b	20 a4 20	jsr $20a4			jsr 	StackLoadPosition			; go back to the loop top
 .121e	60		rts				rts
 .121f					_CNBadIndex:
 .121f	4c a7 19	jmp $19a7			jmp 	EHandlerBadIndex
@@ -582,15 +582,15 @@
 .1233					Command_Gosub:
 .1233	20 96 16	jsr $1696			jsr 	EvaluateBaseDeRef			; get the target line #
 .1236	a9 14		lda #$14			lda 	#SMGosub 					; gosub marker allocate 4 bytes.
-.1238	20 f6 1f	jsr $1ff6			jsr 	StackOpen 					; create on stack.
-.123b	20 4a 20	jsr $204a			jsr 	StackSavePosition 			; save position.
+.1238	20 60 20	jsr $2060			jsr 	StackOpen 					; create on stack.
+.123b	20 b4 20	jsr $20b4			jsr 	StackSavePosition 			; save position.
 .123e	4c 55 12	jmp $1255			jmp 	GotoTOS 					; and use the GOTO code.
 .1241					Command_Return:
 .1241	a9 14		lda #$14			lda 	#SMGosub 					; check the stack matches
-.1243	20 1b 20	jsr $201b			jsr 	StackCheck
+.1243	20 85 20	jsr $2085			jsr 	StackCheck
 .1246	d0 07		bne $124f			bne 	_RTError
-.1248	20 3a 20	jsr $203a			jsr 	StackLoadPosition 			; load the position back
-.124b	20 26 20	jsr $2026			jsr 	StackClose 					; close the frame.
+.1248	20 a4 20	jsr $20a4			jsr 	StackLoadPosition 			; load the position back
+.124b	20 90 20	jsr $2090			jsr 	StackClose 					; close the frame.
 .124e	60		rts				rts
 .124f					_RTError:
 .124f	4c 1c 1a	jmp $1a1c			jmp 	EHandlerNoGosub
@@ -674,11 +674,11 @@
 .12bb					_SIFSkip:
 .12bb	a9 c2		lda #$c2			lda	 	#KWD_ELSE 					; test failed, go to ELSE or ENDIF whichever comes first.
 .12bd	a2 b8		ldx #$b8			ldx 	#KWD_ENDIF
-.12bf	4c a8 1f	jmp $1fa8			jmp		ScanForward
+.12bf	4c 12 20	jmp $2012			jmp		ScanForward
 .12c2					Command_ELSE:
 .12c2	a2 b8		ldx #$b8			ldx 	#KWD_ENDIF
 .12c4	8a		txa				txa
-.12c5	4c a8 1f	jmp $1fa8			jmp		ScanForward
+.12c5	4c 12 20	jmp $2012			jmp		ScanForward
 .12c8					Command_ENDIF:
 .12c8	60		rts				rts
 
@@ -901,20 +901,20 @@
 
 .13ec					Command_Repeat:
 .13ec	a9 24		lda #$24			lda 	#SMRepeat 					; repeat marker allocate 4 bytes.
-.13ee	20 f6 1f	jsr $1ff6			jsr 	StackOpen 					; create on stack.
-.13f1	20 4a 20	jsr $204a			jsr 	StackSavePosition 			; save position.
+.13ee	20 60 20	jsr $2060			jsr 	StackOpen 					; create on stack.
+.13f1	20 b4 20	jsr $20b4			jsr 	StackSavePosition 			; save position.
 .13f4	60		rts				rts
 .13f5					Command_Until:
 .13f5	a9 24		lda #$24			lda 	#SMRepeat 					; check the stack matches
-.13f7	20 1b 20	jsr $201b			jsr 	StackCheck
+.13f7	20 85 20	jsr $2085			jsr 	StackCheck
 .13fa	d0 10		bne $140c			bne 	_CUError
 .13fc	20 96 16	jsr $1696			jsr 	EvaluateBaseDeRef			; get the conditional
 .13ff	20 61 1e	jsr $1e61			jsr 	Int32Zero
 .1402	f0 04		beq $1408			beq 	_CULoopBack
-.1404	20 26 20	jsr $2026			jsr 	StackClose 					; close the frame.
+.1404	20 90 20	jsr $2090			jsr 	StackClose 					; close the frame.
 .1407	60		rts				rts
 .1408					_CULoopBack:
-.1408	20 3a 20	jsr $203a			jsr 	StackLoadPosition			; go back until true
+.1408	20 a4 20	jsr $20a4			jsr 	StackLoadPosition			; go back until true
 .140b	60		rts				rts
 .140c					_CUError:
 .140c	4c 4c 1a	jmp $1a4c			jmp 	EHandlerNoRepeat
@@ -926,7 +926,7 @@
 
 .140f					Command_Run:
 .140f	20 95 10	jsr $1095			jsr 	CommandClear 				; clear variables, memory pointers, hash table.
-.1412	20 2c 1f	jsr $1f2c			jsr 	BuildProcedureList 			; build procedure cache.
+.1412	20 96 1f	jsr $1f96			jsr 	BuildProcedureList 			; build procedure cache.
 .1415	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
 .1417	85 00		sta $00				sta 	codePtr
 .1419	a9 22		lda #$22			lda 	#(BasicProgram) >> 8
@@ -987,26 +987,26 @@
 
 .1462					Command_While:
 .1462	a9 34		lda #$34			lda 	#SMWhile 					; gosub marker allocate 4 bytes.
-.1464	20 f6 1f	jsr $1ff6			jsr 	StackOpen 					; create on stack.
+.1464	20 60 20	jsr $2060			jsr 	StackOpen 					; create on stack.
 .1467	88		dey				dey
-.1468	20 4a 20	jsr $204a			jsr 	StackSavePosition 			; save position before the WHILE.
+.1468	20 b4 20	jsr $20b4			jsr 	StackSavePosition 			; save position before the WHILE.
 .146b	c8		iny				iny
 .146c	20 96 16	jsr $1696			jsr 	EvaluateBaseDeRef			; get the conditional
 .146f	20 61 1e	jsr $1e61			jsr 	Int32Zero
 .1472	f0 01		beq $1475			beq 	_CWFail
 .1474	60		rts				rts
 .1475					_CWFail:
-.1475	20 26 20	jsr $2026			jsr 	StackClose 					; close the just opened position.
+.1475	20 90 20	jsr $2090			jsr 	StackClose 					; close the just opened position.
 .1478	a9 bc		lda #$bc			lda 	#KWD_WEND 					; scan forward past WEND.
 .147a	aa		tax				tax
-.147b	20 a8 1f	jsr $1fa8			jsr 	ScanForward
+.147b	20 12 20	jsr $2012			jsr 	ScanForward
 .147e	60		rts				rts
 .147f					Command_Wend:
 .147f	a9 34		lda #$34			lda 	#SMWhile 					; check the stack matches
-.1481	20 1b 20	jsr $201b			jsr 	StackCheck
+.1481	20 85 20	jsr $2085			jsr 	StackCheck
 .1484	d0 07		bne $148d			bne 	_CWError
-.1486	20 3a 20	jsr $203a			jsr 	StackLoadPosition			; go back until true
-.1489	20 26 20	jsr $2026			jsr 	StackClose 					; close the frame.
+.1486	20 a4 20	jsr $20a4			jsr 	StackLoadPosition			; go back until true
+.1489	20 90 20	jsr $2090			jsr 	StackClose 					; close the frame.
 .148c	60		rts				rts
 .148d					_CWError:
 .148d	4c 64 1a	jmp $1a64			jmp 	EHandlerNoWhile
@@ -1384,7 +1384,7 @@
 .16c1					_EBNotConstant:
 .16c1	c9 60		cmp #$60			cmp 	#$60 						; 60 is a string.
 .16c3	f0 06		beq $16cb			beq 	_EBHaveString
-.16c5	20 ca 20	jsr $20ca			jsr 	VariableAccess
+.16c5	20 34 21	jsr $2134			jsr 	VariableAccess
 .16c8	4c e4 16	jmp $16e4			jmp 	EBHaveTerm
 .16cb					_EBHaveString:
 .16cb	98		tya				tya 								; put codePtr + 2 in the address, it's a string.
@@ -2062,7 +2062,7 @@
 >1b56	c8					.byte Command_ENDIF & $FF              ; endif
 >1b57	8f					.byte Command_NEXT & $FF               ; next
 >1b58	f5					.byte Command_Until & $FF              ; until
->1b59	c9					.byte Command_EndProc & $FF            ; endproc
+>1b59	33					.byte Command_EndProc & $FF            ; endproc
 >1b5a	7f					.byte Command_Wend & $FF               ; wend
 >1b5b	cc					.byte Command_Rem & $FF                ; rem
 >1b5c	c9					.byte Command_LET & $FF                ; let
@@ -2075,7 +2075,7 @@
 >1b63	51					.byte Command_Vdu & $FF                ; vdu
 >1b64	32					.byte Command_Print & $FF              ; print
 >1b65	9e					.byte Command_Call & $FF               ; call
->1b66	dd					.byte Command_Local & $FF              ; local
+>1b66	47					.byte Command_Local & $FF              ; local
 >1b67	52					.byte Command_Goto & $FF               ; goto
 >1b68	33					.byte Command_Gosub & $FF              ; gosub
 >1b69	41					.byte Command_Return & $FF             ; return
@@ -2149,7 +2149,7 @@
 >1bac	12					.byte Command_ENDIF >> 8               ; endif
 >1bad	11					.byte Command_NEXT >> 8                ; next
 >1bae	13					.byte Command_Until >> 8               ; until
->1baf	1e					.byte Command_EndProc >> 8             ; endproc
+>1baf	1f					.byte Command_EndProc >> 8             ; endproc
 >1bb0	14					.byte Command_Wend >> 8                ; wend
 >1bb1	13					.byte Command_Rem >> 8                 ; rem
 >1bb2	12					.byte Command_LET >> 8                 ; let
@@ -2162,7 +2162,7 @@
 >1bb9	14					.byte Command_Vdu >> 8                 ; vdu
 >1bba	13					.byte Command_Print >> 8               ; print
 >1bbb	1e					.byte Command_Call >> 8                ; call
->1bbc	1e					.byte Command_Local >> 8               ; local
+>1bbc	1f					.byte Command_Local >> 8               ; local
 >1bbd	12					.byte Command_Goto >> 8                ; goto
 >1bbe	12					.byte Command_Gosub >> 8               ; gosub
 >1bbf	12					.byte Command_Return >> 8              ; return
@@ -2684,588 +2684,749 @@
 .1e9e	98		tya				tya 								; Y offset - 4
 .1e9f	38		sec				sec
 .1ea0	e9 04		sbc #$04			sbc 	#4
-.1ea2	65 00		adc $00				adc 	codePtr 					; add to CodePtr -> temp1
-.1ea4	85 06		sta $06				sta 	temp1
-.1ea6	a5 01		lda $01				lda 	codePtr+1
-.1ea8	69 00		adc #$00			adc 	#0
-.1eaa	85 07		sta $07				sta 	temp1+1
-.1eac	a2 00		ldx #$00			ldx 	#0
-.1eae					_CCCalcHash:
-.1eae	8a		txa				txa 								; which is simple additive
-.1eaf	18		clc				clc
-.1eb0	71 00		adc ($00),y			adc 	(codePtr),y
-.1eb2	aa		tax				tax
-.1eb3	b1 00		lda ($00),y			lda 	(codePtr),y 				; until added end marker.
-.1eb5	c8		iny				iny
-.1eb6	c9 30		cmp #$30			cmp 	#$30
-.1eb8	b0 f4		bcs $1eae			bcs 	_CCCalCHash
-.1eba	20 96 14	jsr $1496			jsr 	CheckLeftParen 				; check for opening parameter bracket.
->1ebd	db						.byte 	$DB
-.1ebe	ad a9 08	lda $08a9			lda 	ProcTable 					; copy ProcTable to temp0
-.1ec1	85 04		sta $04				sta 	temp0
-.1ec3	ad aa 08	lda $08aa			lda 	ProcTable+1
-.1ec6	85 05		sta $05				sta 	temp0+1
-.1ec8	60		rts				rts
+.1ea2	18		clc				clc
+.1ea3	65 00		adc $00				adc 	codePtr 					; add to CodePtr -> temp1
+.1ea5	85 06		sta $06				sta 	temp1
+.1ea7	a5 01		lda $01				lda 	codePtr+1
+.1ea9	69 00		adc #$00			adc 	#0
+.1eab	85 07		sta $07				sta 	temp1+1
+.1ead	a2 00		ldx #$00			ldx 	#0
+.1eaf					_CCCalcHash:
+.1eaf	8a		txa				txa 								; which is simple additive
+.1eb0	18		clc				clc
+.1eb1	71 00		adc ($00),y			adc 	(codePtr),y
+.1eb3	aa		tax				tax
+.1eb4	b1 00		lda ($00),y			lda 	(codePtr),y 				; until added end marker.
+.1eb6	c8		iny				iny
+.1eb7	c9 30		cmp #$30			cmp 	#$30
+.1eb9	b0 f4		bcs $1eaf			bcs 	_CCCalCHash
+.1ebb	8a		txa				txa
+.1ebc	48		pha				pha
+.1ebd	20 96 14	jsr $1496			jsr 	CheckLeftParen 				; check for opening parameter bracket.
+.1ec0	a2 00		ldx #$00			ldx 	#0 							; actually start at 1 with pre-increment.
+.1ec2					_CCEvaluateParameters:
+.1ec2	b1 00		lda ($00),y			lda 	(codePtr),y 				; hit )
+.1ec4	c9 ae		cmp #$ae			cmp 	#KWD_RPAREN
+.1ec6	f0 04		beq $1ecc			beq 	_CCHaveParams
+.1ec8	e8		inx				inx 								; first parameter goes in offset #1.
+.1ec9	4c 7a 1a	jmp $1a7a			jmp 	EHandlerNotImplemented
+.1ecc					_CCHaveParams:
+.1ecc	68		pla				pla 								; put the hash into temp2
+.1ecd	85 08		sta $08				sta 	temp2
+.1ecf	98		tya				tya
+.1ed0	48		pha				pha
+.1ed1	ad a9 08	lda $08a9			lda 	ProcTable 					; copy ProcTable to temp0
+.1ed4	85 04		sta $04				sta 	temp0
+.1ed6	ad aa 08	lda $08aa			lda 	ProcTable+1
+.1ed9	85 05		sta $05				sta 	temp0+1
+.1edb					_CCCheckLoop:
+.1edb	a0 01		ldy #$01			ldy 	#1 							; check the MSB of the line entry, if zero, then not found.
+.1edd	b1 04		lda ($04),y			lda 	(temp0),y
+.1edf	f0 4f		beq $1f30			beq 	_CCNoProc
+.1ee1	85 0b		sta $0b				sta 	temp3+1 					; save in temp3+1
+.1ee3	c8		iny				iny 								; get the hash
+.1ee4	b1 04		lda ($04),y			lda 	(temp0),y
+.1ee6	c5 08		cmp $08				cmp 	temp2 						; does it match ?
+.1ee8	d0 15		bne $1eff			bne 	_CCNext
+.1eea	a0 00		ldy #$00			ldy 	#0 							; get LSB into temp3
+.1eec	b1 04		lda ($04),y			lda 	(temp0),y
+.1eee	85 0a		sta $0a				sta 	temp3
+.1ef0	a0 03		ldy #$03			ldy 	#3 							; start offset 4 pre-increment.
+.1ef2					_CCCompare:
+.1ef2	c8		iny				iny 								; check match
+.1ef3	b1 0a		lda ($0a),y			lda 	(temp3),y
+.1ef5	d1 06		cmp ($06),y			cmp 	(temp1),y
+.1ef7	d0 06		bne $1eff			bne 	_CCNext
+.1ef9	c9 30		cmp #$30			cmp 	#$30 						; stop if reached actual match.
+.1efb	b0 f5		bcs $1ef2			bcs 	_CCCompare
+.1efd	90 0e		bcc $1f0d			bcc 	_CCFound 					; yes, a match.
+.1eff					_CCNext:
+.1eff	18		clc				clc 								; go four on, table size.
+.1f00	a5 04		lda $04				lda 	temp0
+.1f02	69 04		adc #$04			adc 	#4
+.1f04	85 04		sta $04				sta 	temp0
+.1f06	90 d3		bcc $1edb			bcc 	_CCCheckLoop
+.1f08	e6 05		inc $05				inc 	temp0+1
+.1f0a	4c db 1e	jmp $1edb			jmp 	_CCCheckLoop
+.1f0d					_CCFound:
+.1f0d	68		pla				pla
+.1f0e	a8		tay				tay
+.1f0f	c8		iny				iny 								; now point to the token after it
+.1f10	a9 54		lda #$54			lda 	#SMProcedure				; open a procedure frame
+.1f12	20 60 20	jsr $2060			jsr 	StackOpen
+.1f15	20 b4 20	jsr $20b4			jsr 	StackSavePosition 			; save return address on the stack.
+.1f18	a0 03		ldy #$03			ldy 	#3 							; get the offset to the start of the parameter list
+.1f1a	b1 04		lda ($04),y			lda 	(temp0),y
+.1f1c	a8		tay				tay
+.1f1d	a5 0a		lda $0a				lda 	temp3 						; copy start of line into code Ptr
+.1f1f	85 00		sta $00				sta 	codePtr
+.1f21	a5 0b		lda $0b				lda		temp3+1
+.1f23	85 01		sta $01				sta 	codePtr+1
+.1f25					_CCSaveParams:
+.1f25	b1 00		lda ($00),y			lda 	(codePtr),y 				; found the right bracket
+.1f27	c9 ae		cmp #$ae			cmp 	#KWD_RPAREN
+.1f29	f0 03		beq $1f2e			beq 	_CCExit
+.1f2b	4c 7a 1a	jmp $1a7a			jmp 	EHandlerNotImplemented
+.1f2e					_CCExit:
+.1f2e	c8		iny				iny 								; skip the right bracket
+.1f2f	60		rts				rts
+.1f30					_CCNoProc:
+.1f30	4c bb 19	jmp $19bb			jmp 	EHandlerBadProc
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/procedures/endproc.asm
 
-.1ec9					Command_EndProc:
-.1ec9	20 5d 20	jsr $205d			jsr 	StackPopLocals 				; restore local variables.
-.1ecc	a9 54		lda #$54			lda 	#SMProcedure				; check TOS is PROC
-.1ece	20 1b 20	jsr $201b			jsr 	StackCheck
-.1ed1	d0 07		bne $1eda			bne 	_EPError
-.1ed3	20 3a 20	jsr $203a			jsr 	StackLoadPosition 			; restore position and drop
-.1ed6	20 26 20	jsr $2026			jsr 	StackClose
-.1ed9	60		rts				rts
-.1eda					_EPError:
-.1eda	4c 34 1a	jmp $1a34			jmp 	EHandlerNoProc
+.1f33					Command_EndProc:
+.1f33	20 c7 20	jsr $20c7			jsr 	StackPopLocals 				; restore local variables.
+.1f36	a9 54		lda #$54			lda 	#SMProcedure				; check TOS is PROC
+.1f38	20 85 20	jsr $2085			jsr 	StackCheck
+.1f3b	d0 07		bne $1f44			bne 	_EPError
+.1f3d	20 a4 20	jsr $20a4			jsr 	StackLoadPosition 			; restore position and drop
+.1f40	20 90 20	jsr $2090			jsr 	StackClose
+.1f43	60		rts				rts
+.1f44					_EPError:
+.1f44	4c 34 1a	jmp $1a34			jmp 	EHandlerNoProc
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/procedures/local.asm
 
-.1edd					Command_Local:
-.1edd	20 f6 1e	jsr $1ef6			jsr 	GetLocalTerm 				; get a local variable.
-.1ee0	98		tya				tya
-.1ee1	48		pha				pha
-.1ee2	a0 00		ldy #$00			ldy 	#0 							; erase the variable.
-.1ee4	98		tya				tya
-.1ee5					_CLClear:
-.1ee5	91 04		sta ($04),y			sta 	(temp0),y
-.1ee7	c8		iny				iny
-.1ee8	c0 04		cpy #$04			cpy 	#4
-.1eea	d0 f9		bne $1ee5			bne 	_CLClear
-.1eec	68		pla				pla
-.1eed	a8		tay				tay
-.1eee	b1 00		lda ($00),y			lda 	(codePtr),y					; check comma
-.1ef0	c8		iny				iny
-.1ef1	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
-.1ef3	f0 e8		beq $1edd			beq 	Command_Local
-.1ef5	60		rts				rts
-.1ef6					GetLocalTerm:
-.1ef6	8a		txa				txa
-.1ef7	48		pha				pha
-.1ef8	a2 00		ldx #$00			ldx 	#0 							; start on stack
-.1efa	a9 07		lda #$07			lda 	#7  						; get a term
-.1efc	20 a6 16	jsr $16a6			jsr 	EvaluateLevelAX 			; this is the variable/parameter to localise.
-.1eff	b5 20		lda $20,x			lda 	esType,x 					; which should be a reference of some sort
-.1f01	10 26		bpl $1f29			bpl 	_GLTSyntax 					; if not, syntax error.
-.1f03	98		tya				tya
-.1f04	48		pha				pha
-.1f05	a9 67		lda #$67			lda 	#SMLocal 					; create stack frame.
-.1f07	20 f6 1f	jsr $1ff6			jsr 	StackOpen
-.1f0a	a0 05		ldy #$05			ldy 	#5
-.1f0c	b5 28		lda $28,x			lda 	esInt0,x 					; copy address to temp0 and to stack+5,stack+6
-.1f0e	85 04		sta $04				sta 	temp0
-.1f10	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.1f12	b5 30		lda $30,x			lda 	esInt1,x
-.1f14	85 05		sta $05				sta 	temp0+1
-.1f16	c8		iny				iny
-.1f17	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.1f19	a0 00		ldy #$00			ldy 	#0 							; now copy data into stack1-4
-.1f1b					_GLTCopy:
-.1f1b	b1 04		lda ($04),y			lda 	(temp0),y
-.1f1d	c8		iny				iny
-.1f1e	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.1f20	c0 04		cpy #$04			cpy 	#4
-.1f22	d0 f7		bne $1f1b			bne 	_GLTCopy
-.1f24	68		pla				pla
-.1f25	a8		tay				tay
-.1f26	68		pla				pla
-.1f27	aa		tax				tax
-.1f28	60		rts				rts
-.1f29					_GLTSyntax:
-.1f29	4c a7 1a	jmp $1aa7			jmp 	EHandlerSyntax
+.1f47					Command_Local:
+.1f47	20 60 1f	jsr $1f60			jsr 	GetLocalTerm 				; get a local variable.
+.1f4a	98		tya				tya
+.1f4b	48		pha				pha
+.1f4c	a0 00		ldy #$00			ldy 	#0 							; erase the variable.
+.1f4e	98		tya				tya
+.1f4f					_CLClear:
+.1f4f	91 04		sta ($04),y			sta 	(temp0),y
+.1f51	c8		iny				iny
+.1f52	c0 04		cpy #$04			cpy 	#4
+.1f54	d0 f9		bne $1f4f			bne 	_CLClear
+.1f56	68		pla				pla
+.1f57	a8		tay				tay
+.1f58	b1 00		lda ($00),y			lda 	(codePtr),y					; check comma
+.1f5a	c8		iny				iny
+.1f5b	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
+.1f5d	f0 e8		beq $1f47			beq 	Command_Local
+.1f5f	60		rts				rts
+.1f60					GetLocalTerm:
+.1f60	8a		txa				txa
+.1f61	48		pha				pha
+.1f62	a2 00		ldx #$00			ldx 	#0 							; start on stack
+.1f64	a9 07		lda #$07			lda 	#7  						; get a term
+.1f66	20 a6 16	jsr $16a6			jsr 	EvaluateLevelAX 			; this is the variable/parameter to localise.
+.1f69	b5 20		lda $20,x			lda 	esType,x 					; which should be a reference of some sort
+.1f6b	10 26		bpl $1f93			bpl 	_GLTSyntax 					; if not, syntax error.
+.1f6d	98		tya				tya
+.1f6e	48		pha				pha
+.1f6f	a9 67		lda #$67			lda 	#SMLocal 					; create stack frame.
+.1f71	20 60 20	jsr $2060			jsr 	StackOpen
+.1f74	a0 05		ldy #$05			ldy 	#5
+.1f76	b5 28		lda $28,x			lda 	esInt0,x 					; copy address to temp0 and to stack+5,stack+6
+.1f78	85 04		sta $04				sta 	temp0
+.1f7a	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.1f7c	b5 30		lda $30,x			lda 	esInt1,x
+.1f7e	85 05		sta $05				sta 	temp0+1
+.1f80	c8		iny				iny
+.1f81	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.1f83	a0 00		ldy #$00			ldy 	#0 							; now copy data into stack1-4
+.1f85					_GLTCopy:
+.1f85	b1 04		lda ($04),y			lda 	(temp0),y
+.1f87	c8		iny				iny
+.1f88	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.1f8a	c0 04		cpy #$04			cpy 	#4
+.1f8c	d0 f7		bne $1f85			bne 	_GLTCopy
+.1f8e	68		pla				pla
+.1f8f	a8		tay				tay
+.1f90	68		pla				pla
+.1f91	aa		tax				tax
+.1f92	60		rts				rts
+.1f93					_GLTSyntax:
+.1f93	4c a7 1a	jmp $1aa7			jmp 	EHandlerSyntax
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/procedures/scanproc.asm
 
-.1f2c					BuildProcedureList:
-.1f2c	a5 10		lda $10				lda 	LowMemory 					; starts at low memory
-.1f2e	8d a9 08	sta $08a9			sta 	ProcTable
-.1f31	a5 11		lda $11				lda 	LowMemory+1
-.1f33	8d aa 08	sta $08aa			sta 	ProcTable+1
-.1f36	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
-.1f38	85 04		sta $04				sta 	temp0
-.1f3a	a9 22		lda #$22			lda 	#(BasicProgram) >> 8
-.1f3c	85 05		sta $05				sta 	1+(temp0)
-.1f3e					_BPLLoop:
-.1f3e	a0 00		ldy #$00			ldy 	#0
-.1f40	b1 04		lda ($04),y			lda 	(temp0),y 					; reached then end ?
-.1f42	f0 49		beq $1f8d			beq 	_BPLExit
-.1f44	a0 03		ldy #$03			ldy 	#3 							; look to see if it is PROC
-.1f46	b1 04		lda ($04),y			lda 	(temp0),y
-.1f48	c9 b6		cmp #$b6			cmp 	#KWD_PROC
-.1f4a	f0 10		beq $1f5c			beq 	_BPLFoundProc
-.1f4c					_BPLNext:
-.1f4c	a0 00		ldy #$00			ldy 	#0 							; next line.
-.1f4e	18		clc				clc
-.1f4f	b1 04		lda ($04),y			lda 	(temp0),y
-.1f51	65 04		adc $04				adc 	temp0
-.1f53	85 04		sta $04				sta 	temp0
-.1f55	90 e7		bcc $1f3e			bcc 	_BPLLoop
-.1f57	e6 05		inc $05				inc 	temp0+1
-.1f59	4c 3e 1f	jmp $1f3e			jmp 	_BPLLoop
-.1f5c					_BPLFoundProc:
-.1f5c	a9 00		lda #$00			lda 	#0 							; for calculating the hash.
-.1f5e	85 06		sta $06				sta 	temp1
-.1f60	a0 04		ldy #$04			ldy 	#4
-.1f62					_BPLCalcHash:
-.1f62	18		clc				clc 								; add the tokens making the identifier to make an 8 bit hash.
-.1f63	a5 06		lda $06				lda 	temp1
-.1f65	71 04		adc ($04),y			adc 	(temp0),y
-.1f67	85 06		sta $06				sta 	temp1
-.1f69	b1 04		lda ($04),y			lda 	(temp0),y
-.1f6b	c8		iny				iny
-.1f6c	c9 30		cmp #$30			cmp		#$30
-.1f6e	b0 f2		bcs $1f62			bcs 	_BPLCalcHash
-.1f70	b1 04		lda ($04),y			lda 	(temp0),y 					; check for (
-.1f72	c9 95		cmp #$95			cmp 	#KWD_LPAREN
-.1f74	d0 2f		bne $1fa5			bne 	BPSyntax
-.1f76	c8		iny				iny 								; first char after (
-.1f77					_BPLAddRecord:
-.1f77	a5 04		lda $04				lda 	temp0 						; write address of line (+0,+1)
-.1f79	20 96 1f	jsr $1f96			jsr 	WriteBPL
-.1f7c	a5 05		lda $05				lda 	temp0+1
-.1f7e	20 96 1f	jsr $1f96			jsr 	WriteBPL
-.1f81	a5 06		lda $06				lda 	temp1 						; write out sum hash (+2)
-.1f83	20 96 1f	jsr $1f96			jsr 	WriteBPL
-.1f86	98		tya				tya 								; offset to first character of parameter (+3)
-.1f87	20 96 1f	jsr $1f96			jsr 	WriteBPL
-.1f8a	4c 4c 1f	jmp $1f4c			jmp 	_BPLNext
-.1f8d					_BPLExit:
-.1f8d	a9 00		lda #$00			lda 	#0 							; write two zeros indicating end.
-.1f8f	20 96 1f	jsr $1f96			jsr 	WriteBPL
-.1f92	20 96 1f	jsr $1f96			jsr 	WriteBPL
-.1f95	60		rts				rts
-.1f96					WriteBPL:
-.1f96	84 03		sty $03				sty 	tempShort
-.1f98	a0 00		ldy #$00			ldy 	#0
-.1f9a	91 10		sta ($10),y			sta 	(LowMemory),y
-.1f9c	e6 10		inc $10				inc 	LowMemory
-.1f9e	d0 02		bne $1fa2			bne 	_WBPLExit
-.1fa0	e6 11		inc $11				inc 	LowMemory+1
-.1fa2					_WBPLExit:
-.1fa2	a4 03		ldy $03				ldy 	tempShort
-.1fa4	60		rts				rts
-.1fa5					BPSyntax:
-.1fa5	4c a7 1a	jmp $1aa7			jmp 	EHandlerSyntax
+.1f96					BuildProcedureList:
+.1f96	a5 10		lda $10				lda 	LowMemory 					; starts at low memory
+.1f98	8d a9 08	sta $08a9			sta 	ProcTable
+.1f9b	a5 11		lda $11				lda 	LowMemory+1
+.1f9d	8d aa 08	sta $08aa			sta 	ProcTable+1
+.1fa0	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
+.1fa2	85 04		sta $04				sta 	temp0
+.1fa4	a9 22		lda #$22			lda 	#(BasicProgram) >> 8
+.1fa6	85 05		sta $05				sta 	1+(temp0)
+.1fa8					_BPLLoop:
+.1fa8	a0 00		ldy #$00			ldy 	#0
+.1faa	b1 04		lda ($04),y			lda 	(temp0),y 					; reached then end ?
+.1fac	f0 49		beq $1ff7			beq 	_BPLExit
+.1fae	a0 03		ldy #$03			ldy 	#3 							; look to see if it is PROC
+.1fb0	b1 04		lda ($04),y			lda 	(temp0),y
+.1fb2	c9 b6		cmp #$b6			cmp 	#KWD_PROC
+.1fb4	f0 10		beq $1fc6			beq 	_BPLFoundProc
+.1fb6					_BPLNext:
+.1fb6	a0 00		ldy #$00			ldy 	#0 							; next line.
+.1fb8	18		clc				clc
+.1fb9	b1 04		lda ($04),y			lda 	(temp0),y
+.1fbb	65 04		adc $04				adc 	temp0
+.1fbd	85 04		sta $04				sta 	temp0
+.1fbf	90 e7		bcc $1fa8			bcc 	_BPLLoop
+.1fc1	e6 05		inc $05				inc 	temp0+1
+.1fc3	4c a8 1f	jmp $1fa8			jmp 	_BPLLoop
+.1fc6					_BPLFoundProc:
+.1fc6	a9 00		lda #$00			lda 	#0 							; for calculating the hash.
+.1fc8	85 06		sta $06				sta 	temp1
+.1fca	a0 04		ldy #$04			ldy 	#4
+.1fcc					_BPLCalcHash:
+.1fcc	18		clc				clc 								; add the tokens making the identifier to make an 8 bit hash.
+.1fcd	a5 06		lda $06				lda 	temp1
+.1fcf	71 04		adc ($04),y			adc 	(temp0),y
+.1fd1	85 06		sta $06				sta 	temp1
+.1fd3	b1 04		lda ($04),y			lda 	(temp0),y
+.1fd5	c8		iny				iny
+.1fd6	c9 30		cmp #$30			cmp		#$30
+.1fd8	b0 f2		bcs $1fcc			bcs 	_BPLCalcHash
+.1fda	b1 04		lda ($04),y			lda 	(temp0),y 					; check for (
+.1fdc	c9 95		cmp #$95			cmp 	#KWD_LPAREN
+.1fde	d0 2f		bne $200f			bne 	BPSyntax
+.1fe0	c8		iny				iny 								; first char after (
+.1fe1					_BPLAddRecord:
+.1fe1	a5 04		lda $04				lda 	temp0 						; write address of line (+0,+1)
+.1fe3	20 00 20	jsr $2000			jsr 	WriteBPL
+.1fe6	a5 05		lda $05				lda 	temp0+1
+.1fe8	20 00 20	jsr $2000			jsr 	WriteBPL
+.1feb	a5 06		lda $06				lda 	temp1 						; write out sum hash (+2)
+.1fed	20 00 20	jsr $2000			jsr 	WriteBPL
+.1ff0	98		tya				tya 								; offset to first character of parameter (+3)
+.1ff1	20 00 20	jsr $2000			jsr 	WriteBPL
+.1ff4	4c b6 1f	jmp $1fb6			jmp 	_BPLNext
+.1ff7					_BPLExit:
+.1ff7	a9 00		lda #$00			lda 	#0 							; write two zeros indicating end.
+.1ff9	20 00 20	jsr $2000			jsr 	WriteBPL
+.1ffc	20 00 20	jsr $2000			jsr 	WriteBPL
+.1fff	60		rts				rts
+.2000					WriteBPL:
+.2000	84 03		sty $03				sty 	tempShort
+.2002	a0 00		ldy #$00			ldy 	#0
+.2004	91 10		sta ($10),y			sta 	(LowMemory),y
+.2006	e6 10		inc $10				inc 	LowMemory
+.2008	d0 02		bne $200c			bne 	_WBPLExit
+.200a	e6 11		inc $11				inc 	LowMemory+1
+.200c					_WBPLExit:
+.200c	a4 03		ldy $03				ldy 	tempShort
+.200e	60		rts				rts
+.200f					BPSyntax:
+.200f	4c a7 1a	jmp $1aa7			jmp 	EHandlerSyntax
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/utility/scanner.asm
 
-.1fa8					ScanForward:
-.1fa8	85 0a		sta $0a				sta 	temp3 						; save tokens to search in temp3/temp3+1
-.1faa	86 0b		stx $0b				stx 	temp3+1
-.1fac	a9 00		lda #$00			lda 	#0 							; temp2 counts structure levels.
-.1fae	85 08		sta $08				sta 	temp2
-.1fb0	b1 00		lda ($00),y	_SFLoop:lda 	(codePtr),y 				; look at the high token.
-.1fb2	c9 80		cmp #$80			cmp 	#$80
-.1fb4	f0 13		beq $1fc9			beq 	_SFNextLine 				; if $80 go to next line.
-.1fb6	b0 17		bcs $1fcf			bcs  	_SFFoundCommand				; if -ve its a token
-.1fb8	c9 60		cmp #$60			cmp 	#$60 						; if $60 it's a string.
-.1fba	f0 04		beq $1fc0			beq 	_SFSkipString
-.1fbc					_SFNextToken:
-.1fbc	c8		iny				iny
-.1fbd	4c b0 1f	jmp $1fb0			jmp 	_SFLoop
-.1fc0					_SFSkipString:
-.1fc0	98		tya				tya
-.1fc1	c8		iny				iny
-.1fc2	18		clc				clc
-.1fc3	71 00		adc ($00),y			adc 	(codePtr),y
-.1fc5	a8		tay				tay
-.1fc6	4c b0 1f	jmp $1fb0			jmp 	_SFLoop
-.1fc9					_SFNextLine:
-.1fc9	20 30 14	jsr $1430			jsr 	CommandNextLine
-.1fcc	4c b0 1f	jmp $1fb0			jmp 	_SFLoop
-.1fcf					_SFFoundCommand:
-.1fcf	a5 08		lda $08				lda 	temp2 						; structure level is non-zero then don't check
-.1fd1	d0 0a		bne $1fdd			bne 	_SFNoCheck
-.1fd3	b1 00		lda ($00),y			lda 	(codePtr),y  				; get the token.
-.1fd5	c5 0a		cmp $0a				cmp 	temp3 						; if it matches either, then we win.
-.1fd7	f0 18		beq $1ff1			beq 	_SFFoundEnd
-.1fd9	c5 0b		cmp $0b				cmp 	temp3+1
-.1fdb	f0 14		beq $1ff1			beq 	_SFFoundEnd
-.1fdd					_SFNoCheck:
-.1fdd	b1 00		lda ($00),y			lda 	(codePtr),y 				; get the token
-.1fdf	aa		tax				tax 								; get its type
-.1fe0	bd 48 1a	lda $1a48,x			lda 	KeywordTypes-$80,x
-.1fe3	10 d7		bpl $1fbc			bpl		_SFNextToken 				; not a command
-.1fe5	38		sec				sec
-.1fe6	e9 81		sbc #$81			sbc 	#$81 						; this is now -1 if close, 0 normal, 1 open.
-.1fe8	18		clc				clc
-.1fe9	65 08		adc $08				adc 	temp2 						; add to structure level
-.1feb	85 08		sta $08				sta 	temp2
-.1fed	30 04		bmi $1ff3			bmi		_SFBalance
-.1fef	10 cb		bpl $1fbc			bpl 	_SFNextToken
-.1ff1					_SFFoundEnd:
-.1ff1	c8		iny				iny									; skip over the token
-.1ff2	60		rts				rts
-.1ff3					_SFBalance:
-.1ff3	4c d0 19	jmp $19d0			jmp 	EHandlerClosure
+.2012					ScanForward:
+.2012	85 0a		sta $0a				sta 	temp3 						; save tokens to search in temp3/temp3+1
+.2014	86 0b		stx $0b				stx 	temp3+1
+.2016	a9 00		lda #$00			lda 	#0 							; temp2 counts structure levels.
+.2018	85 08		sta $08				sta 	temp2
+.201a	b1 00		lda ($00),y	_SFLoop:lda 	(codePtr),y 				; look at the high token.
+.201c	c9 80		cmp #$80			cmp 	#$80
+.201e	f0 13		beq $2033			beq 	_SFNextLine 				; if $80 go to next line.
+.2020	b0 17		bcs $2039			bcs  	_SFFoundCommand				; if -ve its a token
+.2022	c9 60		cmp #$60			cmp 	#$60 						; if $60 it's a string.
+.2024	f0 04		beq $202a			beq 	_SFSkipString
+.2026					_SFNextToken:
+.2026	c8		iny				iny
+.2027	4c 1a 20	jmp $201a			jmp 	_SFLoop
+.202a					_SFSkipString:
+.202a	98		tya				tya
+.202b	c8		iny				iny
+.202c	18		clc				clc
+.202d	71 00		adc ($00),y			adc 	(codePtr),y
+.202f	a8		tay				tay
+.2030	4c 1a 20	jmp $201a			jmp 	_SFLoop
+.2033					_SFNextLine:
+.2033	20 30 14	jsr $1430			jsr 	CommandNextLine
+.2036	4c 1a 20	jmp $201a			jmp 	_SFLoop
+.2039					_SFFoundCommand:
+.2039	a5 08		lda $08				lda 	temp2 						; structure level is non-zero then don't check
+.203b	d0 0a		bne $2047			bne 	_SFNoCheck
+.203d	b1 00		lda ($00),y			lda 	(codePtr),y  				; get the token.
+.203f	c5 0a		cmp $0a				cmp 	temp3 						; if it matches either, then we win.
+.2041	f0 18		beq $205b			beq 	_SFFoundEnd
+.2043	c5 0b		cmp $0b				cmp 	temp3+1
+.2045	f0 14		beq $205b			beq 	_SFFoundEnd
+.2047					_SFNoCheck:
+.2047	b1 00		lda ($00),y			lda 	(codePtr),y 				; get the token
+.2049	aa		tax				tax 								; get its type
+.204a	bd 48 1a	lda $1a48,x			lda 	KeywordTypes-$80,x
+.204d	10 d7		bpl $2026			bpl		_SFNextToken 				; not a command
+.204f	38		sec				sec
+.2050	e9 81		sbc #$81			sbc 	#$81 						; this is now -1 if close, 0 normal, 1 open.
+.2052	18		clc				clc
+.2053	65 08		adc $08				adc 	temp2 						; add to structure level
+.2055	85 08		sta $08				sta 	temp2
+.2057	30 04		bmi $205d			bmi		_SFBalance
+.2059	10 cb		bpl $2026			bpl 	_SFNextToken
+.205b					_SFFoundEnd:
+.205b	c8		iny				iny									; skip over the token
+.205c	60		rts				rts
+.205d					_SFBalance:
+.205d	4c d0 19	jmp $19d0			jmp 	EHandlerClosure
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: common/utility/stack.asm
 
-.1ff6					StackOpen:
-.1ff6	85 03		sta $03				sta 	tempShort 					; save it
-.1ff8	29 0f		and #$0f			and 	#StackSizeMask 				; bytes to subtract.
-.1ffa	49 ff		eor #$ff			eor 	#$FF 						; add to stack pointer, 2's complement
-.1ffc	38		sec				sec
-.1ffd	65 0e		adc $0e				adc 	StackPtr
-.1fff	85 0e		sta $0e				sta 	StackPtr
-.2001	a5 0f		lda $0f				lda 	StackPtr+1
-.2003	69 ff		adc #$ff			adc 	#$FF
-.2005	85 0f		sta $0f				sta 	StackPtr+1
-.2007	98		tya				tya
-.2008	48		pha				pha
-.2009	a0 00		ldy #$00			ldy 	#0 							; write marker at offset 0
-.200b	a5 03		lda $03				lda 	tempShort
-.200d	91 0e		sta ($0e),y			sta 	(StackPtr),y
-.200f	68		pla				pla
-.2010	a8		tay				tay
-.2011	a5 11		lda $11				lda 	LowMemory+1 				; check memory available
-.2013	c5 0f		cmp $0f				cmp 	StackPtr+1
-.2015	b0 01		bcs $2018			bcs		_SOMemory
-.2017	60		rts				rts
-.2018					_SOMemory:
-.2018	4c 05 1a	jmp $1a05			jmp 	EHandlerMemory
-.201b					StackCheck:
-.201b	84 03		sty $03				sty 	tempShort
-.201d	a0 00		ldy #$00			ldy 	#0 							; eor with marker
-.201f	51 0e		eor ($0e),y			eor 	(StackPtr),y
-.2021	a4 03		ldy $03				ldy 	tempShort
-.2023	c9 00		cmp #$00			cmp 	#0 							; set Z flag
-.2025	60		rts				rts
-.2026					StackClose:
-.2026	98		tya				tya
-.2027	48		pha				pha
-.2028	a0 00		ldy #$00			ldy 	#0
-.202a	b1 0e		lda ($0e),y			lda 	(StackPtr),y 				; get type back
-.202c	29 0f		and #$0f			and 	#StackSizeMask 				; bytes to add
-.202e	18		clc				clc
-.202f	65 0e		adc $0e				adc 	StackPtr
-.2031	85 0e		sta $0e				sta 	StackPtr
-.2033	90 02		bcc $2037			bcc 	_SCSkip
-.2035	e6 0f		inc $0f				inc 	StackPtr+1
-.2037					_SCSkip:
-.2037	68		pla				pla
-.2038	a8		tay				tay
-.2039	60		rts				rts
-.203a					StackLoadPosition:
-.203a	a0 03		ldy #$03			ldy 	#3 							; read in codePtr from 3,2
-.203c	b1 0e		lda ($0e),y			lda 	(stackPtr),y
-.203e	85 01		sta $01				sta 	codePtr+1
-.2040	88		dey				dey
-.2041	b1 0e		lda ($0e),y			lda 	(stackPtr),y
-.2043	85 00		sta $00				sta 	codePtr
-.2045	88		dey				dey
-.2046	b1 0e		lda ($0e),y			lda 	(stackPtr),y 				; restore offset in line
-.2048	a8		tay				tay
-.2049	60		rts				rts
-.204a					StackSavePosition:
-.204a	98		tya				tya 								; get position in A
-.204b	a0 01		ldy #$01			ldy 	#1
-.204d	91 0e		sta ($0e),y			sta 	(stackPtr),y 				; write it out.
-.204f	48		pha				pha 								; save to stack
-.2050	c8		iny				iny 								; write line position
-.2051	a5 00		lda $00				lda 	codePtr
-.2053	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.2055	c8		iny				iny
-.2056	a5 01		lda $01				lda 	codePtr+1
-.2058	91 0e		sta ($0e),y			sta 	(stackPtr),y
-.205a	68		pla				pla
-.205b	a8		tay				tay
-.205c	60		rts				rts
-.205d					StackPopLocals:
-.205d	a0 00		ldy #$00			ldy 	#0 							; check if TOS is a local record
-.205f	b1 0e		lda ($0e),y			lda 	(stackPtr),y
-.2061	c9 67		cmp #$67			cmp 	#SMLocal
-.2063	d0 1c		bne $2081			bne 	_SPLExit
-.2065	a0 05		ldy #$05			ldy 	#5 							; copy local address to temp0
-.2067	b1 0e		lda ($0e),y			lda 	(stackPtr),y
-.2069	85 04		sta $04				sta 	temp0
-.206b	c8		iny				iny
-.206c	b1 0e		lda ($0e),y			lda 	(stackPtr),y
-.206e	85 05		sta $05				sta 	temp0+1
-.2070	a0 04		ldy #$04			ldy 	#4 							; start copying back
-.2072					_SPLLoop:
-.2072	b1 0e		lda ($0e),y			lda 	(stackPtr),y
-.2074	88		dey				dey
-.2075	91 04		sta ($04),y			sta 	(temp0),y
-.2077	c0 00		cpy #$00			cpy 	#0
-.2079	d0 f7		bne $2072			bne 	_SPLLoop
-.207b	20 26 20	jsr $2026			jsr 	StackClose 					; drop frame and try again
-.207e	4c 5d 20	jmp $205d			jmp 	StackPopLocals
-.2081					_SPLExit:
+.2060					StackOpen:
+.2060	85 03		sta $03				sta 	tempShort 					; save it
+.2062	29 0f		and #$0f			and 	#StackSizeMask 				; bytes to subtract.
+.2064	49 ff		eor #$ff			eor 	#$FF 						; add to stack pointer, 2's complement
+.2066	38		sec				sec
+.2067	65 0e		adc $0e				adc 	StackPtr
+.2069	85 0e		sta $0e				sta 	StackPtr
+.206b	a5 0f		lda $0f				lda 	StackPtr+1
+.206d	69 ff		adc #$ff			adc 	#$FF
+.206f	85 0f		sta $0f				sta 	StackPtr+1
+.2071	98		tya				tya
+.2072	48		pha				pha
+.2073	a0 00		ldy #$00			ldy 	#0 							; write marker at offset 0
+.2075	a5 03		lda $03				lda 	tempShort
+.2077	91 0e		sta ($0e),y			sta 	(StackPtr),y
+.2079	68		pla				pla
+.207a	a8		tay				tay
+.207b	a5 11		lda $11				lda 	LowMemory+1 				; check memory available
+.207d	c5 0f		cmp $0f				cmp 	StackPtr+1
+.207f	b0 01		bcs $2082			bcs		_SOMemory
 .2081	60		rts				rts
+.2082					_SOMemory:
+.2082	4c 05 1a	jmp $1a05			jmp 	EHandlerMemory
+.2085					StackCheck:
+.2085	84 03		sty $03				sty 	tempShort
+.2087	a0 00		ldy #$00			ldy 	#0 							; eor with marker
+.2089	51 0e		eor ($0e),y			eor 	(StackPtr),y
+.208b	a4 03		ldy $03				ldy 	tempShort
+.208d	c9 00		cmp #$00			cmp 	#0 							; set Z flag
+.208f	60		rts				rts
+.2090					StackClose:
+.2090	98		tya				tya
+.2091	48		pha				pha
+.2092	a0 00		ldy #$00			ldy 	#0
+.2094	b1 0e		lda ($0e),y			lda 	(StackPtr),y 				; get type back
+.2096	29 0f		and #$0f			and 	#StackSizeMask 				; bytes to add
+.2098	18		clc				clc
+.2099	65 0e		adc $0e				adc 	StackPtr
+.209b	85 0e		sta $0e				sta 	StackPtr
+.209d	90 02		bcc $20a1			bcc 	_SCSkip
+.209f	e6 0f		inc $0f				inc 	StackPtr+1
+.20a1					_SCSkip:
+.20a1	68		pla				pla
+.20a2	a8		tay				tay
+.20a3	60		rts				rts
+.20a4					StackLoadPosition:
+.20a4	a0 03		ldy #$03			ldy 	#3 							; read in codePtr from 3,2
+.20a6	b1 0e		lda ($0e),y			lda 	(stackPtr),y
+.20a8	85 01		sta $01				sta 	codePtr+1
+.20aa	88		dey				dey
+.20ab	b1 0e		lda ($0e),y			lda 	(stackPtr),y
+.20ad	85 00		sta $00				sta 	codePtr
+.20af	88		dey				dey
+.20b0	b1 0e		lda ($0e),y			lda 	(stackPtr),y 				; restore offset in line
+.20b2	a8		tay				tay
+.20b3	60		rts				rts
+.20b4					StackSavePosition:
+.20b4	98		tya				tya 								; get position in A
+.20b5	a0 01		ldy #$01			ldy 	#1
+.20b7	91 0e		sta ($0e),y			sta 	(stackPtr),y 				; write it out.
+.20b9	48		pha				pha 								; save to stack
+.20ba	c8		iny				iny 								; write line position
+.20bb	a5 00		lda $00				lda 	codePtr
+.20bd	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.20bf	c8		iny				iny
+.20c0	a5 01		lda $01				lda 	codePtr+1
+.20c2	91 0e		sta ($0e),y			sta 	(stackPtr),y
+.20c4	68		pla				pla
+.20c5	a8		tay				tay
+.20c6	60		rts				rts
+.20c7					StackPopLocals:
+.20c7	a0 00		ldy #$00			ldy 	#0 							; check if TOS is a local record
+.20c9	b1 0e		lda ($0e),y			lda 	(stackPtr),y
+.20cb	c9 67		cmp #$67			cmp 	#SMLocal
+.20cd	d0 1c		bne $20eb			bne 	_SPLExit
+.20cf	a0 05		ldy #$05			ldy 	#5 							; copy local address to temp0
+.20d1	b1 0e		lda ($0e),y			lda 	(stackPtr),y
+.20d3	85 04		sta $04				sta 	temp0
+.20d5	c8		iny				iny
+.20d6	b1 0e		lda ($0e),y			lda 	(stackPtr),y
+.20d8	85 05		sta $05				sta 	temp0+1
+.20da	a0 04		ldy #$04			ldy 	#4 							; start copying back
+.20dc					_SPLLoop:
+.20dc	b1 0e		lda ($0e),y			lda 	(stackPtr),y
+.20de	88		dey				dey
+.20df	91 04		sta ($04),y			sta 	(temp0),y
+.20e1	c0 00		cpy #$00			cpy 	#0
+.20e3	d0 f7		bne $20dc			bne 	_SPLLoop
+.20e5	20 90 20	jsr $2090			jsr 	StackClose 					; drop frame and try again
+.20e8	4c c7 20	jmp $20c7			jmp 	StackPopLocals
+.20eb					_SPLExit:
+.20eb	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: variables/common/varcreate.asm
 
-.2082					VariableCreate:
-.2082	a5 10		lda $10				lda 	LowMemory 					; copy LowMemory to temp0 adding 9 as you go
-.2084	85 04		sta $04				sta 	temp0 						; 9 is the size of a variable record.
-.2086	18		clc				clc
-.2087	69 09		adc #$09			adc 	#9
-.2089	85 10		sta $10				sta 	LowMemory
-.208b	a5 11		lda $11				lda 	LowMemory+1
-.208d	85 05		sta $05				sta 	temp0+1
-.208f	69 00		adc #$00			adc 	#0
-.2091	85 11		sta $11				sta 	LowMemory+1
-.2093	c5 0f		cmp $0f				cmp 	StackPtr+1 					; caught up with high memory ?
-.2095	b0 30		bcs $20c7			bcs 	_CVMemoryError
-.2097	a0 00		ldy #$00			ldy 	#0 							; copy the current link from hash table into the 'next' links
-.2099	b1 06		lda ($06),y			lda 	(temp1),y 					; from the hash table, inserting it into the front.
-.209b	91 04		sta ($04),y			sta 	(temp0),y 					; (offset 0 & 1)
-.209d	c8		iny				iny
-.209e	b1 06		lda ($06),y			lda 	(temp1),y
-.20a0	91 04		sta ($04),y			sta 	(temp0),y
-.20a2	c8		iny				iny
-.20a3	a5 08		lda $08				lda 	temp2 						; write full 8 bit hash into offset 2
-.20a5	91 04		sta ($04),y			sta 	(temp0),y
-.20a7	c8		iny				iny
-.20a8	18		clc				clc 								; write variable name address into offset 3,4 (codePtr + y)
-.20a9	a5 0a		lda $0a				lda 	temp3
-.20ab	91 04		sta ($04),y			sta 	(temp0),y
-.20ad	c8		iny				iny
-.20ae	a5 0b		lda $0b				lda 	temp3+1
-.20b0	91 04		sta ($04),y			sta 	(temp0),y
-.20b2					_CVClear:
-.20b2	c8		iny				iny
-.20b3	a9 00		lda #$00			lda 	#$00
-.20b5	91 04		sta ($04),y			sta 	(temp0),y
-.20b7	c0 08		cpy #$08			cpy 	#8
-.20b9	d0 f7		bne $20b2			bne 	_CVClear
-.20bb	a0 00		ldy #$00			ldy 	#0 							; put the address of the record as the new link head
-.20bd	a5 04		lda $04				lda 	temp0
-.20bf	91 06		sta ($06),y			sta 	(temp1),y
-.20c1	c8		iny				iny
-.20c2	a5 05		lda $05				lda 	temp0+1
-.20c4	91 06		sta ($06),y			sta 	(temp1),y
-.20c6	60		rts				rts
-.20c7					_CVMemoryError:
-.20c7	4c 05 1a	jmp $1a05			jmp 	EHandlerMemory
+.20ec					VariableCreate:
+.20ec	a5 10		lda $10				lda 	LowMemory 					; copy LowMemory to temp0 adding 9 as you go
+.20ee	85 04		sta $04				sta 	temp0 						; 9 is the size of a variable record.
+.20f0	18		clc				clc
+.20f1	69 09		adc #$09			adc 	#9
+.20f3	85 10		sta $10				sta 	LowMemory
+.20f5	a5 11		lda $11				lda 	LowMemory+1
+.20f7	85 05		sta $05				sta 	temp0+1
+.20f9	69 00		adc #$00			adc 	#0
+.20fb	85 11		sta $11				sta 	LowMemory+1
+.20fd	c5 0f		cmp $0f				cmp 	StackPtr+1 					; caught up with high memory ?
+.20ff	b0 30		bcs $2131			bcs 	_CVMemoryError
+.2101	a0 00		ldy #$00			ldy 	#0 							; copy the current link from hash table into the 'next' links
+.2103	b1 06		lda ($06),y			lda 	(temp1),y 					; from the hash table, inserting it into the front.
+.2105	91 04		sta ($04),y			sta 	(temp0),y 					; (offset 0 & 1)
+.2107	c8		iny				iny
+.2108	b1 06		lda ($06),y			lda 	(temp1),y
+.210a	91 04		sta ($04),y			sta 	(temp0),y
+.210c	c8		iny				iny
+.210d	a5 08		lda $08				lda 	temp2 						; write full 8 bit hash into offset 2
+.210f	91 04		sta ($04),y			sta 	(temp0),y
+.2111	c8		iny				iny
+.2112	18		clc				clc 								; write variable name address into offset 3,4 (codePtr + y)
+.2113	a5 0a		lda $0a				lda 	temp3
+.2115	91 04		sta ($04),y			sta 	(temp0),y
+.2117	c8		iny				iny
+.2118	a5 0b		lda $0b				lda 	temp3+1
+.211a	91 04		sta ($04),y			sta 	(temp0),y
+.211c					_CVClear:
+.211c	c8		iny				iny
+.211d	a9 00		lda #$00			lda 	#$00
+.211f	91 04		sta ($04),y			sta 	(temp0),y
+.2121	c0 08		cpy #$08			cpy 	#8
+.2123	d0 f7		bne $211c			bne 	_CVClear
+.2125	a0 00		ldy #$00			ldy 	#0 							; put the address of the record as the new link head
+.2127	a5 04		lda $04				lda 	temp0
+.2129	91 06		sta ($06),y			sta 	(temp1),y
+.212b	c8		iny				iny
+.212c	a5 05		lda $05				lda 	temp0+1
+.212e	91 06		sta ($06),y			sta 	(temp1),y
+.2130	60		rts				rts
+.2131					_CVMemoryError:
+.2131	4c 05 1a	jmp $1a05			jmp 	EHandlerMemory
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: variables/common/variables.asm
 
-.20ca					VariableAccess:
-.20ca	b1 00		lda ($00),y			lda 	(codePtr),y 				; check 20xx where x is 1..1A representing A-Z.
-.20cc	c9 1a		cmp #$1a			cmp 	#$1A 						; is this A-Z ?
-.20ce	b0 0b		bcs $20db			bcs 	_VANotBasic
-.20d0	0a		asl a				asl 	a 							; x 4
-.20d1	0a		asl a				asl 	a
-.20d2	95 28		sta $28,x			sta 	esInt0,x 					; set up address
-.20d4	a9 08		lda #$08			lda 	#RootVariables >> 8
-.20d6	95 30		sta $30,x			sta 	esInt1,x
-.20d8	4c 19 21	jmp $2119			jmp 	VACheckModifier
-.20db					_VANotBasic:
-.20db	0a		asl a				asl 	a 							; calculate hash as 2 x first byte + second byte
-.20dc	c8		iny				iny
-.20dd	18		clc				clc
-.20de	71 00		adc ($00),y			adc 	(codePtr),y
-.20e0	88		dey				dey
-.20e1	85 08		sta $08				sta 	temp2 						; 8 bit hash in temp2.
-.20e3	29 0f		and #$0f			and 	#HashTableSize-1 			; force into hash range
-.20e5	0a		asl a				asl 	a 							; double, word addresses in table and CLC
-.20e6	69 68		adc #$68			adc 	#HashTable & $FF 			; make temp1 point to the hash table first link.
-.20e8	85 06		sta $06				sta 	temp1
-.20ea	a9 08		lda #$08			lda 	#HashTable >> 8
-.20ec	85 07		sta $07				sta 	temp1+1
-.20ee	84 09		sty $09				sty 	temp2+1 					; Y is the offset of the first character.
-.20f0	98		tya				tya
-.20f1	18		clc				clc
-.20f2	65 00		adc $00				adc 	codePtr 					; temp3 is the address of that variable name.
-.20f4	85 0a		sta $0a				sta 	temp3
-.20f6	a5 01		lda $01				lda		codePtr+1
-.20f8	69 00		adc #$00			adc 	#0
-.20fa	85 0b		sta $0b				sta 	temp3+1
-.20fc	8a		txa				txa
-.20fd	48		pha				pha
-.20fe	98		tya				tya
-.20ff	48		pha				pha
-.2100	20 30 21	jsr $2130			jsr 	VariableSearch 				; does it exist already ?
-.2103	b0 03		bcs $2108			bcs 	_VAExists
-.2105	20 82 20	jsr $2082			jsr 	VariableCreate 				; no, create it.
-.2108					_VAExists:
-.2108	68		pla				pla
-.2109	a8		tay				tay
-.210a	68		pla				pla
-.210b	aa		tax				tax
-.210c	18		clc				clc
-.210d	a5 04		lda $04				lda 	temp0 						; add 5 to temp0, which is the offset in the record
-.210f	69 05		adc #$05			adc 	#5 							; of the actual variable data and copy into the stack
-.2111	95 28		sta $28,x			sta 	esInt0,x
-.2113	a5 05		lda $05				lda 	temp0+1
-.2115	69 00		adc #$00			adc 	#0
-.2117	95 30		sta $30,x			sta 	esInt1,x
-.2119					VACheckModifier:
-.2119	b1 00		lda ($00),y			lda 	(codePtr),y
-.211b	c8		iny				iny
-.211c	c9 30		cmp #$30			cmp 	#$30
-.211e	b0 f9		bcs $2119			bcs 	VACheckModifier
-.2120	ad a8 08	lda $08a8			lda 	arrayEnabled 				; arrays in operation
-.2123	f0 00		beq $2125			beq 	_VAExit
-.2125					_VAExit:
-.2125	a9 00		lda #$00			lda 	#0 							; clear the upper two bytes of variable/element address.
-.2127	95 38		sta $38,x			sta 	esInt2,x
-.2129	95 40		sta $40,x			sta 	esInt3,x
-.212b	a9 80		lda #$80			lda 	#$80 						; it's a reference to an integer.
-.212d	95 20		sta $20,x			sta 	esType,x
-.212f	60		rts				rts
+.2134					VariableAccess:
+.2134	b1 00		lda ($00),y			lda 	(codePtr),y 				; check 20xx where x is 1..1A representing A-Z.
+.2136	c9 1a		cmp #$1a			cmp 	#$1A 						; is this A-Z ?
+.2138	b0 0b		bcs $2145			bcs 	_VANotBasic
+.213a	0a		asl a				asl 	a 							; x 4
+.213b	0a		asl a				asl 	a
+.213c	95 28		sta $28,x			sta 	esInt0,x 					; set up address
+.213e	a9 08		lda #$08			lda 	#RootVariables >> 8
+.2140	95 30		sta $30,x			sta 	esInt1,x
+.2142	4c 83 21	jmp $2183			jmp 	VACheckModifier
+.2145					_VANotBasic:
+.2145	0a		asl a				asl 	a 							; calculate hash as 2 x first byte + second byte
+.2146	c8		iny				iny
+.2147	18		clc				clc
+.2148	71 00		adc ($00),y			adc 	(codePtr),y
+.214a	88		dey				dey
+.214b	85 08		sta $08				sta 	temp2 						; 8 bit hash in temp2.
+.214d	29 0f		and #$0f			and 	#HashTableSize-1 			; force into hash range
+.214f	0a		asl a				asl 	a 							; double, word addresses in table and CLC
+.2150	69 68		adc #$68			adc 	#HashTable & $FF 			; make temp1 point to the hash table first link.
+.2152	85 06		sta $06				sta 	temp1
+.2154	a9 08		lda #$08			lda 	#HashTable >> 8
+.2156	85 07		sta $07				sta 	temp1+1
+.2158	84 09		sty $09				sty 	temp2+1 					; Y is the offset of the first character.
+.215a	98		tya				tya
+.215b	18		clc				clc
+.215c	65 00		adc $00				adc 	codePtr 					; temp3 is the address of that variable name.
+.215e	85 0a		sta $0a				sta 	temp3
+.2160	a5 01		lda $01				lda		codePtr+1
+.2162	69 00		adc #$00			adc 	#0
+.2164	85 0b		sta $0b				sta 	temp3+1
+.2166	8a		txa				txa
+.2167	48		pha				pha
+.2168	98		tya				tya
+.2169	48		pha				pha
+.216a	20 9a 21	jsr $219a			jsr 	VariableSearch 				; does it exist already ?
+.216d	b0 03		bcs $2172			bcs 	_VAExists
+.216f	20 ec 20	jsr $20ec			jsr 	VariableCreate 				; no, create it.
+.2172					_VAExists:
+.2172	68		pla				pla
+.2173	a8		tay				tay
+.2174	68		pla				pla
+.2175	aa		tax				tax
+.2176	18		clc				clc
+.2177	a5 04		lda $04				lda 	temp0 						; add 5 to temp0, which is the offset in the record
+.2179	69 05		adc #$05			adc 	#5 							; of the actual variable data and copy into the stack
+.217b	95 28		sta $28,x			sta 	esInt0,x
+.217d	a5 05		lda $05				lda 	temp0+1
+.217f	69 00		adc #$00			adc 	#0
+.2181	95 30		sta $30,x			sta 	esInt1,x
+.2183					VACheckModifier:
+.2183	b1 00		lda ($00),y			lda 	(codePtr),y
+.2185	c8		iny				iny
+.2186	c9 30		cmp #$30			cmp 	#$30
+.2188	b0 f9		bcs $2183			bcs 	VACheckModifier
+.218a	ad a8 08	lda $08a8			lda 	arrayEnabled 				; arrays in operation
+.218d	f0 00		beq $218f			beq 	_VAExit
+.218f					_VAExit:
+.218f	a9 00		lda #$00			lda 	#0 							; clear the upper two bytes of variable/element address.
+.2191	95 38		sta $38,x			sta 	esInt2,x
+.2193	95 40		sta $40,x			sta 	esInt3,x
+.2195	a9 80		lda #$80			lda 	#$80 						; it's a reference to an integer.
+.2197	95 20		sta $20,x			sta 	esType,x
+.2199	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: variables/common/varsearch.asm
 
-.2130					VariableSearch:
-.2130	a5 06		lda $06				lda 	temp1 						; put the first hash link address into temp0
-.2132	85 04		sta $04				sta 	temp0
-.2134	a5 07		lda $07				lda 	temp1+1
-.2136	85 05		sta $05				sta 	temp0+1
-.2138					_VSLoop:
-.2138	a0 01		ldy #$01			ldy 	#1 							; look at MSB of link to follow
-.213a	b1 04		lda ($04),y			lda 	(temp0),y
-.213c	f0 29		beq $2167			beq 	_VSFail						; if zero, end of linked list, so exit with CC
-.213e	aa		tax				tax 								; follow the link.
-.213f	88		dey				dey
-.2140	b1 04		lda ($04),y			lda 	(temp0),y
-.2142	85 04		sta $04				sta 	temp0
-.2144	86 05		stx $05				stx 	temp0+1
-.2146	a0 02		ldy #$02			ldy 	#2 							; check the hashes match
-.2148	b1 04		lda ($04),y			lda 	(temp0),y
-.214a	c5 08		cmp $08				cmp 	temp2 						; no, they don't, go around.
-.214c	d0 ea		bne $2138			bne 	_VSLoop
-.214e	c8		iny				iny 								; copy the varname address into temp4
-.214f	b1 04		lda ($04),y			lda 	(temp0),y
-.2151	85 0c		sta $0c				sta 	temp4
-.2153	c8		iny				iny
-.2154	b1 04		lda ($04),y			lda 	(temp0),y
-.2156	85 0d		sta $0d				sta 	temp4+1
-.2158	a0 00		ldy #$00			ldy 	#0 							; now compare them.
-.215a					_VSCompareName:
-.215a	b1 0c		lda ($0c),y			lda 	(temp4),y
-.215c	d1 0a		cmp ($0a),y			cmp 	(temp3),y
-.215e	d0 d8		bne $2138			bne 	_VSLoop 					; different, go around
-.2160	c8		iny				iny
-.2161	c9 30		cmp #$30			cmp 	#$30 						; reached end marker
-.2163	b0 f5		bcs $215a			bcs 	_VSCompareName
-.2165	38		sec				sec 								; and we match.
-.2166	60		rts				rts
-.2167	18		clc		_VSFail:clc
-.2168	60		rts				rts
+.219a					VariableSearch:
+.219a	a5 06		lda $06				lda 	temp1 						; put the first hash link address into temp0
+.219c	85 04		sta $04				sta 	temp0
+.219e	a5 07		lda $07				lda 	temp1+1
+.21a0	85 05		sta $05				sta 	temp0+1
+.21a2					_VSLoop:
+.21a2	a0 01		ldy #$01			ldy 	#1 							; look at MSB of link to follow
+.21a4	b1 04		lda ($04),y			lda 	(temp0),y
+.21a6	f0 29		beq $21d1			beq 	_VSFail						; if zero, end of linked list, so exit with CC
+.21a8	aa		tax				tax 								; follow the link.
+.21a9	88		dey				dey
+.21aa	b1 04		lda ($04),y			lda 	(temp0),y
+.21ac	85 04		sta $04				sta 	temp0
+.21ae	86 05		stx $05				stx 	temp0+1
+.21b0	a0 02		ldy #$02			ldy 	#2 							; check the hashes match
+.21b2	b1 04		lda ($04),y			lda 	(temp0),y
+.21b4	c5 08		cmp $08				cmp 	temp2 						; no, they don't, go around.
+.21b6	d0 ea		bne $21a2			bne 	_VSLoop
+.21b8	c8		iny				iny 								; copy the varname address into temp4
+.21b9	b1 04		lda ($04),y			lda 	(temp0),y
+.21bb	85 0c		sta $0c				sta 	temp4
+.21bd	c8		iny				iny
+.21be	b1 04		lda ($04),y			lda 	(temp0),y
+.21c0	85 0d		sta $0d				sta 	temp4+1
+.21c2	a0 00		ldy #$00			ldy 	#0 							; now compare them.
+.21c4					_VSCompareName:
+.21c4	b1 0c		lda ($0c),y			lda 	(temp4),y
+.21c6	d1 0a		cmp ($0a),y			cmp 	(temp3),y
+.21c8	d0 d8		bne $21a2			bne 	_VSLoop 					; different, go around
+.21ca	c8		iny				iny
+.21cb	c9 30		cmp #$30			cmp 	#$30 						; reached end marker
+.21cd	b0 f5		bcs $21c4			bcs 	_VSCompareName
+.21cf	38		sec				sec 								; and we match.
+.21d0	60		rts				rts
+.21d1	18		clc		_VSFail:clc
+.21d2	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: testing/code/99program.asm
 
->2169						.align 256
+>21d3						.align 256
 .2200					BasicProgram:
->2200	0b					.byte $0b
+>2200	09					.byte $09
 >2201	e8					.byte $e8
 >2202	03					.byte $03
->2203	c7					.byte $c7
->2204	3f					.byte $3f
->2205	41					.byte $41
->2206	32					.byte $32
->2207	1b					.byte $1b
->2208	95					.byte $95
->2209	ae					.byte $ae
->220a	80					.byte $80
->220b	0b					.byte $0b
->220c	f2					.byte $f2
->220d	03					.byte $03
->220e	c7					.byte $c7
->220f	3f					.byte $3f
->2210	41					.byte $41
->2211	32					.byte $32
->2212	1c					.byte $1c
->2213	95					.byte $95
->2214	ae					.byte $ae
->2215	80					.byte $80
->2216	05					.byte $05
->2217	fc					.byte $fc
->2218	03					.byte $03
->2219	cd					.byte $cd
->221a	80					.byte $80
->221b	0b					.byte $0b
->221c	06					.byte $06
->221d	04					.byte $04
->221e	b6					.byte $b6
->221f	3f					.byte $3f
->2220	41					.byte $41
->2221	32					.byte $32
->2222	1b					.byte $1b
->2223	95					.byte $95
->2224	ae					.byte $ae
+>2203	47					.byte $47
+>2204	17					.byte $17
+>2205	89					.byte $89
+>2206	7a					.byte $7a
+>2207	72					.byte $72
+>2208	80					.byte $80
+>2209	0b					.byte $0b
+>220a	f2					.byte $f2
+>220b	03					.byte $03
+>220c	c7					.byte $c7
+>220d	3f					.byte $3f
+>220e	41					.byte $41
+>220f	32					.byte $32
+>2210	1b					.byte $1b
+>2211	95					.byte $95
+>2212	ae					.byte $ae
+>2213	80					.byte $80
+>2214	0b					.byte $0b
+>2215	fc					.byte $fc
+>2216	03					.byte $03
+>2217	c7					.byte $c7
+>2218	3f					.byte $3f
+>2219	41					.byte $41
+>221a	32					.byte $32
+>221b	1c					.byte $1c
+>221c	95					.byte $95
+>221d	ae					.byte $ae
+>221e	80					.byte $80
+>221f	07					.byte $07
+>2220	06					.byte $06
+>2221	04					.byte $04
+>2222	c6					.byte $c6
+>2223	47					.byte $47
+>2224	17					.byte $17
 >2225	80					.byte $80
->2226	0c					.byte $0c
+>2226	05					.byte $05
 >2227	10					.byte $10
 >2228	04					.byte $04
->2229	c6					.byte $c6
->222a	60					.byte $60
->222b	07					.byte $07
->222c	50					.byte $50
->222d	52					.byte $52
->222e	43					.byte $43
->222f	31					.byte $31
->2230	00					.byte $00
->2231	80					.byte $80
->2232	05					.byte $05
->2233	1a					.byte $1a
->2234	04					.byte $04
->2235	bb					.byte $bb
->2236	80					.byte $80
->2237	04					.byte $04
->2238	24					.byte $24
->2239	04					.byte $04
->223a	80					.byte $80
->223b	0b					.byte $0b
->223c	2e					.byte $2e
->223d	04					.byte $04
->223e	b6					.byte $b6
->223f	3f					.byte $3f
->2240	41					.byte $41
->2241	32					.byte $32
->2242	1c					.byte $1c
->2243	95					.byte $95
->2244	ae					.byte $ae
->2245	80					.byte $80
->2246	0c					.byte $0c
->2247	38					.byte $38
->2248	04					.byte $04
->2249	c6					.byte $c6
->224a	60					.byte $60
->224b	07					.byte $07
->224c	50					.byte $50
->224d	52					.byte $52
->224e	43					.byte $43
->224f	32					.byte $32
->2250	00					.byte $00
->2251	80					.byte $80
->2252	05					.byte $05
->2253	42					.byte $42
->2254	04					.byte $04
->2255	bb					.byte $bb
->2256	80					.byte $80
->2257	00					.byte $00
+>2229	cd					.byte $cd
+>222a	80					.byte $80
+>222b	0b					.byte $0b
+>222c	1a					.byte $1a
+>222d	04					.byte $04
+>222e	b6					.byte $b6
+>222f	3f					.byte $3f
+>2230	41					.byte $41
+>2231	32					.byte $32
+>2232	1b					.byte $1b
+>2233	95					.byte $95
+>2234	ae					.byte $ae
+>2235	80					.byte $80
+>2236	0b					.byte $0b
+>2237	24					.byte $24
+>2238	04					.byte $04
+>2239	c7					.byte $c7
+>223a	3f					.byte $3f
+>223b	41					.byte $41
+>223c	32					.byte $32
+>223d	1d					.byte $1d
+>223e	95					.byte $95
+>223f	ae					.byte $ae
+>2240	80					.byte $80
+>2241	0f					.byte $0f
+>2242	2e					.byte $2e
+>2243	04					.byte $04
+>2244	c6					.byte $c6
+>2245	60					.byte $60
+>2246	07					.byte $07
+>2247	50					.byte $50
+>2248	52					.byte $52
+>2249	43					.byte $43
+>224a	31					.byte $31
+>224b	00					.byte $00
+>224c	ac					.byte $ac
+>224d	47					.byte $47
+>224e	17					.byte $17
+>224f	80					.byte $80
+>2250	0b					.byte $0b
+>2251	38					.byte $38
+>2252	04					.byte $04
+>2253	c7					.byte $c7
+>2254	3f					.byte $3f
+>2255	41					.byte $41
+>2256	32					.byte $32
+>2257	1d					.byte $1d
+>2258	95					.byte $95
+>2259	ae					.byte $ae
+>225a	80					.byte $80
+>225b	05					.byte $05
+>225c	42					.byte $42
+>225d	04					.byte $04
+>225e	bb					.byte $bb
+>225f	80					.byte $80
+>2260	04					.byte $04
+>2261	4c					.byte $4c
+>2262	04					.byte $04
+>2263	80					.byte $80
+>2264	0b					.byte $0b
+>2265	56					.byte $56
+>2266	04					.byte $04
+>2267	b6					.byte $b6
+>2268	3f					.byte $3f
+>2269	41					.byte $41
+>226a	32					.byte $32
+>226b	1c					.byte $1c
+>226c	95					.byte $95
+>226d	ae					.byte $ae
+>226e	80					.byte $80
+>226f	0f					.byte $0f
+>2270	60					.byte $60
+>2271	04					.byte $04
+>2272	c6					.byte $c6
+>2273	60					.byte $60
+>2274	07					.byte $07
+>2275	50					.byte $50
+>2276	52					.byte $52
+>2277	43					.byte $43
+>2278	32					.byte $32
+>2279	00					.byte $00
+>227a	ac					.byte $ac
+>227b	47					.byte $47
+>227c	17					.byte $17
+>227d	80					.byte $80
+>227e	05					.byte $05
+>227f	6a					.byte $6a
+>2280	04					.byte $04
+>2281	bb					.byte $bb
+>2282	80					.byte $80
+>2283	04					.byte $04
+>2284	74					.byte $74
+>2285	04					.byte $04
+>2286	80					.byte $80
+>2287	0b					.byte $0b
+>2288	7e					.byte $7e
+>2289	04					.byte $04
+>228a	b6					.byte $b6
+>228b	3f					.byte $3f
+>228c	41					.byte $41
+>228d	32					.byte $32
+>228e	1d					.byte $1d
+>228f	95					.byte $95
+>2290	ae					.byte $ae
+>2291	80					.byte $80
+>2292	10					.byte $10
+>2293	88					.byte $88
+>2294	04					.byte $04
+>2295	c8					.byte $c8
+>2296	47					.byte $47
+>2297	17					.byte $17
+>2298	c0					.byte $c0
+>2299	c6					.byte $c6
+>229a	47					.byte $47
+>229b	17					.byte $17
+>229c	c0					.byte $c0
+>229d	47					.byte $47
+>229e	17					.byte $17
+>229f	89					.byte $89
+>22a0	7c					.byte $7c
+>22a1	80					.byte $80
+>22a2	0f					.byte $0f
+>22a3	92					.byte $92
+>22a4	04					.byte $04
+>22a5	c6					.byte $c6
+>22a6	60					.byte $60
+>22a7	07					.byte $07
+>22a8	50					.byte $50
+>22a9	52					.byte $52
+>22aa	43					.byte $43
+>22ab	33					.byte $33
+>22ac	00					.byte $00
+>22ad	ac					.byte $ac
+>22ae	47					.byte $47
+>22af	17					.byte $17
+>22b0	80					.byte $80
+>22b1	05					.byte $05
+>22b2	9c					.byte $9c
+>22b3	04					.byte $04
+>22b4	bb					.byte $bb
+>22b5	80					.byte $80
+>22b6	00					.byte $00
 
 ;******  Return to file: basic.asm
 

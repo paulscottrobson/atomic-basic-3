@@ -1,11 +1,7 @@
 TODO List
 =========
-Intermingling bug ! 
-
-	- a 'scan and create the parameters' routine which copies => buffer
-	- buffer is then copied into cache.
-
-
+Evaluate parameters
+Localise and store parameters.
 Array code.
 
 Notes

@@ -4,9 +4,12 @@
 EHandlerAssert:
 	jsr	ErrorHandler
 	.text "Assert Failed",0
+EHandlerBadAIndex:
+	jsr	ErrorHandler
+	.text "Bad Array Index",0
 EHandlerBadIndex:
 	jsr	ErrorHandler
-	.text "Wrong NEXT index",0
+	.text "Wrong Next index",0
 EHandlerBadProc:
 	jsr	ErrorHandler
 	.text "Unknown Procedure",0
@@ -22,6 +25,9 @@ EHandlerLineNumber:
 EHandlerMemory:
 	jsr	ErrorHandler
 	.text "Insufficient Memory",0
+EHandlerNoArray:
+	jsr	ErrorHandler
+	.text "Bad Array",0
 EHandlerNoGosub:
 	jsr	ErrorHandler
 	.text "Return without Gosub",0

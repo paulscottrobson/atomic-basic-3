@@ -84,8 +84,30 @@ VACheckModifier:
 		lda 	arrayEnabled 				; arrays in operation
 		beq 	_VAExit
 		;
-		;		TODO: Check for arrays.
+		lda 	(codePtr),y 				; check for (
+		cmp 	#KWD_LPAREN
+		bne 	_VAExit
+		iny
+
+		lda 	#$80 						; convert to a reference and derefence it
+		sta 	esType,x		
+		jsr 	DeRefTop
+
+		lda 	esInt1,x 					; check address $0000 - uninitialised
+		ora 	esInt0,x
+		beq 	_VAUninitialised
 		;
+		inx 
+		jsr 	EvaluateTOSDeRef 			; get the index.
+		jsr 	CheckRightParen
+		;
+		jsr 	Int32ShiftLeft 				; x 4
+		jsr 	Int32ShiftLeft
+		dex
+		jsr 	Int32Add 					; add together
+		lda 	esInt2,x 					; check MSBytses result
+		ora 	esInt3,x
+		bne 	_VABadAIndex
 _VAExit:		
 		lda 	#0 							; clear the upper two bytes of variable/element address.
 		sta 	esInt2,x
@@ -93,3 +115,9 @@ _VAExit:
 		lda 	#$80 						; it's a reference to an integer.
 		sta 	esType,x
 		rts
+
+_VAUninitialised:
+		report 	NoArray
+
+_VABadAIndex:
+		report 	BadAIndex

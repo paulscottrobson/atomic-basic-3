@@ -1,21 +1,11 @@
-n1 = 81:n2 = 92:n3 = 103
-xx = 42:d = -1
-call prc1(-4,"Hello",D)
-call prc2()
-print xx,d
-print n1,n2,n3
-stop
-proc prc1(n1,n2,n3)
-	call prc3()
-	print "PRC1",xx,n1,n2,n3
-	call prc3()
-endproc
+mem = alloc(25)
+print &mem,mem
+mem!0 = 42
+mem!4 = -2
+mem!8 = &12345678
+print &mem!8,mem!4,mem!0
+print &mem(2),mem(1),mem(0)
+mem(2) = &AA55AA55
+print &mem!8,mem!4,mem!0
+print &mem(2),mem(1),mem(0)
 
-proc prc2()
-	print "PRC2",xx
-endproc
-
-proc prc3()
-	local xx:xx = 12
-	print "PRC3",xx
-endproc

@@ -61,7 +61,9 @@ NoWhile:		Wend without While
 Closure:		Structure Error
 BadProc:		Unknown Procedure
 Parameters:		Bad Parameters
-BadIndex:		Wrong NEXT index
+BadIndex:		Wrong Next index
+NoArray:		Bad Array
+BadAIndex:		Bad Array Index
 
 """.split("\n"))
 	eg.write(open("../source/common/generated/errors.asm","w"))

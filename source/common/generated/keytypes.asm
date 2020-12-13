@@ -51,23 +51,23 @@ KeywordTypes:
 	.byte $81 ; $ae )
 	.byte $81 ; $af ++
 	.byte $81 ; $b0 --
-	.byte $81 ; $b1 [
-	.byte $81 ; $b2 ]
-	.byte $81 ; $b3 ->
-	.byte $82 ; $b4 if
-	.byte $82 ; $b5 for
-	.byte $82 ; $b6 repeat
-	.byte $82 ; $b7 proc
-	.byte $82 ; $b8 while
-	.byte $80 ; $b9 endif
-	.byte $80 ; $ba next
-	.byte $80 ; $bb until
-	.byte $80 ; $bc endproc
-	.byte $80 ; $bd wend
-	.byte $81 ; $be rem
-	.byte $81 ; $bf let
-	.byte $81 ; $c0 '
-	.byte $81 ; $c1 :
+	.byte $81 ; $b1 ]
+	.byte $81 ; $b2 ->
+	.byte $82 ; $b3 if
+	.byte $82 ; $b4 for
+	.byte $82 ; $b5 repeat
+	.byte $82 ; $b6 proc
+	.byte $82 ; $b7 while
+	.byte $80 ; $b8 endif
+	.byte $80 ; $b9 next
+	.byte $80 ; $ba until
+	.byte $80 ; $bb endproc
+	.byte $80 ; $bc wend
+	.byte $81 ; $bd rem
+	.byte $81 ; $be let
+	.byte $81 ; $bf '
+	.byte $81 ; $c0 :
+	.byte $81 ; $c1 [
 	.byte $81 ; $c2 then
 	.byte $81 ; $c3 else
 	.byte $81 ; $c4 to

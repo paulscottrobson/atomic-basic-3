@@ -57,7 +57,8 @@ _CCErase:
 		inx
 		cpx 	#HashTableSize*2
 		bne 	_CCErase
-		lda		#1 							; array works.
+		lda		#1 							; array works, variables autocreate.
 		sta 	ArrayEnabled
+		sta 	VariableAutoCreate
 		pulx
 		rts		

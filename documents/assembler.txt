@@ -1,0 +1,50 @@
+
+
+
+Assembler Entry
+===============
+
++0,+1 		Code built from C2 << 10 + C1 << 5 + C3 . $FF in first byte indicates end of list.
+			(order is deliberately odd to make coding easier)
++2 			Base opcode
++3 			Type
+				00-EF group #n to pick opcode modifier.
+						(1000+ has special handling code)
+					  bits 7,6,5,4 specify a mask ID. saying what are allowed.
+
+				F0-FF requires that address mode ; do not modify base opcode.
+
+ 000 immediate
+ 001 z
+ 010 accumulator/none.
+ 011 abs
+ 100 (z),Y
+ 101 z,x
+ 110 a,y
+ 111 a,x
+
+1000 (z,x/a,x)	Group 1 has special versions. Also used for JUMP in absolute form
+1001 (z/a) 		Group 1 uses this and makes it $x2. Also used for JUMP in absolute form
+1010 r 			Relative to PC.
+1011 z,y 		Required for Group 2. a,y already exists.
+
+Group 1	: ORA/AND/EOR/ADC/STA/LDA/CMP/SBC 	aaa mmm 01
+(modifier : to handle (x), immediate, (z,x), rejection of STA #)
+
+
+Group 2 : ASL/ROL/LSR/ROR/STX/LDX/DEC/INC 	aaa mmm 10
+
+Group 3 : BIT/STY/LDY/CPY/CPX
+
+Others : (up front)
+
+BIT# 	(because BIT# is just wrong  as a member of Group 3)
+LDX and STX z,y and a,y
+(at end)
+
+INC DEC (both A mode)
+BPL ..... BRA
+STZ <various>
+JMP JMP() JMP (a,x) JSR RTS RTI BRK NOP
+PHx PLx CLx SEx Tab
+INX DEX INY DEY 

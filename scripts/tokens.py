@@ -90,7 +90,7 @@ class Tokens(object):
 [syn]
 	,		;		)				
 
-	++		--		[ 		]		
+	++		--		]		->	
 #
 #		Keywords which open (10) close (8)
 #
@@ -102,7 +102,7 @@ class Tokens(object):
 #		Keywords (type 9)
 #
 [kwd]
-	rem 	let 	'		:
+	rem 	let 	'		: 		[
 	then 	else	to 		step 	vdu 	print
 	call	local	goto 	gosub 	return 	
 	assert 	stop 	end 	dim

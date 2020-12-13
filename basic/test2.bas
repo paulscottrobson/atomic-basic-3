@@ -1,0 +1,12 @@
+print 0
+print 4
+print 8
+print 10
+print 11
+print 12
+print 128
+print 262
+print 599
+print 3333
+print 333333
+print 123456789

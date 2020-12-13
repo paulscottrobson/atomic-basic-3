@@ -55,3 +55,6 @@ EHandlerSyntax:
 EHandlerTypeMismatch:
 	jsr	ErrorHandler
 	.text "Type Mismatch",0
+EHandlerUnknownVar:
+	jsr	ErrorHandler
+	.text "Unknown variable",0

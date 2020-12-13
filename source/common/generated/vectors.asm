@@ -51,7 +51,6 @@ TokenVectorLow:
 	.byte NoOp3 & $FF                      ; )
 	.byte InstructionUndefined & $FF       ; ++
 	.byte InstructionUndefined & $FF       ; --
-	.byte InstructionUndefined & $FF       ; [
 	.byte InstructionUndefined & $FF       ; ]
 	.byte InstructionUndefined & $FF       ; ->
 	.byte Command_IF & $FF                 ; if
@@ -68,6 +67,7 @@ TokenVectorLow:
 	.byte Command_LET & $FF                ; let
 	.byte Command_Rem2 & $FF               ; '
 	.byte Command_Colon & $FF              ; :
+	.byte InstructionUndefined & $FF       ; [
 	.byte NoOp7 & $FF                      ; then
 	.byte Command_ELSE & $FF               ; else
 	.byte NoOp8 & $FF                      ; to
@@ -139,7 +139,6 @@ TokenVectorHigh:
 	.byte NoOp3 >> 8                       ; )
 	.byte InstructionUndefined >> 8        ; ++
 	.byte InstructionUndefined >> 8        ; --
-	.byte InstructionUndefined >> 8        ; [
 	.byte InstructionUndefined >> 8        ; ]
 	.byte InstructionUndefined >> 8        ; ->
 	.byte Command_IF >> 8                  ; if
@@ -156,6 +155,7 @@ TokenVectorHigh:
 	.byte Command_LET >> 8                 ; let
 	.byte Command_Rem2 >> 8                ; '
 	.byte Command_Colon >> 8               ; :
+	.byte InstructionUndefined >> 8        ; [
 	.byte NoOp7 >> 8                       ; then
 	.byte Command_ELSE >> 8                ; else
 	.byte NoOp8 >> 8                       ; to

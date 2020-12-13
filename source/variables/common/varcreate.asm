@@ -17,6 +17,8 @@
 ; *****************************************************************************
 
 VariableCreate:
+		lda 	VariableAutoCreate 			; are we allowed to autocreate
+		beq 	_CVNoCreate		
 		;
 		lda 	LowMemory 					; copy LowMemory to temp0 adding 9 as you go
 		sta 	temp0 						; 9 is the size of a variable record.
@@ -67,3 +69,5 @@ _CVClear:									; clear the rest of the variable record. (5-8, data)
 
 _CVMemoryError:
 		report 	Memory		
+_CVNoCreate		
+		report 	UnknownVar		

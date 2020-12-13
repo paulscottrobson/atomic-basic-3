@@ -64,6 +64,7 @@ Parameters:		Bad Parameters
 BadIndex:		Wrong Next index
 NoArray:		Bad Array
 BadAIndex:		Bad Array Index
+UnknownVar:		Unknown variable
 
 """.split("\n"))
 	eg.write(open("../source/common/generated/errors.asm","w"))

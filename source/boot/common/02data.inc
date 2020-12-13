@@ -87,5 +87,8 @@ ArrayEnabled:	 							; when clear, cannot do array indexing.
 ProcTable:									; procedure list			
 		.fill 	2		
 
-ParamCount:								; # parameters evaluated in call.
+ParamCount:									; # parameters evaluated in call.
 		.fill 	1		
+
+VariableAutoCreate:							; when clear, cannot autocreate variables.
+		.fill 	1

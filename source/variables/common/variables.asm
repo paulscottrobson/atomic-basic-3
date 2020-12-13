@@ -61,7 +61,7 @@ _VANotBasic:
 		pshy 
 		jsr 	VariableSearch 				; does it exist already ?
 		bcs 	_VAExists	
-		jsr 	VariableCreate 				; no, create it.
+		jsr 	VariableCreate 				; create it.
 _VAExists:
 		puly 								; restore XY.
 		pulx		
@@ -121,3 +121,6 @@ _VAUninitialised:
 
 _VABadAIndex:
 		report 	BadAIndex
+
+_VANoCreate:
+		report 	UnknownVar		

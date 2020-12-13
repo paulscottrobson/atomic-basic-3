@@ -32,11 +32,11 @@ for n in names:
 	print("{0} = {1}".format(n,v[n]))
 print("rem")
 for n in range(1,count>>3):
-	cv = names[random.randint(0,len(names))]
+	cv = names[random.randint(0,len(names)-1)]
 	cn = random.randint(-0x7FFFFFFF,0x7FFFFFFF)
 	print("{0} = {1}".format(cv,cn))
 	v[cv] = cn
-print("rem")
+print("rem ")
 for n in names:
 	print("assert {0} = {1}".format(n,v[n]))
 print("stop")

@@ -1,7 +1,8 @@
 TODO List
 =========
-Need to fix anything advancing : Structure here.
-Run assignment checks again.
+Assembler
+Compiler
+Documentation
 
 Notes
 =====

@@ -92,3 +92,10 @@ ParamCount:									; # parameters evaluated in call.
 
 VariableAutoCreate:							; when clear, cannot autocreate variables.
 		.fill 	1
+
+
+aVariable = ('A'-'A')*4+RootVariables		
+oVariable = ('O'-'A')*4+RootVariables		
+pVariable = ('P'-'A')*4+RootVariables		
+xVariable = ('X'-'A')*4+RootVariables		
+yVariable = ('Y'-'A')*4+RootVariables		

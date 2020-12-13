@@ -73,23 +73,18 @@ UnarySys:		;; [sys]
 		sta 	temp0+1
 		pshx
 		pshy
-		lda 	('A'-'A')*4+RootVariables 	; load AXY
-		ldx 	('X'-'A')*4+RootVariables
-		ldy 	('Y'-'A')*4+RootVariables
+		lda 	aVariable 				 	; load AXY
+		ldx 	xVariable
+		ldy 	yVariable
 		jsr 	_USCall						; call code
-		sta 	('A'-'A')*4+RootVariables 	; save AXY
-		stx 	('X'-'A')*4+RootVariables
-		sty 	('Y'-'A')*4+RootVariables
+		sta 	aVariable 				 	; save AXY
+		stx 	xVariable
+		sty 	yVariable
 		puly
 		pulx
-		lda 	('A'-'A')*4+RootVariables 	; return A.
-		sta 	esInt0,x
-		lda 	#0
-		sta 	esInt1,x
-		sta 	esInt2,x
-		sta 	esInt3,x
-		makeinteger
-		rts
+		lda 	aVariable 				 	; load A to return
+		jmp 	Int32Set8Bit
+		
 _USCall:jmp 	(temp0)
 
 ; *****************************************************************************

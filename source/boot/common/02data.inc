@@ -99,6 +99,12 @@ AsmToken: 									; constructed assembler token.
 AsmMode:									; possible addressing modes
 		.fill 	1
 		
+AsmOpcode: 									; base opcode
+		.fill 	1		
+
+AsmType:									; type byte (see assembleer.txt)
+		.fill 	1
+				
 aVariable = ('A'-'A')*4+RootVariables		
 oVariable = ('O'-'A')*4+RootVariables		
 pVariable = ('P'-'A')*4+RootVariables		

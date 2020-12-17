@@ -9,6 +9,12 @@
 ; *****************************************************************************
 ; *****************************************************************************
 
+; *****************************************************************************
+;
+;						Inline assembler - [ comes here
+;
+; *****************************************************************************
+
 Assembler: 
 		lda 	(codePtr),y 				; look at next
 		cmp 	#$30 						; single char identifier not allowed
@@ -80,6 +86,9 @@ AssemblerAND:
 		sta 	AsmToken+1
 		jmp 	AssemblerHaveToken
 		;
+AssemblerSyntax:
+		report 	Syntax		
+		;
 		;		Standard opcode.
 		;
 AssemblerOpcode:
@@ -87,7 +96,103 @@ AssemblerOpcode:
 AssemblerHaveToken:
 		jsr 	AssemGetOperand				; figure out operand and addresing mode.
 		stx 	AsmMode
-		stop	
+		;
+		;		Now find the table entry.
+		;
+		set16 	temp0,OpcodeTable
+		pshy		
+_AHTSearch:
+		ldy 	#0 							; search table for token.
+		lda 	(temp0),y
+		cmp 	AsmToken
+		bne 	_AHTNext
+		iny
+		lda 	(temp0),y
+		cmp 	#$FF
+		beq 	AssemblerSyntax 			; end of table.
+		cmp 	AsmToken+1 
+		beq 	_AHTFound
+		;
+_AHTNext:		
+		lda 	temp0 						; go to next record
+		clc
+		adc 	#4
+		sta 	temp0
+		bcc 	_AHTSearch
+		inc 	temp0+1
+		jmp 	_AHTSearch
+_AHTFound:
+		iny 								; copy base opcode / type
+		lda 	(temp0),y
+		sta 	AsmOpcode
+		iny
+		lda 	(temp0),y
+		sta 	AsmType
+		;
+		cmp 	#$F0 						; is it a single type opcode ?
+		bcc 	_AHTAllowed
+		and 	#$0F
+		cmp 	AsmMode 					; does it match what we found ?
+		beq 	_AHTAllowed 				; if so, carry on.
+		jsr 	HackStandaloneTypes 		; try to hack it ?
+		bcc 	_AHTNext 					; failed, loop back.
+		
+_AHTAllowed:
+		puly
+		;
+		lda 	AsmType
+		cmp 	#$F0 						; if type is F0-FF go do standalone.
+		bcc 	_AHTIsGroup
+		;
+		;		Stand alone.
+		;
 
-AssemblerSyntax:
-		report 	Syntax		
+		lda 	AsmType 					; set up AX and write out
+		and 	#$0F
+		tax
+		lda 	AsmOpcode 					
+		jsr 	AssemblerWrite
+		jmp 	Assembler 					; go round again.
+		;
+		;		It's a group.
+		;		
+_AHTIsGroup:
+		stop		
+
+
+
+HackStandaloneTypes:
+		lda 	AsmType						; make Mode required : Mode in user code.
+		asl 	a
+		asl 	a
+		asl 	a
+		asl 	a
+		ora 	AsmMode 
+		cmp 	#(AM_Zero << 4)|AM_Abs
+		beq 	_HSTZeroAbsolute
+		cmp 	#(AM_ZeroX << 4)|AM_AbsX
+		beq 	_HSTZeroXAbsoluteX
+_HSTFail:
+		clc
+		rts
+_HSTSwitch:
+		sta 	AsmMode 					; switch it to this
+		sec
+		rts		
+		;
+		;		Require zero, given absolute
+		;
+_HSTZeroAbsolute:
+		lda 	esInt1 						; must be 00-FF
+		bne 	_HSTFail
+		lda 	#AM_Zero 					; and switch
+		bpl 	_HSTSwitch
+		;
+		;		Require zerox, given absolutex
+		;
+_HSTZeroXAbsoluteX:
+		lda 	esInt1 						; must be 00-FF
+		bne 	_HSTFail
+		lda 	#AM_ZeroX 					; and switch
+		bpl 	_HSTSwitch
+

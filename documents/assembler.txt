@@ -5,7 +5,7 @@ Assembler Entry
 ===============
 
 +0,+1 		Code built from C2 << 10 + C1 << 5 + C3 . $FF in first byte indicates end of list.
-			(order is deliberately odd to make coding easier)
+			(order is deliberately odd to make coding easier), $FFFF ends table.
 +2 			Base opcode
 +3 			Type
 				00-EF group #n to pick opcode modifier.

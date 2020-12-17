@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.55.2200 listing file
 ; 64tass -q --m65xx -L asm.out\basic.lst -l asm.out\basic.lbl -o asm.out\basic.prg basic.asm
-; Thu Dec 17 17:42:48 2020
+; Thu Dec 17 19:51:45 2020
 
 ;Offset	;Hex		;Monitor	;Source
 
@@ -68,6 +68,10 @@
 >08ad							.fill 	2
 .08af					AsmMode:
 >08af							.fill 	1
+.08b0					AsmOpcode:
+>08b0							.fill 	1
+.08b1					AsmType:
+>08b1							.fill 	1
 =$800					aVariable = ('A'-'A')*4+RootVariables
 =$838					oVariable = ('O'-'A')*4+RootVariables
 =$83c					pVariable = ('P'-'A')*4+RootVariables
@@ -233,7 +237,7 @@
 .1018					FindEnd:
 .1018	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
 .101a	85 04		sta $04				sta 	temp0
-.101c	a9 25		lda #$25			lda 	#(BasicProgram) >> 8
+.101c	a9 26		lda #$26			lda 	#(BasicProgram) >> 8
 .101e	85 05		sta $05				sta 	1+(temp0)
 .1020	98		tya				tya
 .1021	48		pha				pha
@@ -552,7 +556,7 @@
 .120d					FindGoto:
 .120d	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
 .120f	85 04		sta $04				sta 	temp0
-.1211	a9 25		lda #$25			lda 	#(BasicProgram) >> 8
+.1211	a9 26		lda #$26			lda 	#(BasicProgram) >> 8
 .1213	85 05		sta $05				sta 	1+(temp0)
 .1215					_FGLoop:
 .1215	a0 00		ldy #$00			ldy 	#0 							; look at link
@@ -694,7 +698,7 @@
 
 .12cf					Command_New:
 .12cf	a9 00		lda #$00			lda 	#0 							; clear program
-.12d1	8d 00 25	sta $2500			sta 	BasicProgram
+.12d1	8d 00 26	sta $2600			sta 	BasicProgram
 .12d4	4c 37 10	jmp $1037			jmp 	CommandClear				; clear variables etc.
 
 ;******  Return to file: basic.asm
@@ -759,19 +763,19 @@
 .1326	c8		iny				iny
 .1327	c9 00		cmp #$00			cmp 	#0 							; end of string, loop back.
 .1329	f0 ac		beq $12d7			beq 	_CPRLoop
-.132b	20 be 24	jsr $24be			jsr 	XTPrintA 					; print it and try next character.
+.132b	20 c4 25	jsr $25c4			jsr 	XTPrintA 					; print it and try next character.
 .132e	4c 24 13	jmp $1324			jmp 	_CPRStringLoop
 .1331					_CPRNewLine:
-.1331	20 ae 24	jsr $24ae			jsr 	XTPrintCR
+.1331	20 b4 25	jsr $25b4			jsr 	XTPrintCR
 .1334	4c d7 12	jmp $12d7			jmp 	_CPRLoop
 .1337					_CPRTab:
-.1337	20 b6 24	jsr $24b6			jsr 	XTPrintTab
+.1337	20 bc 25	jsr $25bc			jsr 	XTPrintTab
 .133a	a9 01		lda #$01			lda 	#1
 .133c	4c d9 12	jmp $12d9			jmp 	_CPRSetFlag
 .133f					_CPRExit:
 .133f	ad a7 08	lda $08a7			lda 	PrintCRFlag 				; check flag.
 .1342	d0 03		bne $1347			bne 	_CPRNoNL
-.1344	20 ae 24	jsr $24ae			jsr 	XTPrintCR
+.1344	20 b4 25	jsr $25b4			jsr 	XTPrintCR
 .1347					_CPRNoNL:
 .1347	60		rts				rts
 .1348					_CPRPrintInteger:
@@ -792,7 +796,7 @@
 .1361					_CPROutBuffer:
 .1361	bd 8c 08	lda $088c,x			lda 	buffer,x
 .1364	f0 06		beq $136c			beq 	_CPROBExit
-.1366	20 be 24	jsr $24be			jsr 	XTPrintA
+.1366	20 c4 25	jsr $25c4			jsr 	XTPrintA
 .1369	e8		inx				inx
 .136a	d0 f5		bne $1361			bne 	_CPROutBuffer
 .136c					_CPROBExit:
@@ -853,7 +857,7 @@
 .13a4	20 ad 1f	jsr $1fad			jsr 	BuildProcedureList 			; build procedure cache.
 .13a7	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
 .13a9	85 00		sta $00				sta 	codePtr
-.13ab	a9 25		lda #$25			lda 	#(BasicProgram) >> 8
+.13ab	a9 26		lda #$26			lda 	#(BasicProgram) >> 8
 .13ad	85 01		sta $01				sta 	1+(codePtr)
 .13af	a0 00		ldy #$00			ldy 	#0 							; check if off end of program.
 .13b1	b1 00		lda ($00),y			lda 	(codePtr),y
@@ -888,7 +892,7 @@
 .13e0					Command_Stop:
 .13e0	4c 57 1a	jmp $1a57			jmp 	EHandlerStop
 .13e3					Command_StartAsm:
-.13e3	4c 5a 22	jmp $225a			jmp 	Assembler
+.13e3	4c d6 22	jmp $22d6			jmp 	Assembler
 
 ;******  Return to file: basic.asm
 
@@ -898,7 +902,7 @@
 .13e6					Command_Vdu:
 .13e6	20 2b 16	jsr $162b			jsr 	EvaluateBaseDeRef			; evaluate the thing being asserted.
 .13e9	b5 28		lda $28,x			lda 	esInt0,x 					; get the byte
-.13eb	20 be 24	jsr $24be			jsr 	XTPrintA 					; and print it
+.13eb	20 c4 25	jsr $25c4			jsr 	XTPrintA 					; and print it
 .13ee	b1 00		lda ($00),y			lda 	(codePtr),y 				; if comma follows
 .13f0	c8		iny				iny
 .13f1	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
@@ -1000,7 +1004,7 @@
 .1461	f0 30		beq $1493			beq 	_GoWarm 					; no line #
 .1463	20 9b 14	jsr $149b			jsr 	PrintSpace
 .1466	a9 40		lda #$40			lda 	#'@'
-.1468	20 9e 24	jsr $249e			jsr 	XTPrintAC
+.1468	20 a4 25	jsr $25a4			jsr 	XTPrintAC
 .146b	20 9b 14	jsr $149b			jsr 	PrintSpace
 .146e	a2 00		ldx #$00			ldx 	#0 							; set up for ITOA conversion
 .1470	c8		iny				iny
@@ -1028,7 +1032,7 @@
 .1498	4c 23 1a	jmp $1a23			jmp 	EHandlerNotImplemented
 .149b					PrintSpace:
 .149b	a9 20		lda #$20			lda 	#32
-.149d	4c 9e 24	jmp $249e			jmp 	XTPrintAC
+.149d	4c a4 25	jmp $25a4			jmp 	XTPrintAC
 .14a0					PrintXYString:
 .14a0	48		pha				pha
 .14a1	84 04		sty $04				sty 	temp0
@@ -1036,7 +1040,7 @@
 .14a5	a0 00		ldy #$00			ldy 	#0
 .14a7					_PXYSLoop:
 .14a7	b1 04		lda ($04),y			lda 	(temp0),y
-.14a9	20 9e 24	jsr $249e			jsr 	XTPrintAC
+.14a9	20 a4 25	jsr $25a4			jsr 	XTPrintAC
 .14ac	c8		iny				iny
 .14ad	b1 04		lda ($04),y			lda 	(temp0),y
 .14af	d0 f6		bne $14a7			bne 	_PXYSLoop
@@ -1501,7 +1505,7 @@
 .177d	20 94 17	jsr $1794			jsr 	UnaryFalse 					; set all to zero/int
 .1780	a9 00		lda #$00			lda 	#BasicProgram & $FF
 .1782	95 28		sta $28,x			sta 	esInt0,x
-.1784	a9 25		lda #$25			lda 	#BasicProgram >> 8
+.1784	a9 26		lda #$26			lda 	#BasicProgram >> 8
 .1786	95 30		sta $30,x			sta 	esInt1,x
 .1788	60		rts				rts
 .1789					UnaryParenthesis:
@@ -1673,7 +1677,7 @@
 .189a	20 31 16	jsr $1631			jsr 	EvaluateTOSDeRef 			; get the rate
 .189d	ca		dex				dex
 .189e	20 3d 14	jsr $143d			jsr 	CheckRightParen 			; closing bracket.
-.18a1	20 82 24	jsr $2482			jsr 	XTUpdateClock
+.18a1	20 88 25	jsr $2588			jsr 	XTUpdateClock
 .18a4	98		tya				tya
 .18a5	48		pha				pha
 .18a6	b5 28		lda $28,x			lda 	esInt0,x 					; point temp0 to the variable
@@ -1727,7 +1731,7 @@
 ;******  Processing file: common/functions/keyboard.asm
 
 .18f6					Unary_Inkey:
-.18f6	20 72 24	jsr $2472			jsr 	XTGetKey
+.18f6	20 78 25	jsr $2578			jsr 	XTGetKey
 .18f9	95 28		sta $28,x			sta 	esInt0,x
 .18fb	4c 1b 1e	jmp $1e1b			jmp 	Int32Set8Bit
 .18fe					Unary_Get:
@@ -1742,7 +1746,7 @@
 ;******  Processing file: common/functions/timer.asm
 
 .1906					Unary_Timer:
-.1906	20 82 24	jsr $2482			jsr 	XTUpdateClock
+.1906	20 88 25	jsr $2588			jsr 	XTUpdateClock
 .1909	ad a0 08	lda $08a0			lda 	ClockTicks
 .190c	95 28		sta $28,x			sta 	esInt0,x
 .190e	ad a1 08	lda $08a1			lda 	ClockTicks+1
@@ -2842,7 +2846,7 @@
 .1fb4	8d aa 08	sta $08aa			sta 	ProcTable+1
 .1fb7	a9 00		lda #$00			lda 	#(BasicProgram) & $FF
 .1fb9	85 04		sta $04				sta 	temp0
-.1fbb	a9 25		lda #$25			lda 	#(BasicProgram) >> 8
+.1fbb	a9 26		lda #$26			lda 	#(BasicProgram) >> 8
 .1fbd	85 05		sta $05				sta 	1+(temp0)
 .1fbf					_BPLLoop:
 .1fbf	a0 00		ldy #$00			ldy 	#0
@@ -3307,535 +3311,840 @@
 ;******  Return to file: basic.asm
 
 
+;******  Processing file: assembler/inline/asmutils.asm
+
+.225a					AssemblerWrite:
+.225a	48		pha				pha 								; save A
+.225b	ad 3d 08	lda $083d			lda 	pVariable+1 				; print address
+.225e	20 c0 22	jsr $22c0			jsr 	AWPrintHex
+.2261	ad 3c 08	lda $083c			lda 	pVariable
+.2264	20 b8 22	jsr $22b8			jsr 	AWPrintHexSpace
+.2267	68		pla				pla 								; restore opcode
+.2268	20 8d 22	jsr $228d			jsr 	AWWriteOpcode 				; write opcode out.
+.226b	bd ac 22	lda $22ac,x			lda 	AWSizeTable,x 				; get the number of bytes to output.
+.226e	aa		tax				tax 								; count in X
+.226f	c9 02		cmp #$02			cmp 	#2 							; check zero mode ?
+.2271	d0 04		bne $2277			bne 	_AWWNoCheckZP
+.2273	a5 30		lda $30				lda 	ESInt1 						; if zero mode, must be 00-FF
+.2275	d0 13		bne $228a			bne 	_AWWOperand
+.2277					_AWWNoCheckZP:
+.2277	ca		dex				dex
+.2278	f0 0d		beq $2287			beq 	_AWExit
+.227a	a5 28		lda $28				lda 	ESInt0
+.227c	20 8d 22	jsr $228d			jsr 	AWWriteOpcode
+.227f	ca		dex				dex
+.2280	f0 05		beq $2287			beq 	_AWExit
+.2282	a5 30		lda $30				lda 	ESInt1
+.2284	20 8d 22	jsr $228d			jsr 	AWWriteOpcode
+.2287					_AWExit:
+.2287	4c b4 25	jmp $25b4			jmp 	XTPrintCR
+.228a					_AWWOperand:
+.228a	4c 36 1a	jmp $1a36			jmp 	EHandlerOperand
+.228d					AWWriteOpcode:
+.228d	48		pha				pha 								; save opcode
+.228e	ad 3c 08	lda $083c			lda 	pVariable 					; copy address in P to temp0
+.2291	85 04		sta $04				sta 	temp0
+.2293	ad 3d 08	lda $083d			lda 	pVariable+1
+.2296	85 05		sta $05				sta 	temp0+1
+.2298	84 03		sty $03				sty 	tempShort 					; write byte out.
+.229a	68		pla				pla
+.229b	a0 00		ldy #$00			ldy 	#0
+.229d	91 04		sta ($04),y			sta 	(temp0),y
+.229f	a4 03		ldy $03				ldy 	tempShort
+.22a1	ee 3c 08	inc $083c			inc 	pVariable 					; bump P
+.22a4	d0 03		bne $22a9			bne 	_AWWOSkip
+.22a6	ee 3d 08	inc $083d			inc 	pVariable+1
+.22a9					_AWWOSkip:
+.22a9	4c b8 22	jmp $22b8			jmp 	AWPrintHexSpace 			; write it out.
+.22ac					AWSizeTable:
+>22ac	02 02 01 03 02 02 03 03				.byte 	2,2,1,3,2,2,3,3,3,3,2,2
+>22b4	03 03 02 02
+.22b8					AWPrintHexSpace:
+.22b8	20 c0 22	jsr $22c0			jsr 	AWPrintHex
+.22bb	a9 20		lda #$20			lda 	#' '
+.22bd	4c c4 25	jmp $25c4			jmp 	XTPrintA
+.22c0					AWPrintHex:
+.22c0	48		pha				pha
+.22c1	4a		lsr a				lsr 	a
+.22c2	4a		lsr a				lsr 	a
+.22c3	4a		lsr a				lsr 	a
+.22c4	4a		lsr a				lsr 	a
+.22c5	20 c9 22	jsr $22c9			jsr 	_AWPrintNibble
+.22c8	68		pla				pla
+.22c9					_AWPrintNibble:
+.22c9	29 0f		and #$0f			and 	#$0F
+.22cb	c9 0a		cmp #$0a			cmp 	#10
+.22cd	90 02		bcc $22d1			bcc 	_AWNotHex
+.22cf	69 06		adc #$06			adc 	#6
+.22d1					_AWNotHex:
+.22d1	69 30		adc #$30			adc 	#48
+.22d3	4c c4 25	jmp $25c4			jmp 	XTPrintA
+
+;******  Return to file: basic.asm
+
+
 ;******  Processing file: assembler/inline/assembler.asm
 
-.225a					Assembler:
-.225a	b1 00		lda ($00),y			lda 	(codePtr),y 				; look at next
-.225c	c9 30		cmp #$30			cmp 	#$30 						; single char identifier not allowed
-.225e	90 6c		bcc $22cc			bcc 	AssemblerSyntax
-.2260	c9 54		cmp #$54			cmp 	#$30+$24 					; is it a label ?
-.2262	f0 20		beq $2284			beq 	AssemblerLabel
-.2264	c9 60		cmp #$60			cmp 	#$60 						; is it a character (e.g $00-$5F)
-.2266	90 5a		bcc $22c2			bcc 	AssemblerOpcode
-.2268	c8		iny				iny 								; consume it.
-.2269	c9 b2		cmp #$b2			cmp 	#KWD_RSQPAREN 				; if ]
-.226b	f0 16		beq $2283			beq 	AssemblerExit
-.226d	c9 81		cmp #$81			cmp 	#KWD_AND 					; tokenised assembler.
-.226f	f0 42		beq $22b3			beq 	AssemblerAnd 				; AND only at present.
-.2271	c9 c1		cmp #$c1			cmp 	#KWD_COLON 					; ignore colons
-.2273	f0 e5		beq $225a			beq 	Assembler
-.2275	c9 ad		cmp #$ad			cmp 	#KWD_SEMICOLON 				; semicolon is a comment
-.2277	f0 04		beq $227d			beq 	AssemblerNextLine
-.2279	c9 80		cmp #$80			cmp 	#$80 						; if not EOL
-.227b	d0 4f		bne $22cc			bne 	AssemblerSyntax
-.227d					AssemblerNextLine:
-.227d	20 c2 13	jsr $13c2			jsr 	CommandNextLine 			; go to next line
-.2280	4c 5a 22	jmp $225a			jmp 	Assembler
-.2283					AssemblerExit:
-.2283	60		rts				rts
-.2284					AssemblerLabel:
-.2284	a9 0f		lda #$0f			lda 	#15 						; get a single term
-.2286	a2 00		ldx #$00			ldx 	#0
-.2288	20 3b 16	jsr $163b			jsr 	EvaluateLevelAX
-.228b	b5 20		lda $20,x			lda 	esType,x 					; check it is a reference
-.228d	10 3d		bpl $22cc			bpl 	AssemblerSyntax
-.228f	b5 28		lda $28,x			lda 	esInt0,x 					; copy label address to temp0
-.2291	85 04		sta $04				sta 	temp0
-.2293	b5 30		lda $30,x			lda 	esInt1,x
-.2295	85 05		sta $05				sta 	temp0+1
-.2297	98		tya				tya
-.2298	48		pha				pha
-.2299	a0 00		ldy #$00			ldy 	#0
-.229b	ad 3c 08	lda $083c			lda 	pVariable 					; copy the value of P in
-.229e	91 04		sta ($04),y			sta 	(temp0),y
-.22a0	c8		iny				iny
-.22a1	ad 3d 08	lda $083d			lda 	pVariable+1
-.22a4	91 04		sta ($04),y			sta 	(temp0),y
-.22a6	c8		iny				iny
-.22a7	a9 00		lda #$00			lda 	#0
-.22a9	91 04		sta ($04),y			sta 	(temp0),y
-.22ab	c8		iny				iny
-.22ac	91 04		sta ($04),y			sta 	(temp0),y
-.22ae	68		pla				pla
-.22af	a8		tay				tay
-.22b0	4c 5a 22	jmp $225a			jmp 	Assembler 					; go round again.
-.22b3					AssemblerAND:
-.22b3	ad e6 22	lda $22e6			lda 	AndMnemonic
-.22b6	8d ad 08	sta $08ad			sta 	AsmToken
-.22b9	ad e7 22	lda $22e7			lda 	AndMnemonic+1
-.22bc	8d ae 08	sta $08ae			sta 	AsmToken+1
-.22bf	4c c5 22	jmp $22c5			jmp 	AssemblerHaveToken
-.22c2					AssemblerOpcode:
-.22c2	20 26 22	jsr $2226			jsr 	AssemBuildToken 			; make 16 bit token
-.22c5					AssemblerHaveToken:
-.22c5	20 ec 23	jsr $23ec			jsr 	AssemGetOperand				; figure out operand and addresing mode.
-.22c8	8e af 08	stx $08af			stx 	AsmMode
->22cb	db						.byte 	$DB
-.22cc					AssemblerSyntax:
-.22cc	4c 5f 1a	jmp $1a5f			jmp 	EHandlerSyntax
+.22d6					Assembler:
+.22d6	b1 00		lda ($00),y			lda 	(codePtr),y 				; look at next
+.22d8	c9 30		cmp #$30			cmp 	#$30 						; single char identifier not allowed
+.22da	90 62		bcc $233e			bcc 	AssemblerSyntax
+.22dc	c9 54		cmp #$54			cmp 	#$30+$24 					; is it a label ?
+.22de	f0 20		beq $2300			beq 	AssemblerLabel
+.22e0	c9 60		cmp #$60			cmp 	#$60 						; is it a character (e.g $00-$5F)
+.22e2	90 5d		bcc $2341			bcc 	AssemblerOpcode
+.22e4	c8		iny				iny 								; consume it.
+.22e5	c9 b2		cmp #$b2			cmp 	#KWD_RSQPAREN 				; if ]
+.22e7	f0 16		beq $22ff			beq 	AssemblerExit
+.22e9	c9 81		cmp #$81			cmp 	#KWD_AND 					; tokenised assembler.
+.22eb	f0 42		beq $232f			beq 	AssemblerAnd 				; AND only at present.
+.22ed	c9 c1		cmp #$c1			cmp 	#KWD_COLON 					; ignore colons
+.22ef	f0 e5		beq $22d6			beq 	Assembler
+.22f1	c9 ad		cmp #$ad			cmp 	#KWD_SEMICOLON 				; semicolon is a comment
+.22f3	f0 04		beq $22f9			beq 	AssemblerNextLine
+.22f5	c9 80		cmp #$80			cmp 	#$80 						; if not EOL
+.22f7	d0 45		bne $233e			bne 	AssemblerSyntax
+.22f9					AssemblerNextLine:
+.22f9	20 c2 13	jsr $13c2			jsr 	CommandNextLine 			; go to next line
+.22fc	4c d6 22	jmp $22d6			jmp 	Assembler
+.22ff					AssemblerExit:
+.22ff	60		rts				rts
+.2300					AssemblerLabel:
+.2300	a9 0f		lda #$0f			lda 	#15 						; get a single term
+.2302	a2 00		ldx #$00			ldx 	#0
+.2304	20 3b 16	jsr $163b			jsr 	EvaluateLevelAX
+.2307	b5 20		lda $20,x			lda 	esType,x 					; check it is a reference
+.2309	10 33		bpl $233e			bpl 	AssemblerSyntax
+.230b	b5 28		lda $28,x			lda 	esInt0,x 					; copy label address to temp0
+.230d	85 04		sta $04				sta 	temp0
+.230f	b5 30		lda $30,x			lda 	esInt1,x
+.2311	85 05		sta $05				sta 	temp0+1
+.2313	98		tya				tya
+.2314	48		pha				pha
+.2315	a0 00		ldy #$00			ldy 	#0
+.2317	ad 3c 08	lda $083c			lda 	pVariable 					; copy the value of P in
+.231a	91 04		sta ($04),y			sta 	(temp0),y
+.231c	c8		iny				iny
+.231d	ad 3d 08	lda $083d			lda 	pVariable+1
+.2320	91 04		sta ($04),y			sta 	(temp0),y
+.2322	c8		iny				iny
+.2323	a9 00		lda #$00			lda 	#0
+.2325	91 04		sta ($04),y			sta 	(temp0),y
+.2327	c8		iny				iny
+.2328	91 04		sta ($04),y			sta 	(temp0),y
+.232a	68		pla				pla
+.232b	a8		tay				tay
+.232c	4c d6 22	jmp $22d6			jmp 	Assembler 					; go round again.
+.232f					AssemblerAND:
+.232f	ad ec 23	lda $23ec			lda 	AndMnemonic
+.2332	8d ad 08	sta $08ad			sta 	AsmToken
+.2335	ad ed 23	lda $23ed			lda 	AndMnemonic+1
+.2338	8d ae 08	sta $08ae			sta 	AsmToken+1
+.233b	4c 44 23	jmp $2344			jmp 	AssemblerHaveToken
+.233e					AssemblerSyntax:
+.233e	4c 5f 1a	jmp $1a5f			jmp 	EHandlerSyntax
+.2341					AssemblerOpcode:
+.2341	20 26 22	jsr $2226			jsr 	AssemBuildToken 			; make 16 bit token
+.2344					AssemblerHaveToken:
+.2344	20 f2 24	jsr $24f2			jsr 	AssemGetOperand				; figure out operand and addresing mode.
+.2347	8e af 08	stx $08af			stx 	AsmMode
+.234a	a9 dc		lda #$dc			lda 	#(OpcodeTable) & $FF
+.234c	85 04		sta $04				sta 	temp0
+.234e	a9 23		lda #$23			lda 	#(OpcodeTable) >> 8
+.2350	85 05		sta $05				sta 	1+(temp0)
+.2352	98		tya				tya
+.2353	48		pha				pha
+.2354					_AHTSearch:
+.2354	a0 00		ldy #$00			ldy 	#0 							; search table for token.
+.2356	b1 04		lda ($04),y			lda 	(temp0),y
+.2358	cd ad 08	cmp $08ad			cmp 	AsmToken
+.235b	d0 0c		bne $2369			bne 	_AHTNext
+.235d	c8		iny				iny
+.235e	b1 04		lda ($04),y			lda 	(temp0),y
+.2360	c9 ff		cmp #$ff			cmp 	#$FF
+.2362	f0 da		beq $233e			beq 	AssemblerSyntax 			; end of table.
+.2364	cd ae 08	cmp $08ae			cmp 	AsmToken+1
+.2367	f0 0e		beq $2377			beq 	_AHTFound
+.2369					_AHTNext:
+.2369	a5 04		lda $04				lda 	temp0 						; go to next record
+.236b	18		clc				clc
+.236c	69 04		adc #$04			adc 	#4
+.236e	85 04		sta $04				sta 	temp0
+.2370	90 e2		bcc $2354			bcc 	_AHTSearch
+.2372	e6 05		inc $05				inc 	temp0+1
+.2374	4c 54 23	jmp $2354			jmp 	_AHTSearch
+.2377					_AHTFound:
+.2377	c8		iny				iny 								; copy base opcode / type
+.2378	b1 04		lda ($04),y			lda 	(temp0),y
+.237a	8d b0 08	sta $08b0			sta 	AsmOpcode
+.237d	c8		iny				iny
+.237e	b1 04		lda ($04),y			lda 	(temp0),y
+.2380	8d b1 08	sta $08b1			sta 	AsmType
+.2383	c9 f0		cmp #$f0			cmp 	#$F0 						; is it a single type opcode ?
+.2385	90 0c		bcc $2393			bcc 	_AHTAllowed
+.2387	29 0f		and #$0f			and 	#$0F
+.2389	cd af 08	cmp $08af			cmp 	AsmMode 					; does it match what we found ?
+.238c	f0 05		beq $2393			beq 	_AHTAllowed 				; if so, carry on.
+.238e	20 ac 23	jsr $23ac			jsr 	HackStandaloneTypes 		; try to hack it ?
+.2391	90 d6		bcc $2369			bcc 	_AHTNext 					; failed, loop back.
+.2393					_AHTAllowed:
+.2393	68		pla				pla
+.2394	a8		tay				tay
+.2395	ad b1 08	lda $08b1			lda 	AsmType
+.2398	c9 f0		cmp #$f0			cmp 	#$F0 						; if type is F0-FF go do standalone.
+.239a	90 0f		bcc $23ab			bcc 	_AHTIsGroup
+.239c	ad b1 08	lda $08b1			lda 	AsmType 					; set up AX and write out
+.239f	29 0f		and #$0f			and 	#$0F
+.23a1	aa		tax				tax
+.23a2	ad b0 08	lda $08b0			lda 	AsmOpcode
+.23a5	20 5a 22	jsr $225a			jsr 	AssemblerWrite
+.23a8	4c d6 22	jmp $22d6			jmp 	Assembler 					; go round again.
+.23ab					_AHTIsGroup:
+>23ab	db						.byte 	$DB
+.23ac					HackStandaloneTypes:
+.23ac	ad b1 08	lda $08b1			lda 	AsmType						; make Mode required : Mode in user code.
+.23af	0a		asl a				asl 	a
+.23b0	0a		asl a				asl 	a
+.23b1	0a		asl a				asl 	a
+.23b2	0a		asl a				asl 	a
+.23b3	0d af 08	ora $08af			ora 	AsmMode
+.23b6	c9 13		cmp #$13			cmp 	#(AM_Zero << 4)|AM_Abs
+.23b8	f0 0b		beq $23c5			beq 	_HSTZeroAbsolute
+.23ba	c9 56		cmp #$56			cmp 	#(AM_ZeroX << 4)|AM_AbsX
+.23bc	f0 0f		beq $23cd			beq 	_HSTZeroXAbsoluteX
+.23be					_HSTFail:
+.23be	18		clc				clc
+.23bf	60		rts				rts
+.23c0					_HSTSwitch:
+.23c0	8d af 08	sta $08af			sta 	AsmMode 					; switch it to this
+.23c3	38		sec				sec
+.23c4	60		rts				rts
+.23c5					_HSTZeroAbsolute:
+.23c5	a5 30		lda $30				lda 	esInt1 						; must be 00-FF
+.23c7	d0 f5		bne $23be			bne 	_HSTFail
+.23c9	a9 01		lda #$01			lda 	#AM_Zero 					; and switch
+.23cb	10 f3		bpl $23c0			bpl 	_HSTSwitch
+.23cd					_HSTZeroXAbsoluteX:
+.23cd	a5 30		lda $30				lda 	esInt1 						; must be 00-FF
+.23cf	d0 ed		bne $23be			bne 	_HSTFail
+.23d1	a9 05		lda #$05			lda 	#AM_ZeroX 					; and switch
+.23d3	10 eb		bpl $23c0			bpl 	_HSTSwitch
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: assembler/inline/generated/asmdat.asm
 
-.22cf					MaskTable:
->22cf	ff					.byte $ff ; Mask $0x
->22d0	75					.byte $75 ; Mask $1x
->22d1	54					.byte $54 ; Mask $2x
->22d2	d5					.byte $d5 ; Mask $3x
->22d3	55					.byte $55 ; Mask $4x
->22d4	d4					.byte $d4 ; Mask $5x
->22d5	d0					.byte $d0 ; Mask $6x
-.22d6					OpcodeTable:
->22d6	61 22					.word $2261 ; bit
->22d8	24					.byte $24
->22d9	f0					.byte $f0
->22da	48 34					.word $3448 ; inc
->22dc	1a					.byte $1a
->22dd	f2					.byte $f2
->22de	43 10					.word $1043 ; dec
->22e0	3a					.byte $3a
->22e1	f2					.byte $f2
->22e2	0e 44					.word $440e ; ora
->22e4	01					.byte $01
->22e5	01					.byte $01
-.22e6					AndMnemonic:
->22e6	60 34					.word $3460 ; and
->22e8	21					.byte $21
->22e9	01					.byte $01
->22ea	24 3a					.word $3a24 ; eor
->22ec	41					.byte $41
->22ed	01					.byte $01
->22ee	12 4c					.word $4c12 ; sta
->22f0	61					.byte $61
->22f1	01					.byte $01
->22f2	0b 0c					.word $0c0b ; lda
->22f4	81					.byte $81
->22f5	01					.byte $01
->22f6	e2 31					.word $31e2 ; cmp
->22f8	a1					.byte $a1
->22f9	01					.byte $01
->22fa	52 04					.word $0452 ; sbc
->22fc	e1					.byte $e1
->22fd	01					.byte $01
->22fe	60 49					.word $4960 ; asl
->2300	02					.byte $02
->2301	12					.byte $12
->2302	71 39					.word $3971 ; rol
->2304	22					.byte $22
->2305	12					.byte $12
->2306	2b 4a					.word $4a2b ; lsr
->2308	42					.byte $42
->2309	12					.byte $12
->230a	31 3a					.word $3a31 ; ror
->230c	62					.byte $62
->230d	12					.byte $12
->230e	f2 4e					.word $4ef2 ; stx
->2310	82					.byte $82
->2311	22					.byte $22
->2312	eb 0e					.word $0eeb ; ldx
->2314	a2					.byte $a2
->2315	32					.byte $32
->2316	43 10					.word $1043 ; dec
->2318	c2					.byte $c2
->2319	42					.byte $42
->231a	48 34					.word $3448 ; inc
->231c	e2					.byte $e2
->231d	42					.byte $42
->231e	61 22					.word $2261 ; bit
->2320	20					.byte $20
->2321	43					.byte $43
->2322	12 4f					.word $4f12 ; sty
->2324	80					.byte $80
->2325	23					.byte $23
->2326	0b 0f					.word $0f0b ; ldy
->2328	a0					.byte $a0
->2329	53					.byte $53
->232a	02 3f					.word $3f02 ; cpy
->232c	c0					.byte $c0
->232d	63					.byte $63
->232e	e2 3e					.word $3ee2 ; cpx
->2330	e0					.byte $e0
->2331	63					.byte $63
->2332	61 3d					.word $3d61 ; bpl
->2334	10					.byte $10
->2335	fa					.byte $fa
->2336	01 31					.word $3101 ; bmi
->2338	30					.byte $30
->2339	fa					.byte $fa
->233a	41 54					.word $5441 ; bvc
->233c	50					.byte $50
->233d	fa					.byte $fa
->233e	41 0a					.word $0a41 ; bcs
->2340	70					.byte $70
->2341	fa					.byte $fa
->2342	41 08					.word $0841 ; bcc
->2344	90					.byte $90
->2345	fa					.byte $fa
->2346	41 0a					.word $0a41 ; bcs
->2348	b0					.byte $b0
->2349	fa					.byte $fa
->234a	81 34					.word $3481 ; bne
->234c	d0					.byte $d0
->234d	fa					.byte $fa
->234e	01 12					.word $1201 ; beq
->2350	f0					.byte $f0
->2351	fa					.byte $fa
->2352	29 4a					.word $4a29 ; jsr
->2354	20					.byte $20
->2355	f3					.byte $f3
->2356	e9 31					.word $31e9 ; jmp
->2358	4c					.byte $4c
->2359	f3					.byte $f3
->235a	e9 31					.word $31e9 ; jmp
->235c	6c					.byte $6c
->235d	f9					.byte $f9
->235e	41 45					.word $4541 ; brk
->2360	00					.byte $00
->2361	f2					.byte $f2
->2362	11 4d					.word $4d11 ; rti
->2364	40					.byte $40
->2365	f2					.byte $f2
->2366	51 4e					.word $4e51 ; rts
->2368	60					.byte $60
->2369	f2					.byte $f2
->236a	ef 1d					.word $1def ; php
->236c	08					.byte $08
->236d	f2					.byte $f2
->236e	ef 2d					.word $2def ; plp
->2370	28					.byte $28
->2371	f2					.byte $f2
->2372	0f 1c					.word $1c0f ; pha
->2374	48					.byte $48
->2375	f2					.byte $f2
->2376	0f 2c					.word $2c0f ; pla
->2378	68					.byte $68
->2379	f2					.byte $f2
->237a	03 13					.word $1303 ; dey
->237c	88					.byte $88
->237d	f2					.byte $f2
->237e	13 03					.word $0313 ; tay
->2380	a8					.byte $a8
->2381	f2					.byte $f2
->2382	08 37					.word $3708 ; iny
->2384	c8					.byte $c8
->2385	f2					.byte $f2
->2386	e8 36					.word $36e8 ; inx
->2388	e8					.byte $e8
->2389	f2					.byte $f2
->238a	42 2c					.word $2c42 ; clc
->238c	18					.byte $18
->238d	f2					.byte $f2
->238e	52 10					.word $1052 ; sec
->2390	38					.byte $38
->2391	f2					.byte $f2
->2392	02 2d					.word $2d02 ; cli
->2394	58					.byte $58
->2395	f2					.byte $f2
->2396	12 11					.word $1112 ; sei
->2398	78					.byte $78
->2399	f2					.byte $f2
->239a	13 60					.word $6013 ; tya
->239c	98					.byte $98
->239d	f2					.byte $f2
->239e	a2 2e					.word $2ea2 ; clv
->23a0	b8					.byte $b8
->23a1	f2					.byte $f2
->23a2	62 2c					.word $2c62 ; cld
->23a4	d8					.byte $d8
->23a5	f2					.byte $f2
->23a6	72 10					.word $1072 ; sed
->23a8	f8					.byte $f8
->23a9	f2					.byte $f2
->23aa	13 5c					.word $5c13 ; txa
->23ac	8a					.byte $8a
->23ad	f2					.byte $f2
->23ae	53 5e					.word $5e53 ; txs
->23b0	9a					.byte $9a
->23b1	f2					.byte $f2
->23b2	f3 02					.word $02f3 ; tax
->23b4	aa					.byte $aa
->23b5	f2					.byte $f2
->23b6	f3 4a					.word $4af3 ; tsx
->23b8	ba					.byte $ba
->23b9	f2					.byte $f2
->23ba	e3 12					.word $12e3 ; dex
->23bc	ca					.byte $ca
->23bd	f2					.byte $f2
->23be	ed 39					.word $39ed ; nop
->23c0	ea					.byte $ea
->23c1	f2					.byte $f2
->23c2	e9 31					.word $31e9 ; jmp
->23c4	7c					.byte $7c
->23c5	f8					.byte $f8
->23c6	01 44					.word $4401 ; bra
->23c8	80					.byte $80
->23c9	fa					.byte $fa
->23ca	32 4f					.word $4f32 ; stz
->23cc	64					.byte $64
->23cd	f1					.byte $f1
->23ce	32 4f					.word $4f32 ; stz
->23d0	9c					.byte $9c
->23d1	f3					.byte $f3
->23d2	32 4f					.word $4f32 ; stz
->23d4	74					.byte $74
->23d5	f5					.byte $f5
->23d6	32 4f					.word $4f32 ; stz
->23d8	9e					.byte $9e
->23d9	f7					.byte $f7
->23da	0f 1f					.word $1f0f ; phy
->23dc	5a					.byte $5a
->23dd	f2					.byte $f2
->23de	0f 2f					.word $2f0f ; ply
->23e0	7a					.byte $7a
->23e1	f2					.byte $f2
->23e2	ef 1e					.word $1eef ; phx
->23e4	da					.byte $da
->23e5	f2					.byte $f2
->23e6	0f 1f					.word $1f0f ; phy
->23e8	fa					.byte $fa
->23e9	f2					.byte $f2
->23ea	ff ff					.word $FFFF
+.23d5					MaskTable:
+>23d5	ff					.byte $ff ; Mask $0x
+>23d6	75					.byte $75 ; Mask $1x
+>23d7	54					.byte $54 ; Mask $2x
+>23d8	d5					.byte $d5 ; Mask $3x
+>23d9	55					.byte $55 ; Mask $4x
+>23da	d4					.byte $d4 ; Mask $5x
+>23db	d0					.byte $d0 ; Mask $6x
+.23dc					OpcodeTable:
+>23dc	61 22					.word $2261 ; bit
+>23de	24					.byte $24
+>23df	f0					.byte $f0
+>23e0	48 34					.word $3448 ; inc
+>23e2	1a					.byte $1a
+>23e3	f2					.byte $f2
+>23e4	43 10					.word $1043 ; dec
+>23e6	3a					.byte $3a
+>23e7	f2					.byte $f2
+>23e8	0e 44					.word $440e ; ora
+>23ea	01					.byte $01
+>23eb	01					.byte $01
+.23ec					AndMnemonic:
+>23ec	60 34					.word $3460 ; and
+>23ee	21					.byte $21
+>23ef	01					.byte $01
+>23f0	24 3a					.word $3a24 ; eor
+>23f2	41					.byte $41
+>23f3	01					.byte $01
+>23f4	12 4c					.word $4c12 ; sta
+>23f6	61					.byte $61
+>23f7	01					.byte $01
+>23f8	0b 0c					.word $0c0b ; lda
+>23fa	81					.byte $81
+>23fb	01					.byte $01
+>23fc	e2 31					.word $31e2 ; cmp
+>23fe	a1					.byte $a1
+>23ff	01					.byte $01
+>2400	52 04					.word $0452 ; sbc
+>2402	e1					.byte $e1
+>2403	01					.byte $01
+>2404	60 49					.word $4960 ; asl
+>2406	02					.byte $02
+>2407	12					.byte $12
+>2408	71 39					.word $3971 ; rol
+>240a	22					.byte $22
+>240b	12					.byte $12
+>240c	2b 4a					.word $4a2b ; lsr
+>240e	42					.byte $42
+>240f	12					.byte $12
+>2410	31 3a					.word $3a31 ; ror
+>2412	62					.byte $62
+>2413	12					.byte $12
+>2414	f2 4e					.word $4ef2 ; stx
+>2416	82					.byte $82
+>2417	22					.byte $22
+>2418	eb 0e					.word $0eeb ; ldx
+>241a	a2					.byte $a2
+>241b	32					.byte $32
+>241c	43 10					.word $1043 ; dec
+>241e	c2					.byte $c2
+>241f	42					.byte $42
+>2420	48 34					.word $3448 ; inc
+>2422	e2					.byte $e2
+>2423	42					.byte $42
+>2424	61 22					.word $2261 ; bit
+>2426	20					.byte $20
+>2427	43					.byte $43
+>2428	12 4f					.word $4f12 ; sty
+>242a	80					.byte $80
+>242b	23					.byte $23
+>242c	0b 0f					.word $0f0b ; ldy
+>242e	a0					.byte $a0
+>242f	53					.byte $53
+>2430	02 3f					.word $3f02 ; cpy
+>2432	c0					.byte $c0
+>2433	63					.byte $63
+>2434	e2 3e					.word $3ee2 ; cpx
+>2436	e0					.byte $e0
+>2437	63					.byte $63
+>2438	61 3d					.word $3d61 ; bpl
+>243a	10					.byte $10
+>243b	fa					.byte $fa
+>243c	01 31					.word $3101 ; bmi
+>243e	30					.byte $30
+>243f	fa					.byte $fa
+>2440	41 54					.word $5441 ; bvc
+>2442	50					.byte $50
+>2443	fa					.byte $fa
+>2444	41 0a					.word $0a41 ; bcs
+>2446	70					.byte $70
+>2447	fa					.byte $fa
+>2448	41 08					.word $0841 ; bcc
+>244a	90					.byte $90
+>244b	fa					.byte $fa
+>244c	41 0a					.word $0a41 ; bcs
+>244e	b0					.byte $b0
+>244f	fa					.byte $fa
+>2450	81 34					.word $3481 ; bne
+>2452	d0					.byte $d0
+>2453	fa					.byte $fa
+>2454	01 12					.word $1201 ; beq
+>2456	f0					.byte $f0
+>2457	fa					.byte $fa
+>2458	29 4a					.word $4a29 ; jsr
+>245a	20					.byte $20
+>245b	f3					.byte $f3
+>245c	e9 31					.word $31e9 ; jmp
+>245e	4c					.byte $4c
+>245f	f3					.byte $f3
+>2460	e9 31					.word $31e9 ; jmp
+>2462	6c					.byte $6c
+>2463	f9					.byte $f9
+>2464	41 45					.word $4541 ; brk
+>2466	00					.byte $00
+>2467	f2					.byte $f2
+>2468	11 4d					.word $4d11 ; rti
+>246a	40					.byte $40
+>246b	f2					.byte $f2
+>246c	51 4e					.word $4e51 ; rts
+>246e	60					.byte $60
+>246f	f2					.byte $f2
+>2470	ef 1d					.word $1def ; php
+>2472	08					.byte $08
+>2473	f2					.byte $f2
+>2474	ef 2d					.word $2def ; plp
+>2476	28					.byte $28
+>2477	f2					.byte $f2
+>2478	0f 1c					.word $1c0f ; pha
+>247a	48					.byte $48
+>247b	f2					.byte $f2
+>247c	0f 2c					.word $2c0f ; pla
+>247e	68					.byte $68
+>247f	f2					.byte $f2
+>2480	03 13					.word $1303 ; dey
+>2482	88					.byte $88
+>2483	f2					.byte $f2
+>2484	13 03					.word $0313 ; tay
+>2486	a8					.byte $a8
+>2487	f2					.byte $f2
+>2488	08 37					.word $3708 ; iny
+>248a	c8					.byte $c8
+>248b	f2					.byte $f2
+>248c	e8 36					.word $36e8 ; inx
+>248e	e8					.byte $e8
+>248f	f2					.byte $f2
+>2490	42 2c					.word $2c42 ; clc
+>2492	18					.byte $18
+>2493	f2					.byte $f2
+>2494	52 10					.word $1052 ; sec
+>2496	38					.byte $38
+>2497	f2					.byte $f2
+>2498	02 2d					.word $2d02 ; cli
+>249a	58					.byte $58
+>249b	f2					.byte $f2
+>249c	12 11					.word $1112 ; sei
+>249e	78					.byte $78
+>249f	f2					.byte $f2
+>24a0	13 60					.word $6013 ; tya
+>24a2	98					.byte $98
+>24a3	f2					.byte $f2
+>24a4	a2 2e					.word $2ea2 ; clv
+>24a6	b8					.byte $b8
+>24a7	f2					.byte $f2
+>24a8	62 2c					.word $2c62 ; cld
+>24aa	d8					.byte $d8
+>24ab	f2					.byte $f2
+>24ac	72 10					.word $1072 ; sed
+>24ae	f8					.byte $f8
+>24af	f2					.byte $f2
+>24b0	13 5c					.word $5c13 ; txa
+>24b2	8a					.byte $8a
+>24b3	f2					.byte $f2
+>24b4	53 5e					.word $5e53 ; txs
+>24b6	9a					.byte $9a
+>24b7	f2					.byte $f2
+>24b8	f3 02					.word $02f3 ; tax
+>24ba	aa					.byte $aa
+>24bb	f2					.byte $f2
+>24bc	f3 4a					.word $4af3 ; tsx
+>24be	ba					.byte $ba
+>24bf	f2					.byte $f2
+>24c0	e3 12					.word $12e3 ; dex
+>24c2	ca					.byte $ca
+>24c3	f2					.byte $f2
+>24c4	ed 39					.word $39ed ; nop
+>24c6	ea					.byte $ea
+>24c7	f2					.byte $f2
+>24c8	e9 31					.word $31e9 ; jmp
+>24ca	7c					.byte $7c
+>24cb	f8					.byte $f8
+>24cc	01 44					.word $4401 ; bra
+>24ce	80					.byte $80
+>24cf	fa					.byte $fa
+>24d0	32 4f					.word $4f32 ; stz
+>24d2	64					.byte $64
+>24d3	f1					.byte $f1
+>24d4	32 4f					.word $4f32 ; stz
+>24d6	74					.byte $74
+>24d7	f5					.byte $f5
+>24d8	32 4f					.word $4f32 ; stz
+>24da	9c					.byte $9c
+>24db	f3					.byte $f3
+>24dc	32 4f					.word $4f32 ; stz
+>24de	9e					.byte $9e
+>24df	f7					.byte $f7
+>24e0	0f 1f					.word $1f0f ; phy
+>24e2	5a					.byte $5a
+>24e3	f2					.byte $f2
+>24e4	0f 2f					.word $2f0f ; ply
+>24e6	7a					.byte $7a
+>24e7	f2					.byte $f2
+>24e8	ef 1e					.word $1eef ; phx
+>24ea	da					.byte $da
+>24eb	f2					.byte $f2
+>24ec	0f 1f					.word $1f0f ; phy
+>24ee	fa					.byte $fa
+>24ef	f2					.byte $f2
+>24f0	ff ff					.word $FFFF
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: assembler/inline/operand.asm
 
-.23ec					AssemGetOperand:
-.23ec	b1 00		lda ($00),y			lda 	(codePtr),y 				; look at next token.
-.23ee	a2 02		ldx #$02			ldx 	#AM_Implied 				; first check for Implied and Acc, effectively same.
-.23f0	c9 80		cmp #$80			cmp 	#$80 						; EOL and colon are implied.
-.23f2	f0 09		beq $23fd			beq 	_AGOExit
-.23f4	c9 c1		cmp #$c1			cmp 	#KWD_COLON
-.23f6	f0 05		beq $23fd			beq 	_AGOExit
-.23f8	c9 00		cmp #$00			cmp 	#$00 						; indicates 'A' e.g. ASL A , single character letter A
-.23fa	d0 02		bne $23fe			bne 	_AGONotImplied
-.23fc	c8		iny				iny 								; consume the A
-.23fd					_AGOExit:
-.23fd	60		rts				rts
-.23fe					_AGONotImplied:
-.23fe	c9 af		cmp #$af			cmp 	#KWD_HASH 					; is it immediate e.g. #xxx
-.2400	d0 0b		bne $240d			bne 	_AGONotImmediate
-.2402	c8		iny				iny 								; consume
-.2403	a2 00		ldx #$00			ldx 	#AM_Immediate
-.2405	20 61 24	jsr $2461			jsr 	AssemGetParameter 			; get the parameter value
-.2408	a5 30		lda $30				lda 	esInt1 						; must be 00-FF
-.240a	d0 63		bne $246f			bne 	AGPError
-.240c	60		rts				rts
-.240d					_AGONotImmediate:
-.240d	c9 95		cmp #$95			cmp 	#KWD_LPAREN 				; check if indirect (xxx
-.240f	f0 1e		beq $242f			beq 	_AGOIndirect
-.2411	20 61 24	jsr $2461			jsr 	AssemGetParameter 			; get parameter
-.2414	a2 03		ldx #$03			ldx 	#AM_Abs						; return Absolute.
-.2416	b1 00		lda ($00),y			lda 	(codePtr),y 				; followed by comma
-.2418	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
-.241a	d0 e1		bne $23fd			bne 	_AGOExit
-.241c	c8		iny				iny 								; consume and get and consume next.
-.241d	b1 00		lda ($00),y			lda 	(codePtr),y
-.241f	c8		iny				iny
-.2420	a2 06		ldx #$06			ldx 	#AM_ABSX 					; which must be X or Y
-.2422	c9 17		cmp #$17			cmp 	#'X'-'A'
-.2424	f0 d7		beq $23fd			beq 	_AGOExit
-.2426	a2 07		ldx #$07			ldx 	#AM_ABSY
-.2428	c9 18		cmp #$18			cmp 	#'Y'-'A'
-.242a	f0 d1		beq $23fd			beq 	_AGOExit
-.242c					_AGOSyntax:
-.242c	4c 5f 1a	jmp $1a5f			jmp 	EHandlerSyntax
-.242f					_AGOIndirect:
-.242f	c8		iny				iny 								; consume (
-.2430	20 61 24	jsr $2461			jsr 	AssemGetParameter 			; get the indirection address.
-.2433	b1 00		lda ($00),y			lda 	(codePtr),y 				; what follows
-.2435	c9 ae		cmp #$ae			cmp 	#KWD_RPAREN 				; if right parenthesis then it must be (xxx),y or (xxxx)
-.2437	f0 10		beq $2449			beq 	_AGOIndirectY
-.2439	20 25 14	jsr $1425			jsr 	CheckComma 					; so must be comma.
-.243c	b1 00		lda ($00),y			lda 	(codePtr),y 				; followed by X
-.243e	c9 17		cmp #$17			cmp 	#'X'-'A'
-.2440	d0 ea		bne $242c			bne 	_AGOSyntax
-.2442	c8		iny				iny 								; consume
-.2443	20 3d 14	jsr $143d			jsr 	CheckRightParen 			; check closing )
-.2446	a2 08		ldx #$08			ldx 	#AMX_IndX 					; return (nnnn,x)
-.2448	60		rts				rts
-.2449					_AGOIndirectY:
-.2449	c8		iny				iny 								; consume RParen
-.244a	b1 00		lda ($00),y			lda 	(codePtr),y 				; if not followed by , then exit with Indirect
-.244c	a2 09		ldx #$09			ldx 	#AMX_Ind
-.244e	c9 ac		cmp #$ac			cmp 	#KWD_Comma
-.2450	d0 ab		bne $23fd			bne 	_AGOExit
-.2452	c8		iny				iny 								; comsume ,
-.2453	b1 00		lda ($00),y			lda 	(codePtr),y 				; followed by Y
-.2455	c9 18		cmp #$18			cmp 	#'Y'-'A'
-.2457	d0 d3		bne $242c			bne 	_AGOSyntax
-.2459	c8		iny				iny 								; consume Y
-.245a	a2 04		ldx #$04			ldx 	#AM_IndY 					; there is no (absolute),Y
-.245c	a5 30		lda $30				lda 	esInt1 						; check parameter.
-.245e	d0 9d		bne $23fd			bne 	_AGOExit
-.2460	60		rts				rts
-.2461					AssemGetParameter:
-.2461	8a		txa				txa
-.2462	48		pha				pha
-.2463	20 2b 16	jsr $162b			jsr 	EvaluateBaseDeref			; work out the operand
-.2466	a5 38		lda $38				lda 	esInt2 						; check range
-.2468	05 40		ora $40				ora 	esInt3 						; e.g. 0000-FFFF
-.246a	d0 03		bne $246f			bne 	AGPError
-.246c	68		pla				pla
-.246d	aa		tax				tax
-.246e	60		rts				rts
-.246f					AGPError:
-.246f	4c 36 1a	jmp $1a36			jmp 	EHandlerOperand
+.24f2					AssemGetOperand:
+.24f2	b1 00		lda ($00),y			lda 	(codePtr),y 				; look at next token.
+.24f4	a2 02		ldx #$02			ldx 	#AM_Implied 				; first check for Implied and Acc, effectively same.
+.24f6	c9 80		cmp #$80			cmp 	#$80 						; EOL and colon are implied.
+.24f8	f0 09		beq $2503			beq 	_AGOExit
+.24fa	c9 c1		cmp #$c1			cmp 	#KWD_COLON
+.24fc	f0 05		beq $2503			beq 	_AGOExit
+.24fe	c9 00		cmp #$00			cmp 	#$00 						; indicates 'A' e.g. ASL A , single character letter A
+.2500	d0 02		bne $2504			bne 	_AGONotImplied
+.2502	c8		iny				iny 								; consume the A
+.2503					_AGOExit:
+.2503	60		rts				rts
+.2504					_AGONotImplied:
+.2504	c9 af		cmp #$af			cmp 	#KWD_HASH 					; is it immediate e.g. #xxx
+.2506	d0 0b		bne $2513			bne 	_AGONotImmediate
+.2508	c8		iny				iny 								; consume
+.2509	a2 00		ldx #$00			ldx 	#AM_Immediate
+.250b	20 67 25	jsr $2567			jsr 	AssemGetParameter 			; get the parameter value
+.250e	a5 30		lda $30				lda 	esInt1 						; must be 00-FF
+.2510	d0 63		bne $2575			bne 	AGPError
+.2512	60		rts				rts
+.2513					_AGONotImmediate:
+.2513	c9 95		cmp #$95			cmp 	#KWD_LPAREN 				; check if indirect (xxx
+.2515	f0 1e		beq $2535			beq 	_AGOIndirect
+.2517	20 67 25	jsr $2567			jsr 	AssemGetParameter 			; get parameter
+.251a	a2 03		ldx #$03			ldx 	#AM_Abs						; return Absolute.
+.251c	b1 00		lda ($00),y			lda 	(codePtr),y 				; followed by comma
+.251e	c9 ac		cmp #$ac			cmp 	#KWD_COMMA
+.2520	d0 e1		bne $2503			bne 	_AGOExit
+.2522	c8		iny				iny 								; consume and get and consume next.
+.2523	b1 00		lda ($00),y			lda 	(codePtr),y
+.2525	c8		iny				iny
+.2526	a2 06		ldx #$06			ldx 	#AM_ABSX 					; which must be X or Y
+.2528	c9 17		cmp #$17			cmp 	#'X'-'A'
+.252a	f0 d7		beq $2503			beq 	_AGOExit
+.252c	a2 07		ldx #$07			ldx 	#AM_ABSY
+.252e	c9 18		cmp #$18			cmp 	#'Y'-'A'
+.2530	f0 d1		beq $2503			beq 	_AGOExit
+.2532					_AGOSyntax:
+.2532	4c 5f 1a	jmp $1a5f			jmp 	EHandlerSyntax
+.2535					_AGOIndirect:
+.2535	c8		iny				iny 								; consume (
+.2536	20 67 25	jsr $2567			jsr 	AssemGetParameter 			; get the indirection address.
+.2539	b1 00		lda ($00),y			lda 	(codePtr),y 				; what follows
+.253b	c9 ae		cmp #$ae			cmp 	#KWD_RPAREN 				; if right parenthesis then it must be (xxx),y or (xxxx)
+.253d	f0 10		beq $254f			beq 	_AGOIndirectY
+.253f	20 25 14	jsr $1425			jsr 	CheckComma 					; so must be comma.
+.2542	b1 00		lda ($00),y			lda 	(codePtr),y 				; followed by X
+.2544	c9 17		cmp #$17			cmp 	#'X'-'A'
+.2546	d0 ea		bne $2532			bne 	_AGOSyntax
+.2548	c8		iny				iny 								; consume
+.2549	20 3d 14	jsr $143d			jsr 	CheckRightParen 			; check closing )
+.254c	a2 08		ldx #$08			ldx 	#AMX_IndX 					; return (nnnn,x)
+.254e	60		rts				rts
+.254f					_AGOIndirectY:
+.254f	c8		iny				iny 								; consume RParen
+.2550	b1 00		lda ($00),y			lda 	(codePtr),y 				; if not followed by , then exit with Indirect
+.2552	a2 09		ldx #$09			ldx 	#AMX_Ind
+.2554	c9 ac		cmp #$ac			cmp 	#KWD_Comma
+.2556	d0 ab		bne $2503			bne 	_AGOExit
+.2558	c8		iny				iny 								; comsume ,
+.2559	b1 00		lda ($00),y			lda 	(codePtr),y 				; followed by Y
+.255b	c9 18		cmp #$18			cmp 	#'Y'-'A'
+.255d	d0 d3		bne $2532			bne 	_AGOSyntax
+.255f	c8		iny				iny 								; consume Y
+.2560	a2 04		ldx #$04			ldx 	#AM_IndY 					; there is no (absolute),Y
+.2562	a5 30		lda $30				lda 	esInt1 						; check parameter.
+.2564	d0 9d		bne $2503			bne 	_AGOExit
+.2566	60		rts				rts
+.2567					AssemGetParameter:
+.2567	8a		txa				txa
+.2568	48		pha				pha
+.2569	20 2b 16	jsr $162b			jsr 	EvaluateBaseDeref			; work out the operand
+.256c	a5 38		lda $38				lda 	esInt2 						; check range
+.256e	05 40		ora $40				ora 	esInt3 						; e.g. 0000-FFFF
+.2570	d0 03		bne $2575			bne 	AGPError
+.2572	68		pla				pla
+.2573	aa		tax				tax
+.2574	60		rts				rts
+.2575					AGPError:
+.2575	4c 36 1a	jmp $1a36			jmp 	EHandlerOperand
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: system/x16/x16/x16hardware.asm
 
-.2472					XTGetKey:
-.2472	8a		txa				txa
-.2473	48		pha				pha
-.2474	98		tya				tya
-.2475	48		pha				pha
-.2476	20 e4 ff	jsr $ffe4			jsr 	$FFE4
-.2479	85 03		sta $03				sta 	tempShort
-.247b	68		pla				pla
-.247c	a8		tay				tay
-.247d	68		pla				pla
-.247e	aa		tax				tax
-.247f	a5 03		lda $03				lda 	tempShort
-.2481	60		rts				rts
-.2482					XTUpdateClock:
-.2482	48		pha				pha
-.2483	8a		txa				txa
-.2484	48		pha				pha
-.2485	98		tya				tya
-.2486	48		pha				pha
-.2487	20 de ff	jsr $ffde			jsr 	$FFDE
-.248a	8c a2 08	sty $08a2			sty 	ClockTicks+2
-.248d	8e a1 08	stx $08a1			stx 	ClockTicks+1
-.2490	8d a0 08	sta $08a0			sta 	ClockTicks
-.2493	a9 00		lda #$00			lda 	#0
-.2495	8d a3 08	sta $08a3			sta 	ClockTicks+3
-.2498	68		pla				pla
-.2499	a8		tay				tay
-.249a	68		pla				pla
-.249b	aa		tax				tax
-.249c	68		pla				pla
-.249d	60		rts				rts
+.2578					XTGetKey:
+.2578	8a		txa				txa
+.2579	48		pha				pha
+.257a	98		tya				tya
+.257b	48		pha				pha
+.257c	20 e4 ff	jsr $ffe4			jsr 	$FFE4
+.257f	85 03		sta $03				sta 	tempShort
+.2581	68		pla				pla
+.2582	a8		tay				tay
+.2583	68		pla				pla
+.2584	aa		tax				tax
+.2585	a5 03		lda $03				lda 	tempShort
+.2587	60		rts				rts
+.2588					XTUpdateClock:
+.2588	48		pha				pha
+.2589	8a		txa				txa
+.258a	48		pha				pha
+.258b	98		tya				tya
+.258c	48		pha				pha
+.258d	20 de ff	jsr $ffde			jsr 	$FFDE
+.2590	8c a2 08	sty $08a2			sty 	ClockTicks+2
+.2593	8e a1 08	stx $08a1			stx 	ClockTicks+1
+.2596	8d a0 08	sta $08a0			sta 	ClockTicks
+.2599	a9 00		lda #$00			lda 	#0
+.259b	8d a3 08	sta $08a3			sta 	ClockTicks+3
+.259e	68		pla				pla
+.259f	a8		tay				tay
+.25a0	68		pla				pla
+.25a1	aa		tax				tax
+.25a2	68		pla				pla
+.25a3	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: system/x16/x16/x16print.asm
 
-.249e					XTPrintAC:
-.249e	c9 61		cmp #$61			cmp 	#"a"
-.24a0	90 1c		bcc $24be			bcc 	XTPrintA
-.24a2	c9 7b		cmp #$7b			cmp 	#"z"+1
-.24a4	b0 18		bcs $24be			bcs 	XTPrintA
-.24a6	48		pha				pha
-.24a7	49 20		eor #$20			eor 	#$20
-.24a9	20 be 24	jsr $24be			jsr 	XTPrintA
-.24ac	68		pla				pla
-.24ad	60		rts				rts
-.24ae					XTPrintCR:
-.24ae	48		pha				pha
-.24af	a9 0d		lda #$0d			lda 	#13
-.24b1	20 be 24	jsr $24be			jsr 	XTPrintA
-.24b4	68		pla				pla
-.24b5	60		rts				rts
-.24b6					XTPrintTab:
-.24b6	48		pha				pha
-.24b7	a9 20		lda #$20			lda 	#32
-.24b9	20 be 24	jsr $24be			jsr 	XTPrintA
-.24bc	68		pla				pla
-.24bd	60		rts				rts
-.24be					XTPrintA:
-.24be	85 03		sta $03				sta 	tempShort
-.24c0	48		pha				pha
-.24c1	8a		txa				txa
-.24c2	48		pha				pha
-.24c3	98		tya				tya
-.24c4	48		pha				pha
-.24c5	a5 03		lda $03				lda 	tempShort
-.24c7	20 d2 ff	jsr $ffd2			jsr 	$FFD2
-.24ca	68		pla				pla
-.24cb	a8		tay				tay
-.24cc	68		pla				pla
-.24cd	aa		tax				tax
-.24ce	68		pla				pla
-.24cf	60		rts				rts
+.25a4					XTPrintAC:
+.25a4	c9 61		cmp #$61			cmp 	#"a"
+.25a6	90 1c		bcc $25c4			bcc 	XTPrintA
+.25a8	c9 7b		cmp #$7b			cmp 	#"z"+1
+.25aa	b0 18		bcs $25c4			bcs 	XTPrintA
+.25ac	48		pha				pha
+.25ad	49 20		eor #$20			eor 	#$20
+.25af	20 c4 25	jsr $25c4			jsr 	XTPrintA
+.25b2	68		pla				pla
+.25b3	60		rts				rts
+.25b4					XTPrintCR:
+.25b4	48		pha				pha
+.25b5	a9 0d		lda #$0d			lda 	#13
+.25b7	20 c4 25	jsr $25c4			jsr 	XTPrintA
+.25ba	68		pla				pla
+.25bb	60		rts				rts
+.25bc					XTPrintTab:
+.25bc	48		pha				pha
+.25bd	a9 20		lda #$20			lda 	#32
+.25bf	20 c4 25	jsr $25c4			jsr 	XTPrintA
+.25c2	68		pla				pla
+.25c3	60		rts				rts
+.25c4					XTPrintA:
+.25c4	85 03		sta $03				sta 	tempShort
+.25c6	48		pha				pha
+.25c7	8a		txa				txa
+.25c8	48		pha				pha
+.25c9	98		tya				tya
+.25ca	48		pha				pha
+.25cb	a5 03		lda $03				lda 	tempShort
+.25cd	20 d2 ff	jsr $ffd2			jsr 	$FFD2
+.25d0	68		pla				pla
+.25d1	a8		tay				tay
+.25d2	68		pla				pla
+.25d3	aa		tax				tax
+.25d4	68		pla				pla
+.25d5	60		rts				rts
 
 ;******  Return to file: basic.asm
 
 
 ;******  Processing file: testing/code/99program.asm
 
->24d0						.align 256
-.2500					BasicProgram:
->2500	07					.byte $07
->2501	e8					.byte $e8
->2502	03					.byte $03
->2503	0e					.byte $0e
->2504	89					.byte $89
->2505	70					.byte $70
->2506	80					.byte $80
->2507	0a					.byte $0a
->2508	f2					.byte $f2
->2509	03					.byte $03
->250a	0f					.byte $0f
->250b	89					.byte $89
->250c	96					.byte $96
->250d	70					.byte $70
->250e	70					.byte $70
->250f	77					.byte $77
->2510	80					.byte $80
->2511	05					.byte $05
->2512	fc					.byte $fc
->2513	03					.byte $03
->2514	c2					.byte $c2
->2515	80					.byte $80
->2516	0a					.byte $0a
->2517	06					.byte $06
->2518	04					.byte $04
->2519	54					.byte $54
->251a	42					.byte $42
->251b	43					.byte $43
->251c	30					.byte $30
->251d	41					.byte $41
->251e	13					.byte $13
->251f	80					.byte $80
->2520	0d					.byte $0d
->2521	10					.byte $10
->2522	04					.byte $04
->2523	3b					.byte $3b
->2524	33					.byte $33
->2525	00					.byte $00
->2526	95					.byte $95
->2527	7a					.byte $7a
->2528	72					.byte $72
->2529	ae					.byte $ae
->252a	ac					.byte $ac
->252b	18					.byte $18
->252c	80					.byte $80
->252d	05					.byte $05
->252e	1a					.byte $1a
->252f	04					.byte $04
->2530	b2					.byte $b2
->2531	80					.byte $80
->2532	0d					.byte $0d
->2533	24					.byte $24
->2534	04					.byte $04
->2535	c8					.byte $c8
->2536	0f					.byte $0f
->2537	ac					.byte $ac
->2538	54					.byte $54
->2539	42					.byte $42
->253a	43					.byte $43
->253b	30					.byte $30
->253c	41					.byte $41
->253d	13					.byte $13
->253e	80					.byte $80
->253f	00					.byte $00
+>25d6						.align 256
+.2600					BasicProgram:
+>2600	07					.byte $07
+>2601	e8					.byte $e8
+>2602	03					.byte $03
+>2603	0e					.byte $0e
+>2604	89					.byte $89
+>2605	70					.byte $70
+>2606	80					.byte $80
+>2607	0a					.byte $0a
+>2608	f2					.byte $f2
+>2609	03					.byte $03
+>260a	0f					.byte $0f
+>260b	89					.byte $89
+>260c	96					.byte $96
+>260d	70					.byte $70
+>260e	70					.byte $70
+>260f	77					.byte $77
+>2610	80					.byte $80
+>2611	12					.byte $12
+>2612	fc					.byte $fc
+>2613	03					.byte $03
+>2614	42					.byte $42
+>2615	3e					.byte $3e
+>2616	3c					.byte $3c
+>2617	34					.byte $34
+>2618	32					.byte $32
+>2619	3e					.byte $3e
+>261a	33					.byte $33
+>261b	04					.byte $04
+>261c	89					.byte $89
+>261d	96					.byte $96
+>261e	7c					.byte $7c
+>261f	7d					.byte $7d
+>2620	7e					.byte $7e
+>2621	7f					.byte $7f
+>2622	80					.byte $80
+>2623	05					.byte $05
+>2624	06					.byte $06
+>2625	04					.byte $04
+>2626	c2					.byte $c2
+>2627	80					.byte $80
+>2628	0f					.byte $0f
+>2629	10					.byte $10
+>262a	04					.byte $04
+>262b	ad					.byte $ad
+>262c	42					.byte $42
+>262d	43					.byte $43
+>262e	19					.byte $19
+>262f	96					.byte $96
+>2630	73					.byte $73
+>2631	75					.byte $75
+>2632	72					.byte $72
+>2633	74					.byte $74
+>2634	ac					.byte $ac
+>2635	17					.byte $17
+>2636	80					.byte $80
+>2637	0b					.byte $0b
+>2638	1a					.byte $1a
+>2639	04					.byte $04
+>263a	ad					.byte $ad
+>263b	42					.byte $42
+>263c	43					.byte $43
+>263d	19					.byte $19
+>263e	96					.byte $96
+>263f	72					.byte $72
+>2640	74					.byte $74
+>2641	80					.byte $80
+>2642	0d					.byte $0d
+>2643	24					.byte $24
+>2644	04					.byte $04
+>2645	ad					.byte $ad
+>2646	42					.byte $42
+>2647	43					.byte $43
+>2648	19					.byte $19
+>2649	96					.byte $96
+>264a	73					.byte $73
+>264b	75					.byte $75
+>264c	72					.byte $72
+>264d	74					.byte $74
+>264e	80					.byte $80
+>264f	0d					.byte $0d
+>2650	2e					.byte $2e
+>2651	04					.byte $04
+>2652	ad					.byte $ad
+>2653	42					.byte $42
+>2654	43					.byte $43
+>2655	19					.byte $19
+>2656	96					.byte $96
+>2657	72					.byte $72
+>2658	74					.byte $74
+>2659	ac					.byte $ac
+>265a	17					.byte $17
+>265b	80					.byte $80
+>265c	07					.byte $07
+>265d	38					.byte $38
+>265e	04					.byte $04
+>265f	43					.byte $43
+>2660	30					.byte $30
+>2661	17					.byte $17
+>2662	80					.byte $80
+>2663	0f					.byte $0f
+>2664	42					.byte $42
+>2665	04					.byte $04
+>2666	3f					.byte $3f
+>2667	37					.byte $37
+>2668	0f					.byte $0f
+>2669	c1					.byte $c1
+>266a	3f					.byte $3f
+>266b	37					.byte $37
+>266c	00					.byte $00
+>266d	c1					.byte $c1
+>266e	38					.byte $38
+>266f	3d					.byte $3d
+>2670	17					.byte $17
+>2671	80					.byte $80
+>2672	0a					.byte $0a
+>2673	4c					.byte $4c
+>2674	04					.byte $04
+>2675	31					.byte $31
+>2676	38					.byte $38
+>2677	13					.byte $13
+>2678	af					.byte $af
+>2679	7e					.byte $7e
+>267a	7f					.byte $7f
+>267b	80					.byte $80
+>267c	0f					.byte $0f
+>267d	56					.byte $56
+>267e	04					.byte $04
+>267f	39					.byte $39
+>2680	42					.byte $42
+>2681	11					.byte $11
+>2682	42					.byte $42
+>2683	3e					.byte $3e
+>2684	3c					.byte $3c
+>2685	34					.byte $34
+>2686	32					.byte $32
+>2687	3e					.byte $3e
+>2688	33					.byte $33
+>2689	04					.byte $04
+>268a	80					.byte $80
+>268b	0f					.byte $0f
+>268c	60					.byte $60
+>268d	04					.byte $04
+>268e	39					.byte $39
+>268f	3c					.byte $3c
+>2690	0f					.byte $0f
+>2691	42					.byte $42
+>2692	3e					.byte $3e
+>2693	3c					.byte $3c
+>2694	34					.byte $34
+>2695	32					.byte $32
+>2696	3e					.byte $3e
+>2697	33					.byte $33
+>2698	04					.byte $04
+>2699	80					.byte $80
+>269a	11					.byte $11
+>269b	6a					.byte $6a
+>269c	04					.byte $04
+>269d	39					.byte $39
+>269e	3c					.byte $3c
+>269f	0f					.byte $0f
+>26a0	95					.byte $95
+>26a1	42					.byte $42
+>26a2	3e					.byte $3e
+>26a3	3c					.byte $3c
+>26a4	34					.byte $34
+>26a5	32					.byte $32
+>26a6	3e					.byte $3e
+>26a7	33					.byte $33
+>26a8	04					.byte $04
+>26a9	ae					.byte $ae
+>26aa	80					.byte $80
+>26ab	13					.byte $13
+>26ac	74					.byte $74
+>26ad	04					.byte $04
+>26ae	39					.byte $39
+>26af	3c					.byte $3c
+>26b0	0f					.byte $0f
+>26b1	95					.byte $95
+>26b2	42					.byte $42
+>26b3	3e					.byte $3e
+>26b4	3c					.byte $3c
+>26b5	34					.byte $34
+>26b6	32					.byte $32
+>26b7	3e					.byte $3e
+>26b8	33					.byte $33
+>26b9	04					.byte $04
+>26ba	ac					.byte $ac
+>26bb	17					.byte $17
+>26bc	ae					.byte $ae
+>26bd	80					.byte $80
+>26be	15					.byte $15
+>26bf	7e					.byte $7e
+>26c0	04					.byte $04
+>26c1	38					.byte $38
+>26c2	3d					.byte $3d
+>26c3	02					.byte $02
+>26c4	c1					.byte $c1
+>26c5	33					.byte $33
+>26c6	34					.byte $34
+>26c7	02					.byte $02
+>26c8	c1					.byte $c1
+>26c9	38					.byte $38
+>26ca	3d					.byte $3d
+>26cb	02					.byte $02
+>26cc	00					.byte $00
+>26cd	c1					.byte $c1
+>26ce	33					.byte $33
+>26cf	34					.byte $34
+>26d0	02					.byte $02
+>26d1	00					.byte $00
+>26d2	80					.byte $80
+>26d3	05					.byte $05
+>26d4	88					.byte $88
+>26d5	04					.byte $04
+>26d6	b2					.byte $b2
+>26d7	80					.byte $80
+>26d8	00					.byte $00
 
 ;******  Return to file: basic.asm
 

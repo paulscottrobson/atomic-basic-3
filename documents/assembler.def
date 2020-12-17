@@ -147,9 +147,12 @@ EA 	nop
 7C 	jmp 	(8)
 80 	bra		(10)
 
+;
+;	Zero page first.
+;
 64 	stz 	(1)
-9C 	stz 	(3)
 74 	stz 	(5)
+9C 	stz 	(3)
 9E 	stz 	(7)
 
 [implied]

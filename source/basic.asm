@@ -56,6 +56,7 @@
 	.include "variables/common/varsearch.asm"
 	.include "assembler/inline/assembler.inc"
 	.include "assembler/inline/asmtoken.asm"
+	.include "assembler/inline/asmutils.asm"
 	.include "assembler/inline/assembler.asm"
 	.include "assembler/inline/generated/asmdat.asm"
 	.include "assembler/inline/operand.asm"

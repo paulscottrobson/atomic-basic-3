@@ -261,12 +261,12 @@ AndMnemonic:
 	.byte $f1
 
 	.word $4f32 ; stz
-	.byte $9c
-	.byte $f3
-
-	.word $4f32 ; stz
 	.byte $74
 	.byte $f5
+
+	.word $4f32 ; stz
+	.byte $9c
+	.byte $f3
 
 	.word $4f32 ; stz
 	.byte $9e

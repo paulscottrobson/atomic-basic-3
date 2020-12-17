@@ -1,11 +1,8 @@
 TODO List
 =========
 Assembler
-	- fix STZ absolute,x and check it all works.
-	- Branches.
-	- compile opcodes (stand alone)
 	- compile opcodes (groups)
-	- error checking (range, not defined)
+	- error checking (range, not defined) control.
 	- control listing
 
 Documentation
@@ -25,12 +22,4 @@ Assembler todo list
 
 [group3]
 20 	bit		[-*-*-*-*]
-
-10	bpl		(10)	 
-80 	bra		(10)
-
-64 	stz 	(1)
-9C 	stz 	(3)
-74 	stz 	(5)
-9E 	stz 	(7)
 

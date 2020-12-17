@@ -51,6 +51,11 @@ AssemblerExit:
 		; 		.Label
 		;
 AssemblerLabel:
+		iny 								; skip over the .
+		lda 	(codePtr),y 				; which means we can't have single letter labels
+		cmp 	#$30
+		bcc 	AssemblerSyntax
+		;
 		lda 	#15 						; get a single term
 		ldx 	#0
 		jsr 	EvaluateLevelAX
@@ -102,15 +107,15 @@ AssemblerHaveToken:
 		set16 	temp0,OpcodeTable
 		pshy		
 _AHTSearch:
-		ldy 	#0 							; search table for token.
-		lda 	(temp0),y
-		cmp 	AsmToken
-		bne 	_AHTNext
-		iny
+		ldy 	#1 							; search table for token.
 		lda 	(temp0),y
 		cmp 	#$FF
 		beq 	AssemblerSyntax 			; end of table.
-		cmp 	AsmToken+1 
+		cmp 	AsmToken+1
+		bne 	_AHTNext
+		dey
+		lda 	(temp0),y
+		cmp 	AsmToken
 		beq 	_AHTFound
 		;
 _AHTNext:		
@@ -122,7 +127,7 @@ _AHTNext:
 		inc 	temp0+1
 		jmp 	_AHTSearch
 _AHTFound:
-		iny 								; copy base opcode / type
+		ldy 	#2 							; copy base opcode / type
 		lda 	(temp0),y
 		sta 	AsmOpcode
 		iny
@@ -172,6 +177,8 @@ HackStandaloneTypes:
 		beq 	_HSTZeroAbsolute
 		cmp 	#(AM_ZeroX << 4)|AM_AbsX
 		beq 	_HSTZeroXAbsoluteX
+		cmp 	#(AMX_Relative << 4)|AM_Abs
+		beq 	_HSTRelAbsolute
 _HSTFail:
 		clc
 		rts
@@ -195,4 +202,38 @@ _HSTZeroXAbsoluteX:
 		bne 	_HSTFail
 		lda 	#AM_ZeroX 					; and switch
 		bpl 	_HSTSwitch
+		;
+		;		Require relative, given absolute.
+		;
+_HSTRelAbsolute:
+		lda 	pVariable 					; temp1 = pVariable+2 (start address)
+		clc
+		adc 	#2
+		sta 	temp1
+		lda 	pVariable+1
+		adc 	#0
+		sta 	temp1+1
+		;	
+		sec 								; subtract from the target address
+		lda 	esInt0
+		sbc 	temp1
+		sta 	esInt0
+		lda		esInt1
+		sbc 	temp1+1
+		sta 	esInt1
+		;
+		beq 	_HSTRangeOk 				; MSB must be $FF or $00
+		cmp 	#$FF
+		beq 	_HSTRangeOk
+_HSTRangeError:
+		report 	BranchSize
+		;
+_HSTRangeOk:
+		eor 	esInt0						; signs must be the same.
+		bmi 	_HSTRangeError
+		lda 	#0 							; force into range.
+		sta 	esInt1
+		lda 	#AM_Zero
+		bpl 	_HSTSwitch				
+
 

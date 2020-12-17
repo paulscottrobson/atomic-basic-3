@@ -1,7 +1,9 @@
 O = 0
 P = &700
 SomeCode = &FEDC
-[
+[	.loop
+	bmi loop+4
+	beq loop
 	stz &4253,x
 	stz &42
 	stz &4253
@@ -14,4 +16,6 @@ SomeCode = &FEDC
 	jmp (SomeCode)
 	jmp (SomeCode,X)
 	inc:dec:inc a:dec a	
+	jmp loop
 ]
+print '"LOOP=",loop,.loop

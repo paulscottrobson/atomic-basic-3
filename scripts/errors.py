@@ -66,6 +66,7 @@ NoArray:		Bad Array
 BadAIndex:		Bad Array Index
 UnknownVar:		Unknown variable
 Operand:		Bad Operand
+BranchSize:		Branch range
 
 """.split("\n"))
 	eg.write(open("../source/common/generated/errors.asm","w"))

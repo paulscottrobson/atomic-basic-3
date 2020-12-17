@@ -35,15 +35,43 @@ BasicProgram:
 	.byte $7e
 	.byte $7f
 	.byte $80
-	.byte $05
+	.byte $0a
 	.byte $06
 	.byte $04
 	.byte $c2
-	.byte $80
+	.byte $54
+	.byte $3b
+	.byte $3e
+	.byte $3e
 	.byte $0f
+	.byte $80
+	.byte $0d
 	.byte $10
 	.byte $04
-	.byte $ad
+	.byte $31
+	.byte $3c
+	.byte $08
+	.byte $3b
+	.byte $3e
+	.byte $3e
+	.byte $0f
+	.byte $8a
+	.byte $74
+	.byte $80
+	.byte $0b
+	.byte $1a
+	.byte $04
+	.byte $31
+	.byte $34
+	.byte $10
+	.byte $3b
+	.byte $3e
+	.byte $3e
+	.byte $0f
+	.byte $80
+	.byte $0e
+	.byte $24
+	.byte $04
 	.byte $42
 	.byte $43
 	.byte $19
@@ -55,10 +83,9 @@ BasicProgram:
 	.byte $ac
 	.byte $17
 	.byte $80
-	.byte $0b
-	.byte $1a
+	.byte $0a
+	.byte $2e
 	.byte $04
-	.byte $ad
 	.byte $42
 	.byte $43
 	.byte $19
@@ -66,10 +93,9 @@ BasicProgram:
 	.byte $72
 	.byte $74
 	.byte $80
-	.byte $0d
-	.byte $24
+	.byte $0c
+	.byte $38
 	.byte $04
-	.byte $ad
 	.byte $42
 	.byte $43
 	.byte $19
@@ -79,10 +105,9 @@ BasicProgram:
 	.byte $72
 	.byte $74
 	.byte $80
-	.byte $0d
-	.byte $2e
+	.byte $0c
+	.byte $42
 	.byte $04
-	.byte $ad
 	.byte $42
 	.byte $43
 	.byte $19
@@ -93,14 +118,14 @@ BasicProgram:
 	.byte $17
 	.byte $80
 	.byte $07
-	.byte $38
+	.byte $4c
 	.byte $04
 	.byte $43
 	.byte $30
 	.byte $17
 	.byte $80
 	.byte $0f
-	.byte $42
+	.byte $56
 	.byte $04
 	.byte $3f
 	.byte $37
@@ -115,7 +140,7 @@ BasicProgram:
 	.byte $17
 	.byte $80
 	.byte $0a
-	.byte $4c
+	.byte $60
 	.byte $04
 	.byte $31
 	.byte $38
@@ -125,37 +150,37 @@ BasicProgram:
 	.byte $7f
 	.byte $80
 	.byte $0f
-	.byte $56
-	.byte $04
-	.byte $39
-	.byte $42
-	.byte $11
-	.byte $42
-	.byte $3e
-	.byte $3c
-	.byte $34
-	.byte $32
-	.byte $3e
-	.byte $33
-	.byte $04
-	.byte $80
-	.byte $0f
-	.byte $60
-	.byte $04
-	.byte $39
-	.byte $3c
-	.byte $0f
-	.byte $42
-	.byte $3e
-	.byte $3c
-	.byte $34
-	.byte $32
-	.byte $3e
-	.byte $33
-	.byte $04
-	.byte $80
-	.byte $11
 	.byte $6a
+	.byte $04
+	.byte $39
+	.byte $42
+	.byte $11
+	.byte $42
+	.byte $3e
+	.byte $3c
+	.byte $34
+	.byte $32
+	.byte $3e
+	.byte $33
+	.byte $04
+	.byte $80
+	.byte $0f
+	.byte $74
+	.byte $04
+	.byte $39
+	.byte $3c
+	.byte $0f
+	.byte $42
+	.byte $3e
+	.byte $3c
+	.byte $34
+	.byte $32
+	.byte $3e
+	.byte $33
+	.byte $04
+	.byte $80
+	.byte $11
+	.byte $7e
 	.byte $04
 	.byte $39
 	.byte $3c
@@ -172,7 +197,7 @@ BasicProgram:
 	.byte $ae
 	.byte $80
 	.byte $13
-	.byte $74
+	.byte $88
 	.byte $04
 	.byte $39
 	.byte $3c
@@ -191,7 +216,7 @@ BasicProgram:
 	.byte $ae
 	.byte $80
 	.byte $15
-	.byte $7e
+	.byte $92
 	.byte $04
 	.byte $38
 	.byte $3d
@@ -211,9 +236,45 @@ BasicProgram:
 	.byte $02
 	.byte $00
 	.byte $80
+	.byte $0b
+	.byte $9c
+	.byte $04
+	.byte $39
+	.byte $3c
+	.byte $0f
+	.byte $3b
+	.byte $3e
+	.byte $3e
+	.byte $0f
+	.byte $80
 	.byte $05
-	.byte $88
+	.byte $a6
 	.byte $04
 	.byte $b2
+	.byte $80
+	.byte $19
+	.byte $b0
+	.byte $04
+	.byte $c8
+	.byte $c0
+	.byte $60
+	.byte $08
+	.byte $4c
+	.byte $4f
+	.byte $4f
+	.byte $50
+	.byte $3d
+	.byte $00
+	.byte $ac
+	.byte $3b
+	.byte $3e
+	.byte $3e
+	.byte $0f
+	.byte $ac
+	.byte $54
+	.byte $3b
+	.byte $3e
+	.byte $3e
+	.byte $0f
 	.byte $80
 	.byte $00

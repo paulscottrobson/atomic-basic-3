@@ -13,6 +13,9 @@ EHandlerBadIndex:
 EHandlerBadProc:
 	jsr	ErrorHandler
 	.text "Unknown Procedure",0
+EHandlerBranchSize:
+	jsr	ErrorHandler
+	.text "Branch range",0
 EHandlerClosure:
 	jsr	ErrorHandler
 	.text "Structure Error",0

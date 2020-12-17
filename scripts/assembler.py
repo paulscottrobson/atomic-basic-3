@@ -16,7 +16,7 @@ masks = { }																			# Opcode masks
 maskList = [] 																		# List of mask values.
 group = None 																		# current group : 1,2,3,S,I
 
-h = open(".."+os.sep+"source"+os.sep+"assembler"+os.sep+"generated"+os.sep+"asmdat.asm","w")
+h = open(".."+os.sep+"source"+os.sep+"assembler"+os.sep+"inline"+os.sep+"generated"+os.sep+"asmdat.asm","w")
 
 																					# load and preprocess
 src = [x.strip() for x in open(".."+os.sep+"documents"+os.sep+"assembler.def").readlines() if not x.startswith(";")]

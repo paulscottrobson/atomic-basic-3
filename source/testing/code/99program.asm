@@ -32,15 +32,18 @@ BasicProgram:
 	.byte $41
 	.byte $13
 	.byte $80
-	.byte $0a
+	.byte $0d
 	.byte $10
 	.byte $04
 	.byte $3b
 	.byte $33
-	.byte $17
-	.byte $af
+	.byte $00
+	.byte $95
 	.byte $7a
 	.byte $72
+	.byte $ae
+	.byte $ac
+	.byte $18
 	.byte $80
 	.byte $05
 	.byte $1a

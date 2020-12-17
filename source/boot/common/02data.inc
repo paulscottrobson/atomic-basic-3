@@ -96,6 +96,9 @@ VariableAutoCreate:							; when clear, cannot autocreate variables.
 AsmToken: 									; constructed assembler token.	
 		.fill 	2
 
+AsmMode:									; possible addressing modes
+		.fill 	1
+		
 aVariable = ('A'-'A')*4+RootVariables		
 oVariable = ('O'-'A')*4+RootVariables		
 pVariable = ('P'-'A')*4+RootVariables		

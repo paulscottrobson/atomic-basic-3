@@ -43,6 +43,9 @@ EHandlerNoWhile:
 EHandlerNotImplemented:
 	jsr	ErrorHandler
 	.text "Not implemented",0
+EHandlerOperand:
+	jsr	ErrorHandler
+	.text "Bad Operand",0
 EHandlerParameters:
 	jsr	ErrorHandler
 	.text "Bad Parameters",0

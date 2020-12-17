@@ -33,8 +33,10 @@ Group 1	: ORA/AND/EOR/ADC/STA/LDA/CMP/SBC 	aaa mmm 01
 
 
 Group 2 : ASL/ROL/LSR/ROR/STX/LDX/DEC/INC 	aaa mmm 10
+(modifier to handle STX Z,X => Z,Y)
 
 Group 3 : BIT/STY/LDY/CPY/CPX
+(None)
 
 Others : (up front)
 

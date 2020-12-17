@@ -1,10 +1,10 @@
 TODO List
 =========
 Assembler
-	- get address mode and perhaps parameter
-	- compile opcode.
-Compiler (?)
+	- compile opcodes (stand alone)
+	- compile opcodes (groups)
 Documentation
+Do Pacman in BASIC ?
 
 Notes
 =====

@@ -11,56 +11,56 @@ MaskTable:
 	.byte $d0 ; Mask $6x
 
 OpcodeTable:
-	.word $2033 ; bit
+	.word $2261 ; bit
 	.byte $24
 	.byte $f0
 
-	.word $3502 ; inc
+	.word $3448 ; inc
 	.byte $1a
 	.byte $f2
 
-	.word $1062 ; dec
+	.word $1043 ; dec
 	.byte $3a
 	.byte $f2
 
-	.word $45c0 ; ora
+	.word $440e ; ora
 	.byte $01
 	.byte $01
 
 AndMnemonic:
-	.word $3403 ; and
+	.word $3460 ; and
 	.byte $21
 	.byte $01
 
-	.word $3891 ; eor
+	.word $3a24 ; eor
 	.byte $41
 	.byte $01
 
-	.word $4e40 ; sta
+	.word $4c12 ; sta
 	.byte $61
 	.byte $01
 
-	.word $0d60 ; lda
+	.word $0c0b ; lda
 	.byte $81
 	.byte $01
 
-	.word $304f ; cmp
+	.word $31e2 ; cmp
 	.byte $a1
 	.byte $01
 
-	.word $0642 ; sbc
+	.word $0452 ; sbc
 	.byte $e1
 	.byte $01
 
-	.word $480b ; asl
+	.word $4960 ; asl
 	.byte $02
 	.byte $12
 
-	.word $3a2b ; rol
+	.word $3971 ; rol
 	.byte $22
 	.byte $12
 
-	.word $4971 ; lsr
+	.word $4a2b ; lsr
 	.byte $42
 	.byte $12
 
@@ -68,95 +68,95 @@ AndMnemonic:
 	.byte $62
 	.byte $12
 
-	.word $4e57 ; stx
+	.word $4ef2 ; stx
 	.byte $82
 	.byte $22
 
-	.word $0d77 ; ldx
+	.word $0eeb ; ldx
 	.byte $a2
 	.byte $32
 
-	.word $1062 ; dec
+	.word $1043 ; dec
 	.byte $c2
 	.byte $42
 
-	.word $3502 ; inc
+	.word $3448 ; inc
 	.byte $e2
 	.byte $42
 
-	.word $2033 ; bit
+	.word $2261 ; bit
 	.byte $20
 	.byte $43
 
-	.word $4e58 ; sty
+	.word $4f12 ; sty
 	.byte $80
 	.byte $23
 
-	.word $0d78 ; ldy
+	.word $0f0b ; ldy
 	.byte $a0
 	.byte $53
 
-	.word $3c58 ; cpy
+	.word $3f02 ; cpy
 	.byte $c0
 	.byte $63
 
-	.word $3c57 ; cpx
+	.word $3ee2 ; cpx
 	.byte $e0
 	.byte $63
 
-	.word $3c2b ; bpl
+	.word $3d61 ; bpl
 	.byte $10
 	.byte $fa
 
-	.word $3028 ; bmi
+	.word $3101 ; bmi
 	.byte $30
 	.byte $fa
 
-	.word $5422 ; bvc
+	.word $5441 ; bvc
 	.byte $50
 	.byte $fa
 
-	.word $0832 ; bcs
+	.word $0a41 ; bcs
 	.byte $70
 	.byte $fa
 
-	.word $0822 ; bcc
+	.word $0841 ; bcc
 	.byte $90
 	.byte $fa
 
-	.word $0832 ; bcs
+	.word $0a41 ; bcs
 	.byte $b0
 	.byte $fa
 
-	.word $3424 ; bne
+	.word $3481 ; bne
 	.byte $d0
 	.byte $fa
 
-	.word $1030 ; beq
+	.word $1201 ; beq
 	.byte $f0
 	.byte $fa
 
-	.word $4931 ; jsr
+	.word $4a29 ; jsr
 	.byte $20
 	.byte $f3
 
-	.word $312f ; jmp
+	.word $31e9 ; jmp
 	.byte $4c
 	.byte $f3
 
-	.word $312f ; jmp
+	.word $31e9 ; jmp
 	.byte $6c
 	.byte $f9
 
-	.word $442a ; brk
+	.word $4541 ; brk
 	.byte $00
 	.byte $f2
 
-	.word $4e28 ; rti
+	.word $4d11 ; rti
 	.byte $40
 	.byte $f2
 
-	.word $4e32 ; rts
+	.word $4e51 ; rts
 	.byte $60
 	.byte $f2
 
@@ -168,27 +168,27 @@ AndMnemonic:
 	.byte $28
 	.byte $f2
 
-	.word $1de0 ; pha
+	.word $1c0f ; pha
 	.byte $48
 	.byte $f2
 
-	.word $2de0 ; pla
+	.word $2c0f ; pla
 	.byte $68
 	.byte $f2
 
-	.word $1078 ; dey
+	.word $1303 ; dey
 	.byte $88
 	.byte $f2
 
-	.word $0278 ; tay
+	.word $0313 ; tay
 	.byte $a8
 	.byte $f2
 
-	.word $3518 ; iny
+	.word $3708 ; iny
 	.byte $c8
 	.byte $f2
 
-	.word $3517 ; inx
+	.word $36e8 ; inx
 	.byte $e8
 	.byte $f2
 
@@ -196,95 +196,95 @@ AndMnemonic:
 	.byte $18
 	.byte $f2
 
-	.word $1242 ; sec
+	.word $1052 ; sec
 	.byte $38
 	.byte $f2
 
-	.word $2c48 ; cli
+	.word $2d02 ; cli
 	.byte $58
 	.byte $f2
 
-	.word $1248 ; sei
+	.word $1112 ; sei
 	.byte $78
 	.byte $f2
 
-	.word $6260 ; tya
+	.word $6013 ; tya
 	.byte $98
 	.byte $f2
 
-	.word $2c55 ; clv
+	.word $2ea2 ; clv
 	.byte $b8
 	.byte $f2
 
-	.word $2c43 ; cld
+	.word $2c62 ; cld
 	.byte $d8
 	.byte $f2
 
-	.word $1243 ; sed
+	.word $1072 ; sed
 	.byte $f8
 	.byte $f2
 
-	.word $5e60 ; txa
+	.word $5c13 ; txa
 	.byte $8a
 	.byte $f2
 
-	.word $5e72 ; txs
+	.word $5e53 ; txs
 	.byte $9a
 	.byte $f2
 
-	.word $0277 ; tax
+	.word $02f3 ; tax
 	.byte $aa
 	.byte $f2
 
-	.word $4a77 ; tsx
+	.word $4af3 ; tsx
 	.byte $ba
 	.byte $f2
 
-	.word $1077 ; dex
+	.word $12e3 ; dex
 	.byte $ca
 	.byte $f2
 
-	.word $39af ; nop
+	.word $39ed ; nop
 	.byte $ea
 	.byte $f2
 
-	.word $312f ; jmp
+	.word $31e9 ; jmp
 	.byte $7c
 	.byte $f8
 
-	.word $4420 ; bra
+	.word $4401 ; bra
 	.byte $80
 	.byte $fa
 
-	.word $4e59 ; stz
+	.word $4f32 ; stz
 	.byte $64
 	.byte $f1
 
-	.word $4e59 ; stz
+	.word $4f32 ; stz
 	.byte $9c
 	.byte $f3
 
-	.word $4e59 ; stz
+	.word $4f32 ; stz
 	.byte $74
 	.byte $f5
 
-	.word $4e59 ; stz
+	.word $4f32 ; stz
 	.byte $9e
 	.byte $f7
 
-	.word $1df8 ; phy
+	.word $1f0f ; phy
 	.byte $5a
 	.byte $f2
 
-	.word $2df8 ; ply
+	.word $2f0f ; ply
 	.byte $7a
 	.byte $f2
 
-	.word $1df7 ; phx
+	.word $1eef ; phx
 	.byte $da
 	.byte $f2
 
-	.word $1df8 ; phy
+	.word $1f0f ; phy
 	.byte $fa
 	.byte $f2
 

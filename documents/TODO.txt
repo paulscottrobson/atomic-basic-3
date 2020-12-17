@@ -1,8 +1,11 @@
 TODO List
 =========
 Assembler
-Compiler
+	- get address mode and perhaps parameter
+	- compile opcode.
+Compiler (?)
 Documentation
 
 Notes
 =====
+Mode dependent .x shouldn't change value.

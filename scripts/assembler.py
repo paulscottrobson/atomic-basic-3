@@ -62,7 +62,7 @@ h.write("\n")
 h.write("OpcodeTable:\n")
 for op in entries:
 	name = [ord(x) - ord('A') for x in op["mnemonic"].upper()]						# convert name to offsets from 0
-	encode = (name[0] << 5)+(name[1] << 10)+name[2]									# encode in 15 bits.
+	encode = (name[2] << 5)+(name[1] << 10)+name[0]									# encode in 15 bits.
 	assert (encode & 0xFF) != 0xFF 													# $FF is end of list maker
 	if op["mnemonic"] == "and":														# This hack because AND is tokenised.
 		h.write("AndMnemonic:\n")

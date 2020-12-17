@@ -88,7 +88,7 @@ class Tokens(object):
 #		Syntax (type 0)
 #
 [syn]
-	,		;		)				
+	,		;		)		#		
 
 	++		--		]		->	
 #

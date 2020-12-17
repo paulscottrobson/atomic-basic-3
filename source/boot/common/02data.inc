@@ -93,6 +93,8 @@ ParamCount:									; # parameters evaluated in call.
 VariableAutoCreate:							; when clear, cannot autocreate variables.
 		.fill 	1
 
+AsmToken: 									; constructed assembler token.	
+		.fill 	2
 
 aVariable = ('A'-'A')*4+RootVariables		
 oVariable = ('O'-'A')*4+RootVariables		

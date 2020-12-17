@@ -54,6 +54,7 @@
 	.include "variables/common/varcreate.asm"
 	.include "variables/common/variables.asm"
 	.include "variables/common/varsearch.asm"
+	.include "assembler/assembler.asm"
 	.include "assembler/generated/asmdat.asm"
 	.include "system/x16/x16/x16hardware.asm"
 	.include "system/x16/x16/x16print.asm"

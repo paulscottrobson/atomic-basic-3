@@ -14,6 +14,8 @@ Assembler Entry
 
 				F0-FF requires that address mode ; do not modify base opcode.
 
+Group 2 and 3 have these 8 options: Group 1 has a slight rearrangement of these
+===============================================================================
  000 immediate
  001 z
  010 accumulator/none.
@@ -23,10 +25,12 @@ Assembler Entry
  110 a,y
  111 a,x
 
-1000 (z,x/a,x)	Group 1 has special versions. Also used for JUMP in absolute form
-1001 (z/a) 		Group 1 uses this and makes it $x2. Also used for JUMP in absolute form
+1000 (a,x)		Used for JUMP in absolute form
+1001 (a) 		Used for JUMP in absolute form
 1010 r 			Relative to PC.
 1011 z,y 		Required for Group 2. a,y already exists.
+1100 (z,x) 		Group 1 uses it
+1101 (z) 		Group 1 uses it
 
 Group 1	: ORA/AND/EOR/ADC/STA/LDA/CMP/SBC 	aaa mmm 01
 (modifier : to handle (x), immediate, (z,x), rejection of STA #)
@@ -34,9 +38,11 @@ Group 1	: ORA/AND/EOR/ADC/STA/LDA/CMP/SBC 	aaa mmm 01
 
 Group 2 : ASL/ROL/LSR/ROR/STX/LDX/DEC/INC 	aaa mmm 10
 (modifier to handle STX Z,X => Z,Y)
+(STZ hacked into this group)
 
 Group 3 : BIT/STY/LDY/CPY/CPX
 (None)
+
 
 Others : (up front)
 
@@ -46,7 +52,6 @@ LDX and STX z,y and a,y
 
 INC DEC (both A mode)
 BPL ..... BRA
-STZ <various>
 JMP JMP() JMP (a,x) JSR RTS RTI BRK NOP
 PHx PLx CLx SEx Tab
 INX DEX INY DEY 

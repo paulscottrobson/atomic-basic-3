@@ -13,10 +13,8 @@
 ; *****************************************************************************
 ;
 ;			Get Operand. (Stack:0 contains value, X the address mode.)
-;	 		 Returns : (Does not check zero except (nn),Y mode and Immediate)
-;					Implied, Immediate, Absolute, 
-;					(Zero),Y, Absolute,X Absolute,Y
-;					(Absolute) (Absolute,X) 	
+;
+;			  	Returns : Best fitting mode. Long where possible.
 ;
 ; *****************************************************************************
 
@@ -33,8 +31,7 @@ AssemGetOperand:
 		cmp 	#$00 						; indicates 'A' e.g. ASL A , single character letter A
 		bne 	_AGONotImplied
 		iny 								; consume the A
-_AGOExit:
-		rts
+		jmp 	_AGOExit
 		;
 		;		Immediate check.
 		;
@@ -46,7 +43,7 @@ _AGONotImplied:
 		jsr 	AssemGetParameter 			; get the parameter value
 		lda 	esInt1 						; must be 00-FF
 		bne 	AGPError
-		rts
+		beq 	_AGOExit
 		;
 		;		Check for indirection.
 		;
@@ -87,15 +84,15 @@ _AGOIndirect:
 		bne 	_AGOSyntax
 		iny 								; consume
 		jsr 	CheckRightParen 			; check closing )
-		ldx 	#AMX_IndX 					; return (nnnn,x)
-		rts
+		ldx 	#AMX_AbsIndX 				; return (nnnn,x)
+		jmp 	_AGOExit
 		;
 		;		Indirect, possibly Y X code.
 		;
 _AGOIndirectY:
 		iny 								; consume RParen
 		lda 	(codePtr),y 				; if not followed by , then exit with Indirect
-		ldx 	#AMX_Ind
+		ldx 	#AMX_AbsInd
 		cmp 	#KWD_Comma
 		bne 	_AGOExit 
 		iny 								; comsume ,
@@ -103,11 +100,13 @@ _AGOIndirectY:
 		cmp 	#'Y'-'A'
 		bne 	_AGOSyntax
 		iny 								; consume Y
-		ldx 	#AM_IndY 					; there is no (absolute),Y
-		lda 	esInt1 						; check parameter.
-		bne 	_AGOExit
-		rts		
+		ldx 	#AM_ZeroIndY 				; there is no (absolute),Y
+_AGOExit:
+		stx 	AsmMode
+		rts
 
+AGPError:
+		report 	Operand
 
 ; *****************************************************************************
 ;
@@ -124,8 +123,7 @@ AssemGetParameter:
 		pulx
 		rts
 
-AGPError:
-		report 	Operand
+
 
 
 

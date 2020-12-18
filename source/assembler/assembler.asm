@@ -100,7 +100,6 @@ AssemblerOpcode:
 		jsr 	AssemBuildToken 			; make 16 bit token
 AssemblerHaveToken:
 		jsr 	AssemGetOperand				; figure out operand and addresing mode.
-		stx 	AsmMode
 		;
 		;		Now find the table entry.
 		;
@@ -137,11 +136,13 @@ _AHTFound:
 		cmp 	#$F0 						; is it a single type opcode ?
 		bcc 	_AHTAllowed
 		and 	#$0F
-		cmp 	AsmMode 					; does it match what we found ?
+		cmp 	AsmMode						; does it match what we found ?
 		beq 	_AHTAllowed 				; if so, carry on.
-		jsr 	HackStandaloneTypes 		; try to hack it ?
-		bcc 	_AHTNext 					; failed, loop back.
-		
+		;
+		cmp 	#AMX_RELATIVE 				; is it relative ?	
+		bne 	_AHTNext
+		jsr 	CalculateBranch 			; do the branch calculation.
+
 _AHTAllowed:
 		puly
 		;
@@ -151,7 +152,6 @@ _AHTAllowed:
 		;
 		;		Stand alone.
 		;
-
 		lda 	AsmType 					; set up AX and write out
 		and 	#$0F
 		tax
@@ -164,48 +164,18 @@ _AHTAllowed:
 _AHTIsGroup:
 		stop		
 
+; *****************************************************************************
+;
+;						Calculate Relative Branch
+;
+; *****************************************************************************
 
-
-HackStandaloneTypes:
-		lda 	AsmType						; make Mode required : Mode in user code.
-		asl 	a
-		asl 	a
-		asl 	a
-		asl 	a
-		ora 	AsmMode 
-		cmp 	#(AM_Zero << 4)|AM_Abs
-		beq 	_HSTZeroAbsolute
-		cmp 	#(AM_ZeroX << 4)|AM_AbsX
-		beq 	_HSTZeroXAbsoluteX
-		cmp 	#(AMX_Relative << 4)|AM_Abs
-		beq 	_HSTRelAbsolute
-_HSTFail:
-		clc
-		rts
-_HSTSwitch:
-		sta 	AsmMode 					; switch it to this
-		sec
-		rts		
-		;
-		;		Require zero, given absolute
-		;
-_HSTZeroAbsolute:
-		lda 	esInt1 						; must be 00-FF
-		bne 	_HSTFail
-		lda 	#AM_Zero 					; and switch
-		bpl 	_HSTSwitch
-		;
-		;		Require zerox, given absolutex
-		;
-_HSTZeroXAbsoluteX:
-		lda 	esInt1 						; must be 00-FF
-		bne 	_HSTFail
-		lda 	#AM_ZeroX 					; and switch
-		bpl 	_HSTSwitch
-		;
-		;		Require relative, given absolute.
-		;
-_HSTRelAbsolute:
+CalculateBranch:
+		lda 	asmMode 					; must be ABS 
+		cmp 	#AM_ABS
+		beq 	_CBOkay
+		report 	Syntax
+_CBOkay:		
 		lda 	pVariable 					; temp1 = pVariable+2 (start address)
 		clc
 		adc 	#2
@@ -222,18 +192,45 @@ _HSTRelAbsolute:
 		sbc 	temp1+1
 		sta 	esInt1
 		;
-		beq 	_HSTRangeOk 				; MSB must be $FF or $00
+		beq 	_CBRangeOk 					; MSB must be $FF or $00
 		cmp 	#$FF
-		beq 	_HSTRangeOk
-_HSTRangeError:
+		beq 	_CBRangeOk
+_CBRangeError:
 		report 	BranchSize
 		;
-_HSTRangeOk:
+_CBRangeOk:
 		eor 	esInt0						; signs must be the same.
-		bmi 	_HSTRangeError
+		bmi 	_CBRangeError
 		lda 	#0 							; force into range.
 		sta 	esInt1
-		lda 	#AM_Zero
-		bpl 	_HSTSwitch				
+		rts
 
+; *****************************************************************************
+;
+;				Get the equivalent 'short' mode for a given mode.
+;
+; *****************************************************************************
 
+GetShortMode:
+		ldx 	esInt1 						; can we actually use the short mode.
+		bne 	_GSMExit
+		tax
+		lda 	_GSMTable,x
+_GSMExit:		
+		rts
+
+_GSMTable:
+		.byte 	AM_Immediate 
+		.byte 	AM_Zero 
+		.byte 	AM_Implied 
+		.byte 	AM_Zero 					; was AM_ABS
+		.byte 	AM_ZeroIndY 
+		.byte 	AM_ZeroX 
+		.byte	AMX_ZeroY 					; was AM_ABSY
+		.byte 	AM_ZeroX  					; was AM_ABSX
+		.byte 	AMX_ZeroIndX				; was AM_ABSINDX
+		.byte 	AMX_ZeroInd  				; was AM_ABSIND
+		.byte 	AMX_Relative 
+		.byte 	AMX_ZeroY 
+		.byte 	AMX_ZeroIndX
+		.byte 	AMX_ZeroInd 

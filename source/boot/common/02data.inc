@@ -96,7 +96,7 @@ VariableAutoCreate:							; when clear, cannot autocreate variables.
 AsmToken: 									; constructed assembler token.	
 		.fill 	2
 
-AsmMode:									; possible addressing modes
+AsmMode:									; possible addressing mode (longest version)
 		.fill 	1
 		
 AsmOpcode: 									; base opcode

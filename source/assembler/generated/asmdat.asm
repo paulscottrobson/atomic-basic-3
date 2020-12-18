@@ -84,6 +84,10 @@ AndMnemonic:
 	.byte $e2
 	.byte $42
 
+	.word $4f32 ; stz
+	.byte $f2
+	.byte $42
+
 	.word $2261 ; bit
 	.byte $20
 	.byte $43
@@ -255,22 +259,6 @@ AndMnemonic:
 	.word $4401 ; bra
 	.byte $80
 	.byte $fa
-
-	.word $4f32 ; stz
-	.byte $64
-	.byte $f1
-
-	.word $4f32 ; stz
-	.byte $74
-	.byte $f5
-
-	.word $4f32 ; stz
-	.byte $9c
-	.byte $f3
-
-	.word $4f32 ; stz
-	.byte $9e
-	.byte $f7
 
 	.word $1f0f ; phy
 	.byte $5a

@@ -5,6 +5,7 @@
 #		Author:		Paul Robson (paul@robsons.org.uk)
 #		Date:		10 Dec 2020
 #		Purpose:	Generate token tables, vector tables, keyword lookups.
+#					(uses output of builder, basic.asm so runs after it.)
 #
 # *****************************************************************************
 # *****************************************************************************
@@ -51,9 +52,11 @@ h.close()
 #		Keyword vectors.
 #
 handlers = {}
-for root,dirs,files in os.walk(".."):
-	for f in [x for x in files if x.endswith(".asm")]:
-		for l in open(root+os.sep+f).readlines():
+fList = [x.strip() for x in open("basic.asm","r").readlines() if x.find(".include") >= 0]
+for f in fList:
+	m = re.match('^\\.include\\s*\\"(.*)\\"',f)
+	if m is not None and m.group(1).endswith(".asm"):
+		for l in open(m.group(1)).readlines():
 			if l.find(";;") >= 0:
 				m = re.match("^([A-Za-z0-9\\_]+)\\:\\s*\\;\\;\\s*\\[(.*?)\\]\\s*$",l)
 				assert m is not None,l

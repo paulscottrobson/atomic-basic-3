@@ -15,7 +15,7 @@
 ;
 ; *****************************************************************************
 
-Assembler: 
+Assembler: ;; [[] 
 		lda 	(codePtr),y 				; look at next
 		cmp 	#$30 						; single char identifier not allowed
 		bcc 	AssemblerSyntax

@@ -68,7 +68,7 @@ TokenVectorLow:
 	.byte Command_LET & $FF                ; let
 	.byte Command_Rem2 & $FF               ; '
 	.byte Command_Colon & $FF              ; :
-	.byte Command_StartAsm & $FF           ; [
+	.byte Assembler & $FF                  ; [
 	.byte NoOp7 & $FF                      ; then
 	.byte Command_ELSE & $FF               ; else
 	.byte NoOp8 & $FF                      ; to
@@ -157,7 +157,7 @@ TokenVectorHigh:
 	.byte Command_LET >> 8                 ; let
 	.byte Command_Rem2 >> 8                ; '
 	.byte Command_Colon >> 8               ; :
-	.byte Command_StartAsm >> 8            ; [
+	.byte Assembler >> 8                   ; [
 	.byte NoOp7 >> 8                       ; then
 	.byte Command_ELSE >> 8                ; else
 	.byte NoOp8 >> 8                       ; to

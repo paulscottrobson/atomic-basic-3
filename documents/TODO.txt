@@ -1,12 +1,13 @@
 TODO List
 =========
-Assembler
+Assembler:
 	- compile opcodes (groups)
-	- error checking (range, not defined) control.
-	- control listing
+	- error checking (range, not defined) control (bit 0)
+	- control listing (bit 1)
 
 Documentation
 Do Pacman in BASIC ?
+
 Notes
 =====
 Mode dependent .x shouldn't change value

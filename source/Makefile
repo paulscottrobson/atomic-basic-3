@@ -24,7 +24,7 @@ TESTS = ..$(S)tests$(S)
 GENERATOR = makepgm.py
 
 BUILD = boot.x16 boot.common extern.x16 interface.none common variables \
-		assembler.inline \
+		assembler \
 		system.x16 \
 		testing.code
 all : $(BASIC) asm.out$(S)basic.prg
@@ -49,7 +49,7 @@ DEPS = 	$(wildcard **/*.asm) $(wildcard **/*.inc) \
 asm.out$(S)basic.prg : $(DEPS) 
 	python $(SCRIPTS)errors.py
 	python $(SCRIPTS)assembler.py
-	python $(SCRIPTS)tokentables.py
 	python $(SCRIPTS)builder.py $(BUILD)
+	python $(SCRIPTS)tokentables.py
 	$(DEL) *.bin $(DELQ)
 	64tass -q --m65xx basic.asm -L asm.out$(S)basic.lst -l asm.out$(S)basic.lbl -o asm.out$(S)basic.prg

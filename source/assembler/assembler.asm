@@ -162,7 +162,25 @@ _AHTAllowed:
 		;		It's a group.
 		;		
 _AHTIsGroup:
-		stop		
+		stop	
+		lda 	esInt1 						; is it a long address/value ?
+		bne 	_AHTNoShrink 				; no, don't shrink
+		;
+		lda 	AsmMode 					; save the current address mode
+		pha
+		jsr 	GetShortMode 				; convert short
+		sta 	AsmMode 					; and try that
+		jsr 	AssembleGroup 				; do a group assembly on the short 
+		pla 								; restore mode.
+		sta 	AsmMode 					
+		bcs 	_AHTGDone 					; if okay, then done.		
+_AHTNoShrink:		
+		jsr 	AssembleGroup 				; try a group assembly on the original (long)
+		bcc 	_AHTGOperand 				; syntax error if no.
+_AHTGDone:
+		jmp 	Assembler		
+_AHTGOperand:
+		report 	Operand		
 
 ; *****************************************************************************
 ;

@@ -55,6 +55,7 @@
 	.include "variables/common/variables.asm"
 	.include "variables/common/varsearch.asm"
 	.include "assembler/assembler.inc"
+	.include "assembler/asmgroup.asm"
 	.include "assembler/asmtoken.asm"
 	.include "assembler/asmutils.asm"
 	.include "assembler/assembler.asm"

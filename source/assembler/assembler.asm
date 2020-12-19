@@ -162,7 +162,6 @@ _AHTAllowed:
 		;		It's a group.
 		;		
 _AHTIsGroup:
-		stop	
 		lda 	esInt1 						; is it a long address/value ?
 		bne 	_AHTNoShrink 				; no, don't shrink
 		;

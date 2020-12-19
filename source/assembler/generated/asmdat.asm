@@ -7,12 +7,11 @@ MaskTable:
 	.byte $54 ; Mask $2x
 	.byte $d5 ; Mask $3x
 	.byte $55 ; Mask $4x
-	.byte $d4 ; Mask $5x
-	.byte $d0 ; Mask $6x
+	.byte $d0 ; Mask $5x
 
 OpcodeTable:
 	.word $2261 ; bit
-	.byte $24
+	.byte $89
 	.byte $f0
 
 	.word $3448 ; inc
@@ -36,16 +35,20 @@ AndMnemonic:
 	.byte $41
 	.byte $01
 
-	.word $4c12 ; sta
+	.word $0c40 ; adc
 	.byte $61
 	.byte $01
 
-	.word $0c0b ; lda
+	.word $4c12 ; sta
 	.byte $81
 	.byte $01
 
-	.word $31e2 ; cmp
+	.word $0c0b ; lda
 	.byte $a1
+	.byte $01
+
+	.word $31e2 ; cmp
+	.byte $c1
 	.byte $01
 
 	.word $0452 ; sbc
@@ -98,15 +101,15 @@ AndMnemonic:
 
 	.word $0f0b ; ldy
 	.byte $a0
-	.byte $53
+	.byte $33
 
 	.word $3f02 ; cpy
 	.byte $c0
-	.byte $63
+	.byte $53
 
 	.word $3ee2 ; cpx
 	.byte $e0
-	.byte $63
+	.byte $53
 
 	.word $3d61 ; bpl
 	.byte $10

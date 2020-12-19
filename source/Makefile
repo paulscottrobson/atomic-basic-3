@@ -27,6 +27,7 @@ BUILD = boot.x16 boot.common extern.x16 interface.none common variables \
 		assembler \
 		system.x16 \
 		testing.code
+		
 all : $(BASIC) asm.out$(S)basic.prg
 
 run : $(BASIC) asm.out$(S)basic.prg

@@ -4,6 +4,7 @@ Assembler:
 	- error checking (range, not defined) control (bit 0)
 	- control listing (bit 1)
 	- values shouldn't change.
+
 	
 Documentation
 Do Pacman in BASIC ?

@@ -12,8 +12,8 @@
 		DataStackSize = 8
 		HashTableSize = 16
 
-		ZeroPageStart = $00
-		DataStackStart = $20
+		ZeroPageStart = $22
+		DataStackStart = $40
 		DataStart = $800					; must be on a page boundary.
 
 		CodeBase = $1000

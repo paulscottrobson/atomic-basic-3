@@ -1,7 +1,6 @@
 TODO List
 =========
 Assembler:
-	- compile opcodes (groups) / special cases.
 	- error checking (range, not defined) control (bit 0)
 	- control listing (bit 1)
 
@@ -12,31 +11,3 @@ Notes
 =====
 Mode dependent .x shouldn't change value
 
-Assembler todo list
-===================
-
-[group1]
-01 	ora 	61 	sta 	 (no immediate)
-
-[group2]
-02 	asl		[-***-*-*]
-F2 	stz		[-***-*-*]
-
-[group3]
-20 	bit		[-*-*-*-*]
-
-_AGOAbsToZero:
-		.byte 	AM_Immediate 
-		.byte 	AM_Zero 
-		.byte 	AM_Implied 
-		.byte 	AM_Zero 					; was AM_ABS
-		.byte 	AM_ZeroIndY 
-		.byte 	AM_ZeroX 
-		.byte	AMX_ZeroY 					; was AM_ABSY
-		.byte 	AM_ZeroX  					; was AM_ABSX
-		.byte 	AMX_ZeroIndX				; was AM_ABSINDX
-		.byte 	AMX_ZeroInd  				; was AM_ABSIND
-		.byte 	AMX_Relative 
-		.byte 	AMX_ZeroY 
-		.byte 	AMX_ZeroIndX
-		.byte 	AMX_ZeroInd 
